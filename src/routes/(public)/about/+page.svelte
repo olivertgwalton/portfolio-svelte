@@ -11,16 +11,14 @@
 	/>
 </svelte:head>
 
-<section
-	class="relative min-h-[30vh] w-full overflow-hidden border-b border-border"
->
+<section class="border-border relative min-h-[30vh] w-full overflow-hidden border-b">
 	<InteractiveGrid />
 	<div
 		class="relative z-10 container mx-auto flex h-full min-h-[30vh] flex-col justify-end px-6 pt-32 pb-12"
 	>
 		<h1
 			use:reveal={{ delay: 0, y: 20 }}
-			class="max-w-4xl font-heading text-6xl font-black tracking-tight text-primary"
+			class="text-foreground max-w-4xl font-heading text-6xl font-black tracking-tight"
 		>
 			Background.
 		</h1>
@@ -30,11 +28,9 @@
 <section class="container mx-auto px-6 py-24">
 	<div class="grid gap-16 lg:grid-cols-[1fr_1fr] lg:gap-32">
 		<!-- Left Column: The Narrative -->
-		<div class="space-y-12 text-lg leading-relaxed text-secondary">
+		<div class="text-muted-foreground space-y-12 text-lg leading-relaxed">
 			<div use:reveal={{ delay: 0 }}>
-				<h2 class="mb-6 font-heading text-3xl font-bold text-primary">
-					Systematic Curiosity
-				</h2>
+				<h2 class="text-foreground mb-6 font-heading text-3xl font-bold">Systematic Curiosity</h2>
 				<p>
 					My interest in technology started early, not with games, but with operating systems. Since
 					age 10, I’ve been using Linux as my daily driver. It wasn't always smooth sailing, but
@@ -49,9 +45,7 @@
 			</div>
 
 			<div use:reveal={{ delay: 200 }}>
-				<h2 class="mb-6 font-heading text-3xl font-bold text-primary">
-					Beyond the Code
-				</h2>
+				<h2 class="text-foreground mb-6 font-heading text-3xl font-bold">Beyond the Code</h2>
 				<p>
 					I’m driven by an appreciation for complex systems, whether they are digital or physical. I
 					follow Formula 1 for the relentless engineering optimization, and I love architecture for
@@ -71,31 +65,31 @@
 
 		<!-- Right Column: Stats / Highlights -->
 		<div class="space-y-16" use:reveal={{ delay: 400 }}>
-			<div class="border-t border-border pt-8 dark:border-stone-800">
-				<div class="mb-2 font-mono text-xs font-bold tracking-widest text-muted uppercase">
+			<div class="border-border border-t pt-8">
+				<div
+					class="text-muted-foreground mb-2 font-mono text-xs font-bold tracking-widest uppercase"
+				>
 					Location
 				</div>
-				<div class="font-heading text-4xl font-bold text-primary">
-					Soihull, United Kingdom
-				</div>
+				<div class="text-foreground font-heading text-4xl font-bold">Soihull, United Kingdom</div>
 			</div>
 
-			<div class="border-t border-border pt-8 dark:border-stone-800">
-				<div class="mb-2 font-mono text-xs font-bold tracking-widest text-muted uppercase">
+			<div class="border-border border-t pt-8">
+				<div
+					class="text-muted-foreground mb-2 font-mono text-xs font-bold tracking-widest uppercase"
+				>
 					Focus
 				</div>
-				<div class="font-heading text-4xl font-bold text-primary">
-					Systems & Frontend
-				</div>
+				<div class="text-foreground font-heading text-4xl font-bold">Systems & Frontend</div>
 			</div>
 
-			<div class="border-t border-border pt-8 dark:border-stone-800">
-				<div class="mb-2 font-mono text-xs font-bold tracking-widest text-muted uppercase">
+			<div class="border-border border-t pt-8">
+				<div
+					class="text-muted-foreground mb-2 font-mono text-xs font-bold tracking-widest uppercase"
+				>
 					Experience
 				</div>
-				<div class="font-heading text-4xl font-bold text-primary">
-					22 Years Old
-				</div>
+				<div class="text-foreground font-heading text-4xl font-bold">22 Years Old</div>
 			</div>
 		</div>
 	</div>

@@ -60,7 +60,7 @@
 	<meta name="description" content="Thoughts on software engineering, design, and systems." />
 </svelte:head>
 
-<section class="relative min-h-[30vh] w-full overflow-hidden border-b border-border">
+<section class="border-border relative min-h-[30vh] w-full overflow-hidden border-b">
 	<InteractiveGrid />
 	<div
 		class="relative z-10 container mx-auto flex h-full min-h-[30vh] flex-col justify-end px-6 pt-32 pb-12"
@@ -69,14 +69,14 @@
 			<div>
 				<h1
 					use:reveal={{ delay: 0, y: 20 }}
-					class="font-heading text-6xl font-black tracking-tighter text-primary"
+					class="text-foreground font-heading text-6xl font-black tracking-tighter"
 				>
 					Writing.
 				</h1>
 			</div>
 			<p
 				use:reveal={{ delay: 100, y: 20 }}
-				class="hidden max-w-xs text-right text-sm font-bold tracking-wide text-muted md:block dark:text-muted"
+				class="text-muted-foreground hidden max-w-xs text-right text-sm font-bold tracking-wide md:block"
 			>
 				Archive of thoughts <br />and technical notes.
 			</p>
@@ -84,12 +84,12 @@
 	</div>
 </section>
 
-<section class="min-h-screen bg-base">
+<section class="bg-background min-h-screen">
 	<div class="container mx-auto max-w-5xl px-6 py-20">
 		<!-- Search & Filter Bar -->
 		<div class="mb-8" use:reveal={{ delay: 200, y: 20 }}>
 			<div class="relative max-w-md">
-				<div class="absolute top-1/2 left-4 -translate-y-1/2 text-muted">
+				<div class="text-muted-foreground absolute top-1/2 left-4 -translate-y-1/2">
 					<MagnifyingGlass size={20} weight="bold" />
 				</div>
 				<input
@@ -97,7 +97,7 @@
 					placeholder="Search articles..."
 					value={searchQuery}
 					oninput={handleSearch}
-					class="w-full rounded-full border-2 border-border bg-transparent py-4 pr-6 pl-12 text-sm font-bold text-primary dark:focus:border-stone-100"
+					class="border-border text-foreground w-full rounded-full border-2 bg-transparent py-4 pr-6 pl-12 text-sm font-bold dark:focus:border-stone-100"
 				/>
 			</div>
 		</div>
@@ -111,7 +111,7 @@
 						class="rounded-full border px-3 py-1 text-xs font-bold tracking-wide uppercase transition-colors
 											{data.currentTag === tag
 							? 'border-primary bg-primary text-base'
-							: 'border-border bg-transparent text-muted hover:border-muted hover:text-primary'}"
+							: 'border-border text-muted-foreground hover:border-muted hover:text-foreground bg-transparent'}"
 					>
 						{tag}
 					</button>
@@ -125,7 +125,7 @@
 				<li>
 					<a
 						href={resolve(`/blog/${post.slug}`)}
-						class="group block border-b-2 border-stone-900 transition-colors hover:bg-stone-50 dark:border-stone-100 dark:hover:bg-surface"
+						class="group dark:hover:bg-card block border-b-2 border-stone-900 transition-colors hover:bg-stone-50 dark:border-stone-100"
 					>
 						<article
 							use:reveal={{ delay: i * 50 }}
@@ -134,7 +134,7 @@
 							<!-- Date -->
 							<time
 								datetime={post.publishedAt ? new Date(post.publishedAt).toISOString() : ''}
-								class="font-mono text-sm font-bold tracking-wider text-muted uppercase dark:text-muted"
+								class="text-muted-foreground font-mono text-sm font-bold tracking-wider uppercase"
 							>
 								{formatDate(post.publishedAt ? new Date(post.publishedAt) : null)}
 							</time>
@@ -142,17 +142,17 @@
 							<!-- Content -->
 							<div class="space-y-6">
 								<h3
-									class="font-heading text-3xl leading-tight font-bold tracking-tight text-primary transition-colors group-hover:text-secondary"
+									class="text-foreground group-hover:text-muted-foreground font-heading text-3xl leading-tight font-bold tracking-tight transition-colors"
 								>
 									{post.title}
 								</h3>
-								<p class="line-clamp-2 max-w-2xl leading-relaxed font-medium text-base">
+								<p class="line-clamp-2 max-w-2xl text-base leading-relaxed font-medium">
 									{post.excerpt}
 								</p>
 								{#if post.tags}
 									<div class="flex flex-wrap gap-2">
 										{#each post.tags.split(',') as tag (tag)}
-											<span class="font-mono text-xs font-bold text-muted dark:text-muted"
+											<span class="text-muted-foreground font-mono text-xs font-bold"
 												>#{tag.trim()}</span
 											>
 										{/each}
@@ -162,7 +162,7 @@
 
 							<!-- Arrow -->
 							<div class="hidden md:block">
-								<span class="text-primary">
+								<span class="text-foreground">
 									<ArrowRight size={32} weight="light" />
 								</span>
 							</div>
@@ -171,7 +171,7 @@
 				</li>
 			{:else}
 				<li class="py-32 text-center">
-					<p class="font-heading text-3xl font-bold text-muted">No articles found.</p>
+					<p class="font-heading text-3xl font-bold text-muted-foreground">No articles found.</p>
 				</li>
 			{/each}
 		</ul>

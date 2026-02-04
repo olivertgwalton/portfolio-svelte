@@ -25,15 +25,13 @@
 		use:reveal={{ delay: 0, y: 20 }}
 	>
 		<div
-			class="rounded-2xl border border-black/5 bg-white/60 p-8 shadow-xl backdrop-blur-xl dark:border-white/10 dark:bg-surface/60"
+			class="/60 rounded-2xl border border-black/5 bg-white/60 p-8 shadow-xl backdrop-blur-xl dark:border-white/10"
 		>
 			<div class="mb-8 space-y-2 text-center">
-				<h1
-					class="font-heading text-3xl font-black tracking-tighter text-primary"
-				>
+				<h1 class="text-foreground font-heading text-3xl font-black tracking-tighter">
 					Welcome back
 				</h1>
-				<p class="text-xs font-bold text-muted">
+				<p class="text-muted-foreground text-xs font-bold">
 					Enter your credentials to access the admin panel
 				</p>
 			</div>
@@ -43,7 +41,7 @@
 				<div class="space-y-2">
 					<label
 						for="email"
-						class="text-xs font-black tracking-widest text-secondary uppercase"
+						class="text-muted-foreground text-xs font-black tracking-widest uppercase"
 					>
 						Email
 					</label>
@@ -55,7 +53,7 @@
 						bind:value={email}
 						required
 						autocomplete="email"
-						class="w-full border-b-2 border-stone-300 bg-transparent py-2 font-heading text-lg font-bold text-primary dark:focus:border-stone-100"
+						class="text-foreground w-full border-b-2 border-stone-300 bg-transparent py-2 font-heading text-lg font-bold dark:focus:border-stone-100"
 					/>
 				</div>
 
@@ -64,7 +62,7 @@
 					<div class="flex items-center justify-between">
 						<label
 							for="password"
-							class="text-xs font-black tracking-widest text-secondary uppercase"
+							class="text-muted-foreground text-xs font-black tracking-widest uppercase"
 						>
 							Password
 						</label>
@@ -76,7 +74,7 @@
 						bind:value={password}
 						required
 						autocomplete="current-password"
-						class="w-full border-b-2 border-stone-300 bg-transparent py-2 font-heading text-lg font-bold text-primary dark:focus:border-stone-100"
+						class="text-foreground w-full border-b-2 border-stone-300 bg-transparent py-2 font-heading text-lg font-bold dark:focus:border-stone-100"
 					/>
 				</div>
 

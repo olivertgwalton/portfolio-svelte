@@ -120,19 +120,20 @@
 	<!-- Content (Markdown) -->
 	<div class="flex flex-col gap-2">
 		<div class="flex items-center justify-between">
-			<label for="content" class="text-xs font-black tracking-widest text-muted uppercase">
+			<label
+				for="content"
+				class="text-muted-foreground text-xs font-black tracking-widest uppercase"
+			>
 				Content (Markdown)
 			</label>
 			<ImageUploadButton onUpload={handleImageUpload} />
 		</div>
 
 		{#if uploadedImages.length > 0}
-			<div
-				class="flex flex-wrap gap-4 rounded-lg border border-stone-100 bg-stone-50/30 p-4 dark:border-stone-800 dark:bg-surface/30"
-			>
+			<div class="/30 flex flex-wrap gap-4 rounded-lg border border-stone-100 bg-stone-50/30 p-4">
 				{#each uploadedImages as img (img)}
 					<div
-						class="group relative h-20 w-20 overflow-hidden rounded-md border border-border bg-white dark:border-stone-700"
+						class="group border-border relative h-20 w-20 overflow-hidden rounded-md border bg-white dark:border-stone-700"
 					>
 						<img src={img} alt="Uploaded" class="h-full w-full object-cover" />
 						<div
@@ -140,7 +141,7 @@
 						>
 							<button
 								type="button"
-								class="rounded bg-white px-2 py-1 text-[10px] font-bold text-primary hover:bg-stone-100"
+								class="text-foreground rounded bg-white px-2 py-1 text-[10px] font-bold hover:bg-stone-100"
 								onclick={() => handleImageUpload(img, 'image')}
 							>
 								Insert
@@ -167,7 +168,7 @@
 			rows="15"
 			placeholder="# Writing starts here..."
 			required
-			class="w-full rounded-sm border-2 border-stone-100 bg-stone-50/50 p-6 font-mono text-sm leading-relaxed focus:border-stone-900 focus:outline-none dark:border-stone-800 dark:bg-surface/50 dark:focus:border-stone-100"
+			class="/50 w-full rounded-sm border-2 border-stone-100 bg-stone-50/50 p-6 font-mono text-sm leading-relaxed focus:border-stone-900 focus:outline-none dark:focus:border-stone-100"
 		></textarea>
 	</div>
 
@@ -181,13 +182,13 @@
 	<div class="flex items-center gap-4 pt-8">
 		<button
 			type="submit"
-			class="btn-polished btn-polished-primary bg-surface px-12 py-4 text-sm font-bold text-white transition-all hover:scale-[1.02] hover:bg-black"
+			class="btn-polished btn-polished-primary bg-card px-12 py-4 text-sm font-bold text-white transition-all hover:scale-[1.02] hover:bg-black"
 		>
 			{submitLabel}
 		</button>
 		<a
 			href={resolve('/admin')}
-			class="text-sm font-bold text-muted transition-colors hover:text-primary dark:hover:text-stone-100"
+			class="text-muted-foreground hover:text-foreground text-sm font-bold transition-colors dark:hover:text-stone-100"
 		>
 			Cancel
 		</a>

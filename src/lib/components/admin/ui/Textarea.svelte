@@ -23,7 +23,7 @@
 </script>
 
 <div class="flex flex-col gap-2">
-	<label for={id} class="text-xs font-black tracking-widest text-secondary uppercase">
+	<label for={id} class="text-muted-foreground text-xs font-black tracking-widest uppercase">
 		{label}
 	</label>
 	<textarea
@@ -33,7 +33,7 @@
 		{rows}
 		{placeholder}
 		{required}
-		class="border-b-2 border-border bg-transparent py-2 text-lg text-primary placeholder-muted focus:border-primary focus:outline-none"
+		class="border-border text-foreground placeholder-muted focus:border-primary border-b-2 bg-transparent py-2 text-lg focus:outline-none"
 		{...rest}
 	></textarea>
 </div>

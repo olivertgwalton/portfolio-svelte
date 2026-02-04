@@ -9,16 +9,14 @@
 	<meta name="description" content="Get in touch via email or social media." />
 </svelte:head>
 
-<section
-	class="relative min-h-[30vh] w-full overflow-hidden border-b border-border"
->
+<section class="border-border relative min-h-[30vh] w-full overflow-hidden border-b">
 	<InteractiveGrid />
 	<div
 		class="relative z-10 container mx-auto flex h-full min-h-[30vh] flex-col justify-end px-6 pt-32 pb-12"
 	>
 		<h1
 			use:reveal={{ delay: 0, y: 20 }}
-			class="max-w-4xl font-heading text-6xl font-black tracking-tight text-primary"
+			class="text-foreground max-w-4xl font-heading text-6xl font-black tracking-tight"
 		>
 			Say Hello.
 		</h1>
@@ -28,7 +26,7 @@
 <section class="container mx-auto px-6 py-24">
 	<div class="space-y-16">
 		<div
-			class="max-w-3xl space-y-6 text-xl leading-relaxed text-secondary"
+			class="text-muted-foreground max-w-3xl space-y-6 text-xl leading-relaxed"
 			use:reveal={{ delay: 100 }}
 		>
 			<p>
@@ -42,10 +40,12 @@
 		<div class="grid gap-12 md:grid-cols-2 lg:gap-24">
 			<!-- Email -->
 			<div class="space-y-4" use:reveal={{ delay: 200, y: 20 }}>
-				<h3 class="font-mono text-xs font-bold tracking-widest text-muted uppercase">Direct</h3>
+				<h3 class="text-muted-foreground font-mono text-xs font-bold tracking-widest uppercase">
+					Direct
+				</h3>
 				<a
 					href="mailto:hello@oliverwalton.dev"
-					class="block font-heading text-2xl font-bold text-primary"
+					class="text-foreground block font-heading text-2xl font-bold"
 				>
 					olivertgwalton03@gmail.com
 				</a>
@@ -53,18 +53,18 @@
 
 			<!-- Socials -->
 			<div class="space-y-4 md:pl-12" use:reveal={{ delay: 300, y: 20 }}>
-				<h3 class="font-mono text-xs font-bold tracking-widest text-muted uppercase">
+				<h3 class="text-muted-foreground font-mono text-xs font-bold tracking-widest uppercase">
 					Socials
 				</h3>
-				<ul class="space-y-4 font-heading text-2xl font-bold text-primary">
+				<ul class="text-foreground space-y-4 font-heading text-2xl font-bold">
 					<li>
 						<a
 							href="https://github.com/olivertgwalton"
 							target="_blank"
 							rel="noopener noreferrer"
-							class="flex items-center gap-2 transition-colors hover:text-muted"
+							class="hover:text-muted-foreground flex items-center gap-2 transition-colors"
 						>
-							Github <ArrowUpRight size={20} weight="bold" class="text-muted" />
+							Github <ArrowUpRight size={20} weight="bold" class="text-muted-foreground" />
 						</a>
 					</li>
 					<li>
@@ -72,9 +72,9 @@
 							href="https://www.linkedin.com/in/oliver-walton03/"
 							target="_blank"
 							rel="noopener noreferrer"
-							class="flex items-center gap-2 transition-colors hover:text-muted"
+							class="hover:text-muted-foreground flex items-center gap-2 transition-colors"
 						>
-							LinkedIn <ArrowUpRight size={20} weight="bold" class="text-muted" />
+							LinkedIn <ArrowUpRight size={20} weight="bold" class="text-muted-foreground" />
 						</a>
 					</li>
 					<li>
@@ -82,9 +82,9 @@
 							href="https://instagram.com/olivertgwalton03"
 							target="_blank"
 							rel="noopener noreferrer"
-							class="flex items-center gap-2 transition-colors hover:text-muted"
+							class="hover:text-muted-foreground flex items-center gap-2 transition-colors"
 						>
-							Instagram <ArrowUpRight size={20} weight="bold" class="text-muted" />
+							Instagram <ArrowUpRight size={20} weight="bold" class="text-muted-foreground" />
 						</a>
 					</li>
 				</ul>

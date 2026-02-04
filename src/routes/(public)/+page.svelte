@@ -36,9 +36,7 @@
 <TechStack />
 
 {#await data.posts}
-	<div
-		class="container mx-auto animate-pulse border-t border-border px-6 py-24 dark:border-stone-800"
-	>
+	<div class="border-border container mx-auto animate-pulse border-t px-6 py-24">
 		<div class="mb-16 h-12 w-48 rounded bg-stone-200 dark:bg-stone-800"></div>
 		<div class="space-y-8">
 			<div class="h-32 w-full rounded bg-stone-100 dark:bg-stone-800"></div>
