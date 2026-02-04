@@ -1,80 +1,80 @@
-:root[data-theme="t3-chat"] {
-    /* 
+:root[data-theme='t3-chat'] {
+	/* 
        T3 Chat Theme - Corrected for Skeleton v4 Mappings
     */
 
-    /* 
+	/* 
        Surface 50 
        Light Mode: Background (#faf5fa)
        Dark Mode: Foreground (#d2c4de) - Used for text in dark mode via pairing
     */
-    --color-surface-50: light-dark(#faf5fa, #d2c4de);
+	--color-surface-50: light-dark(#faf5fa, #d2c4de);
 
-    /* 
+	/* 
        Surface 200
        Light: Border (#efbdeb)
        Dark: Muted Text (#c2b6cf)
     */
-    --color-surface-200: light-dark(#efbdeb, #c2b6cf);
+	--color-surface-200: light-dark(#efbdeb, #c2b6cf);
 
-    /* 
+	/* 
        Surface 800
        Light: Inverse Border (#77347c) - placeholder
        Dark: Border (#3b3237)
     */
-    --color-surface-800: light-dark(#77347c, #3b3237);
+	--color-surface-800: light-dark(#77347c, #3b3237);
 
-    /* 
+	/* 
        Surface 900
        Light: Card (#faf5fa)
        Dark: Card (#2c2632)
     */
-    --color-surface-900: light-dark(#faf5fa, #2c2632);
+	--color-surface-900: light-dark(#faf5fa, #2c2632);
 
-    /* 
+	/* 
        Surface 950
        Light: Foreground (#501854)
        Dark: Background (#221d27) - Used for bg in dark mode via pairing
     */
-    --color-surface-950: light-dark(#501854, #221d27);
+	--color-surface-950: light-dark(#501854, #221d27);
 
-    /* Intermediate Surfaces */
-    --color-surface-100: light-dark(#f3e4f6, #181117); /* Sidebar */
-    --color-surface-300: light-dark(#e7c1dc, #3e343c); /* Input */
-    --color-surface-400: light-dark(#c2b6cf, #834588);
-    --color-surface-500: light-dark(#f6e5f3, #28222d); /* Muted BG */
-    --color-surface-600: light-dark(#834588, #c2b6cf); /* Muted FG */
-    --color-surface-700: light-dark(#77347c, #d4c7e1);
+	/* Intermediate Surfaces */
+	--color-surface-100: light-dark(#f3e4f6, #181117); /* Sidebar */
+	--color-surface-300: light-dark(#e7c1dc, #3e343c); /* Input */
+	--color-surface-400: light-dark(#c2b6cf, #834588);
+	--color-surface-500: light-dark(#f6e5f3, #28222d); /* Muted BG */
+	--color-surface-600: light-dark(#834588, #c2b6cf); /* Muted FG */
+	--color-surface-700: light-dark(#77347c, #d4c7e1);
 
-    /* Primary */
-    --color-primary-500: light-dark(#a84370, #a3004c);
-    --color-primary-contrast-500: light-dark(#ffffff, #efc0d8);
+	/* Primary */
+	--color-primary-500: light-dark(#a84370, #a3004c);
+	--color-primary-contrast-500: light-dark(#ffffff, #efc0d8);
 
-    /* Secondary */
-    --color-secondary-500: light-dark(#f1c4e6, #362d3d);
-    --color-secondary-contrast-500: light-dark(#77347c, #d4c7e1);
+	/* Secondary */
+	--color-secondary-500: light-dark(#f1c4e6, #362d3d);
+	--color-secondary-contrast-500: light-dark(#77347c, #d4c7e1);
 
-    /* Tertiary (Accent) */
-    --color-tertiary-500: light-dark(#f1c4e6, #463753);
-    --color-tertiary-contrast-500: light-dark(#77347c, #f8f1f5);
+	/* Tertiary (Accent) */
+	--color-tertiary-500: light-dark(#f1c4e6, #463753);
+	--color-tertiary-contrast-500: light-dark(#77347c, #f8f1f5);
 
-    /* Success */
-    --color-success-500: light-dark(#339933, #339933);
-    --color-success-contrast-500: #ffffff;
+	/* Success */
+	--color-success-500: light-dark(#339933, #339933);
+	--color-success-contrast-500: #ffffff;
 
-    /* Warning */
-    --color-warning-500: light-dark(#e8c468, #e88c30);
-    --color-warning-contrast-500: #000000;
+	/* Warning */
+	--color-warning-500: light-dark(#e8c468, #e88c30);
+	--color-warning-contrast-500: #000000;
 
-    /* Error (Destructive) */
-    --color-error-500: light-dark(#ab4347, #301015);
-    --color-error-contrast-500: light-dark(#ffffff, #ffffff);
-    
-    /* 
+	/* Error (Destructive) */
+	--color-error-500: light-dark(#ab4347, #301015);
+	--color-error-contrast-500: light-dark(#ffffff, #ffffff);
+
+	/* 
        Core Settings
        These must use light-dark() pairings to ensure they pick the correct 
        color from the surface scale based on the mode.
     */
-    --base-font-color: light-dark(var(--color-surface-950), var(--color-surface-50));
-    --body-background-color: light-dark(var(--color-surface-50), var(--color-surface-950));
+	--base-font-color: light-dark(var(--color-surface-950), var(--color-surface-50));
+	--body-background-color: light-dark(var(--color-surface-50), var(--color-surface-950));
 }
