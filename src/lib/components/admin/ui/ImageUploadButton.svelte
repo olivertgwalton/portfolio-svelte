@@ -47,7 +47,7 @@
 	/>
 	<button
 		type="button"
-		class="rounded bg-stone-200 px-3 py-1 text-xs font-bold text-stone-600 transition-colors hover:bg-stone-300 disabled:opacity-50 dark:bg-stone-800 dark:text-stone-400 dark:hover:bg-stone-700"
+		class="rounded bg-stone-200 px-3 py-1 text-xs font-bold text-secondary transition-colors hover:bg-stone-300 disabled:opacity-50 dark:bg-stone-800 dark:text-muted dark:hover:bg-stone-700"
 	>
 		{isUploading ? 'Uploading...' : '+ Insert Image'}
 	</button>

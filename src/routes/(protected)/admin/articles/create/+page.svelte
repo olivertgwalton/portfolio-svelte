@@ -9,10 +9,10 @@
 
 <div class="container mx-auto max-w-4xl px-6 py-24">
 	<header class="mb-12">
-		<h1 class="font-serif text-5xl font-black tracking-tight text-stone-900 dark:text-stone-100">
+		<h1 class="font-heading text-5xl font-black tracking-tight text-primary">
 			New Article.
 		</h1>
-		<p class="mt-4 text-stone-500">Drafting something new for the world to see.</p>
+		<p class="mt-4 text-muted">Drafting something new for the world to see.</p>
 	</header>
 
 	{#if form?.message}

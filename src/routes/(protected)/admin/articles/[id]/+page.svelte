@@ -10,10 +10,10 @@
 <div class="container mx-auto max-w-4xl px-6 py-24">
 	<header class="mb-12 flex items-center justify-between">
 		<div>
-			<h1 class="font-serif text-5xl font-black tracking-tight text-stone-900 dark:text-stone-100">
+			<h1 class="font-heading text-5xl font-black tracking-tight text-primary">
 				Edit Article.
 			</h1>
-			<p class="mt-4 text-stone-500">Polishing the draft.</p>
+			<p class="mt-4 text-muted">Polishing the draft.</p>
 		</div>
 	</header>
 
