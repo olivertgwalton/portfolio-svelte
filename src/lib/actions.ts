@@ -8,29 +8,53 @@ interface RevealParams {
 }
 
 export const reveal: Action<HTMLElement, RevealParams> = (node, params = {}) => {
-	const { delay = 0, duration = 800, y = 30, threshold = 0.1 } = params;
+	const { delay = 0, duration = 800, y = 20, threshold = 0.1 } = params;
 
-	// Initial state
+	// Guard: If already animated, don't re-animate
+	if (node.dataset.revealed === 'true') {
+		node.style.opacity = '1';
+		return { destroy() {} };
+	}
+
+	// Set initial state
 	node.style.opacity = '0';
 	node.style.transform = `translateY(${y}px)`;
-	node.style.willChange = 'opacity, transform';
-	node.style.transition = `opacity ${duration}ms cubic-bezier(0.2, 0.0, 0.2, 1) ${delay}ms, transform ${duration}ms cubic-bezier(0.2, 0.0, 0.2, 1) ${delay}ms`;
 
 	const observer = new IntersectionObserver(
 		(entries) => {
 			entries.forEach((entry) => {
 				if (entry.isIntersecting) {
-					// Reveal state
-					node.style.opacity = '1';
-					node.style.transform = 'translateY(0)';
+					// Mark as revealed to prevent re-animation
+					node.dataset.revealed = 'true';
 
-					const totalTime = duration + delay;
-					setTimeout(() => {
-						node.style.willChange = 'auto';
-						// Keep transition for responsiveness if needed, or remove.
-						// Removing helps prevent interference with other transforms like tilt.
-						node.style.transition = '';
-					}, totalTime);
+					// Disable CSS transitions temporarily to prevent conflict with WAAPI
+					const originalTransition = node.style.transition;
+					node.style.transition = 'none';
+
+					// Trigger WAAPI Animation
+					const animation = node.animate(
+						[
+							{ opacity: 0, transform: `translateY(${y}px)` },
+							{ opacity: 1, transform: 'translateY(0)' }
+						],
+						{
+							duration: duration,
+							delay: delay,
+							easing: 'cubic-bezier(0.2, 0, 0.2, 1)',
+							fill: 'forwards'
+						}
+					);
+
+					// Clean up after animation
+					animation.onfinish = () => {
+						// Apply final styles directly
+						node.style.opacity = '1';
+						node.style.transform = 'translateY(0)';
+						// Restore transitions after a frame to avoid flash
+						requestAnimationFrame(() => {
+							node.style.transition = originalTransition;
+						});
+					};
 
 					observer.unobserve(node);
 				}
@@ -38,7 +62,7 @@ export const reveal: Action<HTMLElement, RevealParams> = (node, params = {}) => 
 		},
 		{
 			threshold,
-			rootMargin: '0px 0px -50px 0px'
+			rootMargin: '0px'
 		}
 	);
 
