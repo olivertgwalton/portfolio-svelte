@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import me from '$lib/assets/me.jpg?enhanced';
-	import ArrowDown from 'phosphor-svelte/lib/ArrowDown';
+	import ArrowDownIcon from 'phosphor-svelte/lib/ArrowDownIcon';
 	import InteractiveGrid from '$lib/components/visuals/InteractiveGrid.svelte';
 	import { reveal } from '$lib/actions';
 </script>
 
 <section
-	class="relative flex min-h-[80vh] w-full items-center justify-center overflow-hidden border-b border-border dark:border-border"
+	class="border-border dark:border-border relative flex min-h-[80vh] w-full items-center justify-center overflow-hidden border-b"
 >
 	<InteractiveGrid />
 	<div class="relative z-10 container mx-auto px-6 md:px-12">
@@ -21,11 +21,9 @@
 
 				<div
 					use:reveal={{ delay: 0, y: 20 }}
-					class="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-white/80 px-4 py-1.5 shadow-sm backdrop-blur-sm dark:border-stone-700 dark:bg-stone-800/80"
+					class="mb-8 inline-flex items-center gap-2 rounded-full border border-surface-200-800 bg-surface-50-950/80 px-4 py-1.5 shadow-sm backdrop-blur-sm"
 				>
-					<span
-						class="text-xs font-bold tracking-widest text-primary"
-					>
+					<span class="text-foreground text-xs font-bold tracking-widest">
 						<span role="img" aria-label="United Kingdom">🇬🇧</span> Based in the UK
 					</span>
 				</div>
@@ -34,13 +32,11 @@
 
 				<h1
 					use:reveal={{ delay: 100, y: 20 }}
-					class="mb-8 font-heading leading-[0.9] font-black tracking-tighter text-primary"
+					class="text-foreground mb-8 font-heading leading-[0.9] font-black tracking-tighter"
 				>
 					<span class="block text-5xl md:text-8xl"> Oliver Walton. </span>
 
-					<span
-						class="mt-2 block text-2xl font-bold text-secondary md:text-4xl dark:text-muted"
-					>
+					<span class="text-muted-foreground mt-2 block text-2xl font-bold md:text-4xl">
 						Software Engineer.
 					</span>
 				</h1>
@@ -49,18 +45,18 @@
 
 				<p
 					use:reveal={{ delay: 200, y: 20 }}
-					class="max-w-xl font-sans text-lg leading-relaxed font-medium text-stone-800 dark:text-stone-300"
+					class="max-w-xl font-sans text-lg leading-relaxed font-medium text-surface-800-200"
 				>
 					British developer with a focus on design and performance. Specialising in
 
 					<strong
-						class="font-extrabold text-primary underline decoration-(--color-accent-pop) decoration-4 underline-offset-4 dark:text-white"
+						class="text-foreground font-extrabold underline decoration-primary-500 decoration-4 underline-offset-4"
 						>Frontend Architecture</strong
 					>,
 
-					<strong class="font-extrabold text-primary">Linux Systems</strong>, and
+					<strong class="text-foreground font-extrabold">Linux Systems</strong>, and
 
-					<strong class="font-extrabold text-primary">Embedded Development</strong>.
+					<strong class="text-foreground font-extrabold">Embedded Development</strong>.
 				</p>
 
 				<!-- Buttons -->
@@ -68,7 +64,7 @@
 				<div use:reveal={{ delay: 300, y: 20 }} class="mt-10 flex flex-wrap gap-5">
 					<a
 						href={resolve('/contact')}
-						class="inline-flex items-center justify-center border-2 border-black px-8 py-4 text-sm font-bold tracking-wider text-primary uppercase transition-colors hover:bg-black hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-primary"
+						class="btn preset-filled-primary-500 px-8 py-4 text-sm font-bold tracking-wider uppercase"
 					>
 						Contact
 					</a>
@@ -81,7 +77,7 @@
 				<div class="group relative mx-auto aspect-3/4 w-full max-w-sm">
 					<!-- Glass Background/Frame -->
 					<div
-						class="absolute -inset-4 rounded-3xl border border-border/50 bg-white/30 backdrop-blur-xl transition-all duration-500 group-hover:-inset-6 group-hover:bg-white/40 dark:border-stone-700/50 dark:bg-surface/30 dark:group-hover:bg-surface/40"
+						class="/30 absolute -inset-4 rounded-3xl border border-surface-200-800/50 bg-surface-50-950/30 backdrop-blur-xl transition-all duration-500 group-hover:-inset-6 group-hover:bg-surface-50-950/40"
 					></div>
 
 					<!-- Image Container -->
@@ -96,7 +92,7 @@
 
 						<!-- Overlay Gradient for depth -->
 						<div
-							class="absolute inset-0 bg-linear-to-t from-stone-900/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+							class="absolute inset-0 bg-linear-to-t from-surface-950/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
 						></div>
 					</div>
 				</div>
@@ -107,10 +103,10 @@
 	<!-- Scroll Indicator -->
 	<div
 		use:reveal={{ delay: 600, y: -10 }}
-		class="absolute bottom-8 left-1/2 -translate-x-1/2 text-muted dark:text-secondary"
+		class="text-muted-foreground absolute bottom-8 left-1/2 -translate-x-1/2"
 	>
 		<span class="block animate-bounce">
-			<ArrowDown size={24} weight="bold" />
+			<ArrowDownIcon size={24} weight="bold" />
 		</span>
 	</div>
 </section>
