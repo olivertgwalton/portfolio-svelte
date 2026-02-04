@@ -68,13 +68,11 @@
 	}
 
 	function updateThemeColor() {
-		// Read CSS variable only once when needed, not every frame
-		if (typeof window !== 'undefined') {
-			const style = getComputedStyle(document.documentElement);
-			// We manually check for dark class on html for faster switching if needed,
-			// or just rely on the variable --grid-color defined in layout.css
-			dotColor = style.getPropertyValue('--grid-color').trim() || 'rgba(0, 0, 0, 0.08)';
-		}
+		if (typeof window === 'undefined') return;
+		// Use computed body text color which ensures we get a resolved color value (rgb/hex)
+		// rather than potentially getting the raw 'light-dark()' function string from a variable.
+		const style = getComputedStyle(document.body);
+		dotColor = style.color || '#000000';
 	}
 
 	function animate() {
@@ -82,6 +80,7 @@
 
 		// Clear
 		ctx.clearRect(0, 0, width, height);
+		ctx.globalAlpha = 0.15;
 		ctx.fillStyle = dotColor;
 		ctx.beginPath();
 
@@ -154,7 +153,7 @@
 
 		// Observer for Dark Mode changes to update color instantly
 		const observer = new MutationObserver(updateThemeColor);
-		observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+		observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] });
 
 		animationId = requestAnimationFrame(animate);
 		window.addEventListener('resize', handleResize);
