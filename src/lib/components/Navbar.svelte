@@ -1,13 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { resolve, asset } from '$app/paths';
-	import { tick } from 'svelte';
-	import Sun from 'phosphor-svelte/lib/Sun';
-	import Moon from 'phosphor-svelte/lib/Moon';
-	import List from 'phosphor-svelte/lib/List';
-	import { Button, DropdownMenu } from 'bits-ui';
-	import { Switch } from '@skeletonlabs/skeleton-svelte';
-	import { mode, setMode } from 'mode-watcher';
+	import ListIcon from 'phosphor-svelte/lib/ListIcon';
+	import { DropdownMenu } from 'bits-ui';
+	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
 	import { reveal } from '$lib/actions';
 
 	const links = [
@@ -16,48 +12,19 @@
 		{ href: '/about', label: 'About' },
 		{ href: '/contact', label: 'Contact' }
 	] as const;
-
-	// Store click coordinates for the view transition as Switch onclick is specific
-	let clickCoords = { x: 0, y: 0 };
-
-	function captureClick(e: MouseEvent) {
-		clickCoords = { x: e.clientX, y: e.clientY };
-	}
-
-	function handleSwitchChange() {
-		const next = mode.current === 'dark' ? 'light' : 'dark';
-
-		if (!document.startViewTransition) {
-			setMode(next);
-			return;
-		}
-
-		const x = clickCoords.x;
-		const y = clickCoords.y;
-		const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-
-		document.documentElement.style.setProperty('--x', `${x}px`);
-		document.documentElement.style.setProperty('--y', `${y}px`);
-		document.documentElement.style.setProperty('--r', `${endRadius}px`);
-
-		document.startViewTransition(async () => {
-			setMode(next);
-			await tick();
-		});
-	}
 </script>
 
 <nav
-	class="sticky top-0 z-50 w-full border-b border-border bg-base/90 backdrop-blur-md transition-all duration-300 dark:border-stone-800"
+	class="sticky top-0 z-50 w-full border-b border-surface-200-800 bg-surface-50-950/90 backdrop-blur-md transition-all duration-300"
 >
 	<div class="container mx-auto flex items-center justify-between px-6 pt-3 pb-4">
 		<!-- Logo -->
 		<a
 			use:reveal={{ delay: 0, y: -4, duration: 800 }}
 			href={resolve('/')}
-			class="font-heading text-2xl font-bold tracking-tighter text-primary"
+			class="font-heading text-2xl font-bold tracking-tighter text-surface-950-50"
 		>
-			Oliver<span class="text-muted">.</span>
+			Oliver<span class="text-surface-600-400">.</span>
 		</a>
 
 		<!-- Desktop Links -->
@@ -68,12 +35,12 @@
 					use:reveal={{ delay: 100 + i * 30, y: -4, duration: 800 }}
 					href={resolve(link.href)}
 					aria-current={isActive ? 'page' : undefined}
-					class="group relative text-sm leading-none font-semibold tracking-wide text-secondary transition-colors hover:text-primary dark:text-muted dark:hover:text-stone-200
-								{isActive ? 'text-primary' : ''}"
+					class="group relative text-sm leading-none font-semibold tracking-wide text-surface-600-400 transition-colors hover:text-surface-950-50
+								{isActive ? 'text-surface-950-50' : ''}"
 				>
 					{link.label}
 					<span
-						class="absolute -bottom-1 left-0 h-px w-full origin-left bg-surface transition-transform duration-300 ease-out dark:bg-stone-100 {isActive
+						class="absolute -bottom-1 left-0 h-px w-full origin-left bg-surface-950-50 transition-transform duration-300 ease-out {isActive
 							? 'scale-x-100'
 							: 'scale-x-0 group-hover:scale-x-100'}"
 					></span>
@@ -82,40 +49,17 @@
 		</div>
 
 		<div class="flex items-center gap-4" use:reveal={{ delay: 300, y: -4, duration: 800 }}>
-			<!-- Theme Toggle (Skeleton Switch) -->
-			<Switch
-				checked={mode.current === 'dark'}
-				onCheckedChange={handleSwitchChange}
-				onclick={captureClick}
-				aria-label="Toggle Dark Mode"
-				class="group inline-flex items-center justify-center rounded-full focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2 focus-visible:outline-none"
-			>
-				<Switch.HiddenInput />
-				<Switch.Control
-					class="inline-flex h-8 w-14 cursor-pointer items-center rounded-full bg-stone-200 transition-colors data-[state=checked]:bg-stone-800 dark:bg-stone-700 dark:data-[state=checked]:bg-stone-600"
-				>
-					<Switch.Thumb
-						class="pointer-events-none block h-6 w-6 translate-x-1 rounded-full bg-white shadow-lg transition-transform duration-200 will-change-transform data-[state=checked]:translate-x-7"
-					>
-						<div class="flex h-full w-full items-center justify-center text-primary">
-							{#if mode.current === 'dark'}
-								<Moon size={14} weight="bold" />
-							{:else}
-								<Sun size={14} weight="bold" />
-							{/if}
-						</div>
-					</Switch.Thumb>
-				</Switch.Control>
-			</Switch>
+			<!-- Theme Toggle -->
+			<ThemeSwitcher />
 
 			<!-- Mobile Menu Button -->
 			<div class="md:hidden">
 				<DropdownMenu.Root>
-					<DropdownMenu.Trigger class="rounded-md p-2 text-primary" aria-label="Open Menu">
-						<List size={24} weight="bold" />
+					<DropdownMenu.Trigger class="rounded-md p-2 text-surface-950-50" aria-label="Open Menu">
+						<ListIcon size={24} weight="bold" />
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content
-						class="z-50 w-64 rounded-xl border border-border bg-white p-2 shadow-lg dark:border-stone-800 dark:bg-surface"
+						class="z-50 w-64 rounded-xl border border-surface-200-800 bg-surface-50-950 p-2 shadow-lg"
 						align="end"
 						sideOffset={8}
 					>
@@ -123,17 +67,17 @@
 							{@const isActive = page.url.pathname === link.href}
 							<DropdownMenu.Item
 								class="rounded-lg px-4 py-3 text-sm font-bold {isActive
-									? 'bg-stone-100 text-primary'
-									: 'text-secondary hover:bg-stone-50 dark:text-muted dark:hover:bg-stone-800/50'}"
+									? 'bg-surface-200-800 text-surface-950-50'
+									: 'text-surface-600-400 hover:bg-surface-100-900'}"
 							>
 								<a href={resolve(link.href)} class="block w-full">{link.label}</a>
 							</DropdownMenu.Item>
 						{/each}
-						<DropdownMenu.Separator class="my-2 h-px bg-stone-100 dark:bg-stone-800" />
+						<DropdownMenu.Separator class="my-2 h-px bg-surface-200-800" />
 						<DropdownMenu.Item class="p-2">
 							<a
 								href={asset('/CV.pdf')}
-								class="btn-polished btn-polished-secondary block w-full py-2 text-center text-xs dark:border-stone-700 dark:bg-stone-800 dark:text-stone-100 dark:hover:bg-stone-700"
+								class="btn block w-full preset-outlined-surface-200-800 btn-sm py-2 text-center text-xs"
 							>
 								Download CV
 							</a>
@@ -144,12 +88,9 @@
 
 			<!-- CTA Button -->
 			<div class="hidden md:block">
-				<Button.Root
-					href={asset('/CV.pdf')}
-					class="btn-polished btn-polished-secondary px-5 py-2 text-xs dark:border-stone-700 dark:bg-stone-800 dark:text-stone-100 dark:hover:bg-stone-700"
-				>
+				<a href={asset('/CV.pdf')} class="btn preset-filled-primary-500 btn-sm px-5 py-2 text-xs">
 					CV
-				</Button.Root>
+				</a>
 			</div>
 		</div>
 	</div>
