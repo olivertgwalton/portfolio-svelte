@@ -1,3 +1,156 @@
 @import 'tailwindcss';
+@custom-variant dark (&:where(.dark, .dark *));
+
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+
+/* Skeleton Setup */
+@import '@skeletonlabs/skeleton';
+@import '@skeletonlabs/skeleton/themes/cerberus';
+
+:root {
+	/* Typography: Technical & Clean */
+	--font-heading: 'Space Grotesk Variable', sans-serif;
+	--font-body: 'Manrope Variable', sans-serif;
+	--font-mono: 'JetBrains Mono Variable', monospace;
+
+	/* Palette: Polished, Natural, High-End */
+	--color-base: #fffcf5; /* Merino */
+	--color-surface: #f5f5f4; /* Stone 100 */
+	--color-primary: #000000; /* Pure Black - Forced High Contrast */
+	--color-secondary: #44403c; /* Stone 700 */
+
+	/* Vibrant Pop Accents */
+	--color-accent-pop: #ff8ba7;
+	--color-accent-highlight: #faef9b;
+	--color-accent-blue: #c3f0fa;
+
+	/* Grid Color */
+	--grid-color: rgba(0, 0, 0, 0.15);
+}
+
+.dark {
+	/* Palette: Dark Mode */
+	--color-base: #121110;
+	--color-surface: #1c1917;
+	--color-primary: #ffffff; /* Pure White */
+	--color-secondary: #a8a29e;
+
+	--color-accent-pop: #ff6b6b;
+	--color-accent-highlight: #423f30;
+
+	--grid-color: rgba(255, 255, 255, 0.1);
+}
+
+body,
+.font-sans {
+	font-family: var(--font-body);
+	background-color: var(--color-base);
+	color: var(--color-primary);
+	overflow-x: hidden;
+}
+
+/* Authentic Dotted Grid */
+.bg-grid-paper {
+	background-color: var(--color-base);
+	background-image: radial-gradient(var(--grid-color) 1.5px, transparent 1.5px);
+	background-size: 40px 40px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-serif {
+	font-family: var(--font-heading);
+	letter-spacing: -0.02em;
+	color: var(--color-primary);
+}
+
+/* Swiss/Architectural Border */
+.swiss-border {
+	border: 1px solid rgba(28, 25, 23, 0.08);
+}
+
+/* Button Utilities */
+.btn-polished {
+	border-radius: 4px; /* Slightly rounded, architectural */
+	font-weight: 600;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	transition: all 0.2s ease;
+}
+
+.btn-polished-primary {
+	background-color: var(--color-primary);
+	color: white;
+}
+
+.btn-polished-primary:hover {
+	background-color: #292524; /* Stone 800 */
+	transform: translateY(-1px);
+}
+
+.btn-polished-secondary {
+	background-color: white;
+	color: var(--color-primary);
+	border: 1px solid rgba(28, 25, 23, 0.1);
+}
+
+.btn-polished-secondary:hover {
+	background-color: var(--color-surface);
+	border-color: rgba(28, 25, 23, 0.2);
+}
+
+/* Dark Mode Button Overrides */
+.dark .btn-polished-secondary {
+	background-color: transparent;
+	color: var(--color-primary);
+	border-color: rgba(255, 255, 255, 0.2);
+}
+
+.dark .btn-polished-secondary:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+	border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Subtle Texture */
+.bg-texture {
+	background-color: var(--color-base);
+	background-image: radial-gradient(#44403c 0.5px, transparent 0.5px);
+	background-size: 24px 24px;
+	opacity: 0.8;
+}
+
+/* Global Focus Styles for Accessibility */
+:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 2px;
+}
+
+/* View Transitions */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation: none;
+
+	mix-blend-mode: normal;
+}
+
+/* Custom Theme Transition */
+
+::view-transition-new(root) {
+	animation: clip 0.5s ease-in-out forwards;
+}
+
+@keyframes clip {
+	from {
+		clip-path: circle(0px at var(--x) var(--y));
+	}
+
+	to {
+		clip-path: circle(var(--r) at var(--x) var(--y));
+	}
+}
