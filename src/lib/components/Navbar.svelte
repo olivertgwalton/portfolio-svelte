@@ -68,7 +68,7 @@
 									<Menu.Item value={link.href}>
 										{#snippet element(attributes)}
 											<a
-												{...attributes}
+												{...attributes as import('svelte/elements').HTMLAnchorAttributes}
 												href={resolve(link.href)}
 												class="block w-full rounded-lg px-4 py-3 text-sm font-bold {isActive
 													? 'bg-surface-200-800 text-surface-950-50'
@@ -83,7 +83,7 @@
 								<Menu.Item value="cv">
 									{#snippet element(attributes)}
 										<a
-											{...attributes}
+											{...attributes as import('svelte/elements').HTMLAnchorAttributes}
 											href={asset('/CV.pdf')}
 											class="btn block w-full preset-outlined-surface-200-800 btn-sm py-2 text-center text-xs"
 										>

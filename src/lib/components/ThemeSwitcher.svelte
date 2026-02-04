@@ -160,49 +160,53 @@
 		<Menu.Content
 			class="z-50 w-56 rounded-container border border-surface-200-800 bg-surface-50-950 p-2 shadow-xl"
 		>
-				<Menu.ItemGroup>
-					<Menu.ItemGroupLabel class="px-3 py-1.5 text-xs font-bold uppercase opacity-60">Theme</Menu.ItemGroupLabel>
-					{#each themes as theme (theme.id)}
-						<Menu.Item
-							value={theme.id}
-							onclick={(e) => setTheme(theme.id, e)}
-							class="flex cursor-pointer items-center justify-between rounded-container px-3 py-2 text-sm font-medium transition-colors hover:preset-tonal {currentTheme ===
-							theme.id
-								? 'text-primary-500'
-								: ''}"
-						>
-							<Menu.ItemText>{theme.name}</Menu.ItemText>
-							{#if currentTheme === theme.id}
-								<Menu.ItemIndicator><CheckIcon size={16} weight="bold" /></Menu.ItemIndicator>
-							{/if}
-						</Menu.Item>
-					{/each}
-				</Menu.ItemGroup>
+			<Menu.ItemGroup>
+				<Menu.ItemGroupLabel class="px-3 py-1.5 text-xs font-bold uppercase opacity-60"
+					>Theme</Menu.ItemGroupLabel
+				>
+				{#each themes as theme (theme.id)}
+					<Menu.Item
+						value={theme.id}
+						onclick={(e) => setTheme(theme.id, e)}
+						class="flex cursor-pointer items-center justify-between rounded-container px-3 py-2 text-sm font-medium transition-colors hover:preset-tonal {currentTheme ===
+						theme.id
+							? 'text-primary-500'
+							: ''}"
+					>
+						<Menu.ItemText>{theme.name}</Menu.ItemText>
+						{#if currentTheme === theme.id}
+							<Menu.ItemIndicator><CheckIcon size={16} weight="bold" /></Menu.ItemIndicator>
+						{/if}
+					</Menu.Item>
+				{/each}
+			</Menu.ItemGroup>
 
-				<Menu.Separator class="my-1 h-px bg-surface-200-800" />
+			<Menu.Separator class="my-1 h-px bg-surface-200-800" />
 
-				<Menu.ItemGroup>
-					<Menu.ItemGroupLabel class="px-3 py-1.5 text-xs font-bold uppercase opacity-60">Mode</Menu.ItemGroupLabel>
-					{#each modes as mode (mode.id)}
-						{@const Icon = mode.icon}
-						<Menu.Item
-							value={mode.id}
-							onclick={(e) => setMode(mode.id, e)}
-							class="flex cursor-pointer items-center justify-between rounded-container px-3 py-2 text-sm font-medium transition-colors hover:preset-tonal {currentMode ===
-							mode.id
-								? 'text-primary-500'
-								: ''}"
-						>
-							<div class="flex items-center gap-2">
-								<Icon size={16} />
-								<Menu.ItemText>{mode.name}</Menu.ItemText>
-							</div>
-							{#if currentMode === mode.id}
-								<Menu.ItemIndicator><CheckIcon size={16} weight="bold" /></Menu.ItemIndicator>
-							{/if}
-						</Menu.Item>
-					{/each}
-				</Menu.ItemGroup>
-			</Menu.Content>
+			<Menu.ItemGroup>
+				<Menu.ItemGroupLabel class="px-3 py-1.5 text-xs font-bold uppercase opacity-60"
+					>Mode</Menu.ItemGroupLabel
+				>
+				{#each modes as mode (mode.id)}
+					{@const Icon = mode.icon}
+					<Menu.Item
+						value={mode.id}
+						onclick={(e) => setMode(mode.id, e)}
+						class="flex cursor-pointer items-center justify-between rounded-container px-3 py-2 text-sm font-medium transition-colors hover:preset-tonal {currentMode ===
+						mode.id
+							? 'text-primary-500'
+							: ''}"
+					>
+						<div class="flex items-center gap-2">
+							<Icon size={16} />
+							<Menu.ItemText>{mode.name}</Menu.ItemText>
+						</div>
+						{#if currentMode === mode.id}
+							<Menu.ItemIndicator><CheckIcon size={16} weight="bold" /></Menu.ItemIndicator>
+						{/if}
+					</Menu.Item>
+				{/each}
+			</Menu.ItemGroup>
+		</Menu.Content>
 	</Menu.Positioner>
 </Menu>
