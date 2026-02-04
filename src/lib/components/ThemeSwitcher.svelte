@@ -4,7 +4,7 @@
 	import MoonIcon from 'phosphor-svelte/lib/MoonIcon';
 	import SunIcon from 'phosphor-svelte/lib/SunIcon';
 	import MonitorIcon from 'phosphor-svelte/lib/MonitorIcon';
-	import { DropdownMenu } from 'bits-ui';
+	import { Menu } from '@skeletonlabs/skeleton-svelte';
 	import { onMount, tick } from 'svelte';
 
 	const themes = [
@@ -152,51 +152,57 @@
 	});
 </script>
 
-<DropdownMenu.Root>
-	<DropdownMenu.Trigger class="btn-icon hover:preset-tonal" aria-label="Appearance">
+<Menu>
+	<Menu.Trigger class="btn-icon hover:preset-tonal" aria-label="Appearance">
 		<PaletteIcon size={20} weight="bold" />
-	</DropdownMenu.Trigger>
-	<DropdownMenu.Content
-		class="z-50 w-56 rounded-container border border-surface-200-800 preset-filled-surface-100-900 p-2 shadow-xl"
-		align="end"
-		sideOffset={8}
-	>
-		<div class="px-3 py-1.5 text-xs font-bold uppercase opacity-60">Theme</div>
-		{#each themes as theme (theme.id)}
-			<DropdownMenu.Item
-				onclick={(e) => setTheme(theme.id, e)}
-				class="flex cursor-pointer items-center justify-between rounded-container px-3 py-2 text-sm font-medium transition-colors hover:preset-tonal {currentTheme ===
-				theme.id
-					? 'text-primary-500'
-					: ''}"
-			>
-				{theme.name}
-				{#if currentTheme === theme.id}
-					<CheckIcon size={16} weight="bold" />
-				{/if}
-			</DropdownMenu.Item>
-		{/each}
+	</Menu.Trigger>
+	<Menu.Positioner>
+		<Menu.Content
+			class="z-50 w-56 rounded-container border border-surface-200-800 bg-surface-50-950 p-2 shadow-xl"
+		>
+				<Menu.ItemGroup>
+					<Menu.ItemGroupLabel class="px-3 py-1.5 text-xs font-bold uppercase opacity-60">Theme</Menu.ItemGroupLabel>
+					{#each themes as theme (theme.id)}
+						<Menu.Item
+							value={theme.id}
+							onclick={(e) => setTheme(theme.id, e)}
+							class="flex cursor-pointer items-center justify-between rounded-container px-3 py-2 text-sm font-medium transition-colors hover:preset-tonal {currentTheme ===
+							theme.id
+								? 'text-primary-500'
+								: ''}"
+						>
+							<Menu.ItemText>{theme.name}</Menu.ItemText>
+							{#if currentTheme === theme.id}
+								<Menu.ItemIndicator><CheckIcon size={16} weight="bold" /></Menu.ItemIndicator>
+							{/if}
+						</Menu.Item>
+					{/each}
+				</Menu.ItemGroup>
 
-		<DropdownMenu.Separator class="my-1 h-px bg-surface-200-800" />
+				<Menu.Separator class="my-1 h-px bg-surface-200-800" />
 
-		<div class="px-3 py-1.5 text-xs font-bold uppercase opacity-60">Mode</div>
-		{#each modes as mode (mode.id)}
-			{@const Icon = mode.icon}
-			<DropdownMenu.Item
-				onclick={(e) => setMode(mode.id, e)}
-				class="flex cursor-pointer items-center justify-between rounded-container px-3 py-2 text-sm font-medium transition-colors hover:preset-tonal {currentMode ===
-				mode.id
-					? 'text-primary-500'
-					: ''}"
-			>
-				<div class="flex items-center gap-2">
-					<Icon size={16} />
-					{mode.name}
-				</div>
-				{#if currentMode === mode.id}
-					<CheckIcon size={16} weight="bold" />
-				{/if}
-			</DropdownMenu.Item>
-		{/each}
-	</DropdownMenu.Content>
-</DropdownMenu.Root>
+				<Menu.ItemGroup>
+					<Menu.ItemGroupLabel class="px-3 py-1.5 text-xs font-bold uppercase opacity-60">Mode</Menu.ItemGroupLabel>
+					{#each modes as mode (mode.id)}
+						{@const Icon = mode.icon}
+						<Menu.Item
+							value={mode.id}
+							onclick={(e) => setMode(mode.id, e)}
+							class="flex cursor-pointer items-center justify-between rounded-container px-3 py-2 text-sm font-medium transition-colors hover:preset-tonal {currentMode ===
+							mode.id
+								? 'text-primary-500'
+								: ''}"
+						>
+							<div class="flex items-center gap-2">
+								<Icon size={16} />
+								<Menu.ItemText>{mode.name}</Menu.ItemText>
+							</div>
+							{#if currentMode === mode.id}
+								<Menu.ItemIndicator><CheckIcon size={16} weight="bold" /></Menu.ItemIndicator>
+							{/if}
+						</Menu.Item>
+					{/each}
+				</Menu.ItemGroup>
+			</Menu.Content>
+	</Menu.Positioner>
+</Menu>

@@ -153,7 +153,10 @@
 
 		// Observer for Dark Mode changes to update color instantly
 		const observer = new MutationObserver(updateThemeColor);
-		observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+		observer.observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ['class', 'data-theme']
+		});
 
 		animationId = requestAnimationFrame(animate);
 		window.addEventListener('resize', handleResize);

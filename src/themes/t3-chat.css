@@ -1,38 +1,32 @@
 :root[data-theme="t3-chat"] {
     /* 
        T3 Chat Theme - Corrected for Skeleton v4 Mappings
-       
-       Skeleton v4 Layout Mappings:
-       --background: light-dark(surface-50, surface-950) -> Light BG / Dark BG
-       --foreground: light-dark(surface-950, surface-50) -> Light FG / Dark FG
-       --card: light-dark(surface-50, surface-900)       -> Light Card / Dark Card
-       --border: light-dark(surface-200, surface-800)     -> Light Border / Dark Border
     */
 
     /* 
        Surface 50 
-       Light: Background (#faf5fa)
-       Dark: Foreground (#d2c4de) - via --foreground mapping
+       Light Mode: Background (#faf5fa)
+       Dark Mode: Foreground (#d2c4de) - Used for text in dark mode via pairing
     */
     --color-surface-50: light-dark(#faf5fa, #d2c4de);
 
     /* 
        Surface 200
        Light: Border (#efbdeb)
-       Dark: Unused directly in main mappings, but can be Muted Text equivalent
+       Dark: Muted Text (#c2b6cf)
     */
     --color-surface-200: light-dark(#efbdeb, #c2b6cf);
 
     /* 
        Surface 800
-       Light: Unused directly
+       Light: Inverse Border (#77347c) - placeholder
        Dark: Border (#3b3237)
     */
     --color-surface-800: light-dark(#77347c, #3b3237);
 
     /* 
        Surface 900
-       Light: Card (#faf5fa) - usually same as bg
+       Light: Card (#faf5fa)
        Dark: Card (#2c2632)
     */
     --color-surface-900: light-dark(#faf5fa, #2c2632);
@@ -40,13 +34,11 @@
     /* 
        Surface 950
        Light: Foreground (#501854)
-       Dark: Background (#221d27) - via --background mapping
+       Dark: Background (#221d27) - Used for bg in dark mode via pairing
     */
     --color-surface-950: light-dark(#501854, #221d27);
 
-    /* 
-       Intermediate Surfaces (for safety/completeness)
-    */
+    /* Intermediate Surfaces */
     --color-surface-100: light-dark(#f3e4f6, #181117); /* Sidebar */
     --color-surface-300: light-dark(#e7c1dc, #3e343c); /* Input */
     --color-surface-400: light-dark(#c2b6cf, #834588);
@@ -78,7 +70,11 @@
     --color-error-500: light-dark(#ab4347, #301015);
     --color-error-contrast-500: light-dark(#ffffff, #ffffff);
     
-    /* Core Settings - Direct Overrides for Safety */
-    --base-font-color: var(--color-surface-950);
-    --body-background-color: var(--color-surface-50);
+    /* 
+       Core Settings
+       These must use light-dark() pairings to ensure they pick the correct 
+       color from the surface scale based on the mode.
+    */
+    --base-font-color: light-dark(var(--color-surface-950), var(--color-surface-50));
+    --body-background-color: light-dark(var(--color-surface-50), var(--color-surface-950));
 }

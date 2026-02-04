@@ -2,7 +2,7 @@
 	import { page } from '$app/state';
 	import { resolve, asset } from '$app/paths';
 	import ListIcon from 'phosphor-svelte/lib/ListIcon';
-	import { DropdownMenu } from 'bits-ui';
+	import { Menu, Portal } from '@skeletonlabs/skeleton-svelte';
 	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
 	import { reveal } from '$lib/actions';
 
@@ -54,36 +54,47 @@
 
 			<!-- Mobile Menu Button -->
 			<div class="md:hidden">
-				<DropdownMenu.Root>
-					<DropdownMenu.Trigger class="rounded-md p-2 text-surface-950-50" aria-label="Open Menu">
+				<Menu>
+					<Menu.Trigger class="rounded-md p-2 text-surface-950-50" aria-label="Open Menu">
 						<ListIcon size={24} weight="bold" />
-					</DropdownMenu.Trigger>
-					<DropdownMenu.Content
-						class="z-50 w-64 rounded-xl border border-surface-200-800 bg-surface-50-950 p-2 shadow-lg"
-						align="end"
-						sideOffset={8}
-					>
-						{#each links as link (link.href)}
-							{@const isActive = page.url.pathname === link.href}
-							<DropdownMenu.Item
-								class="rounded-lg px-4 py-3 text-sm font-bold {isActive
-									? 'bg-surface-200-800 text-surface-950-50'
-									: 'text-surface-600-400 hover:bg-surface-100-900'}"
+					</Menu.Trigger>
+					<Portal>
+						<Menu.Positioner>
+							<Menu.Content
+								class="z-50 w-64 rounded-xl border border-surface-200-800 bg-surface-50-950 p-2 shadow-lg"
 							>
-								<a href={resolve(link.href)} class="block w-full">{link.label}</a>
-							</DropdownMenu.Item>
-						{/each}
-						<DropdownMenu.Separator class="my-2 h-px bg-surface-200-800" />
-						<DropdownMenu.Item class="p-2">
-							<a
-								href={asset('/CV.pdf')}
-								class="btn block w-full preset-outlined-surface-200-800 btn-sm py-2 text-center text-xs"
-							>
-								Download CV
-							</a>
-						</DropdownMenu.Item>
-					</DropdownMenu.Content>
-				</DropdownMenu.Root>
+								{#each links as link (link.href)}
+									{@const isActive = page.url.pathname === link.href}
+									<Menu.Item value={link.href}>
+										{#snippet element(attributes)}
+											<a
+												{...attributes}
+												href={resolve(link.href)}
+												class="block w-full rounded-lg px-4 py-3 text-sm font-bold {isActive
+													? 'bg-surface-200-800 text-surface-950-50'
+													: 'text-surface-600-400 hover:bg-surface-100-900'}"
+											>
+												{link.label}
+											</a>
+										{/snippet}
+									</Menu.Item>
+								{/each}
+								<Menu.Separator class="my-2 h-px bg-surface-200-800" />
+								<Menu.Item value="cv">
+									{#snippet element(attributes)}
+										<a
+											{...attributes}
+											href={asset('/CV.pdf')}
+											class="btn block w-full preset-outlined-surface-200-800 btn-sm py-2 text-center text-xs"
+										>
+											Download CV
+										</a>
+									{/snippet}
+								</Menu.Item>
+							</Menu.Content>
+						</Menu.Positioner>
+					</Portal>
+				</Menu>
 			</div>
 
 			<!-- CTA Button -->
