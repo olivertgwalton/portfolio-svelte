@@ -1,21 +1,23 @@
 import { db } from '$lib/server/db';
 import { posts } from '$lib/server/db/schema';
+import { articleSchema } from '$lib/schemas/article';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 
 export const actions = {
 	default: async ({ request }) => {
 		const formData = await request.formData();
-		const title = formData.get('title') as string;
-		const slug = formData.get('slug') as string;
-		const excerpt = formData.get('excerpt') as string;
-		const content = formData.get('content') as string;
-		const coverImage = formData.get('cover_image') as string;
-		const tags = formData.get('tags') as string;
+		const data = Object.fromEntries(formData);
 
-		if (!title || !slug || !content) {
-			return fail(400, { message: 'Missing required fields' });
+		const result = articleSchema.safeParse(data);
+
+		if (!result.success) {
+			const { fieldErrors: errors } = result.error.flatten();
+			return fail(400, { errors, data });
 		}
+
+		const { title, slug, excerpt, content, tags } = result.data;
+		const coverImage = formData.get('cover_image') as string; // Handled separately or add to schema if string
 
 		try {
 			await db.insert(posts).values({
@@ -29,7 +31,7 @@ export const actions = {
 			});
 		} catch (e) {
 			console.error('Error creating post:', e);
-			return fail(500, { message: 'Failed to create post. Slug might be taken.' });
+			return fail(500, { message: 'Failed to create post. Slug might be taken.', data });
 		}
 
 		throw redirect(303, '/');
