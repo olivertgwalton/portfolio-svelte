@@ -4,6 +4,8 @@
 	// Svelte 5 Runes for element binding
 	let canvas = $state<HTMLCanvasElement>();
 
+	let { fixed = false } = $props();
+
 	// Physics Constants
 	const GRID_SPACING = 40;
 	const DOT_RADIUS = 1.5;
@@ -37,11 +39,13 @@
 	function initGrid() {
 		if (!canvas) return;
 
+		// Use canvas dimensions (which match parent due to CSS) instead of window
 		width = canvas.width = canvas.offsetWidth;
 		height = canvas.height = canvas.offsetHeight;
 
-		const cols = Math.ceil(width / GRID_SPACING) + 1;
-		const rows = Math.ceil(height / GRID_SPACING) + 1;
+		// Add extra columns/rows to cover edges completely
+		const cols = Math.ceil(width / GRID_SPACING) + 2;
+		const rows = Math.ceil(height / GRID_SPACING) + 2;
 
 		// Reset points
 		points = new Array(cols * rows);
@@ -49,8 +53,8 @@
 
 		for (let i = 0; i < cols; i++) {
 			for (let j = 0; j < rows; j++) {
-				const x = i * GRID_SPACING;
-				const y = j * GRID_SPACING;
+				const x = (i - 1) * GRID_SPACING; // Start slightly off-screen
+				const y = (j - 1) * GRID_SPACING;
 				points[index++] = {
 					x,
 					y,
@@ -169,6 +173,6 @@
 
 <canvas
 	bind:this={canvas}
-	class="pointer-events-none absolute inset-0 h-full w-full"
+	class="pointer-events-none inset-0 z-0 h-full w-full {fixed ? 'fixed' : 'absolute'}"
 	aria-hidden="true"
 ></canvas>
