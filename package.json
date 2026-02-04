@@ -49,12 +49,15 @@
 		"@fontsource-variable/jetbrains-mono": "^5.2.8",
 		"@fontsource-variable/manrope": "^5.2.8",
 		"@fontsource-variable/space-grotesk": "^5.2.10",
+		"@resvg/resvg-js": "^2.6.2",
 		"@skeletonlabs/skeleton": "^4.11.0",
 		"@skeletonlabs/skeleton-svelte": "^4.11.0",
 		"bits-ui": "^2.15.5",
 		"clsx": "^2.1.1",
 		"marked": "^17.0.1",
 		"phosphor-svelte": "^3.1.0",
+		"satori": "^0.19.1",
+		"satori-html": "^0.3.2",
 		"svelte-sonner": "^1.0.7",
 		"tailwind-merge": "^3.4.0"
 	}
