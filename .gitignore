@@ -25,3 +25,8 @@ vite.config.ts.timestamp-*
 
 # SQLite
 *.db
+*.db-journal
+
+# IDEs
+.gemini
+.vscode
