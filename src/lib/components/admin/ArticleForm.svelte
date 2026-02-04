@@ -35,11 +35,15 @@
 
 	// Auto-generate slug for new posts only
 	$effect(() => {
-		if (!initialData && !isSlugTouched && title) {
-			slug = title
-				.toLowerCase()
-				.replace(/[^a-z0-9]+/g, '-')
-				.replace(/(^-|-$)/g, '');
+		if (!initialData && !isSlugTouched) {
+			if (!title) {
+				slug = '';
+			} else {
+				slug = title
+					.toLowerCase()
+					.replace(/[^a-z0-9]+/g, '-')
+					.replace(/(^-|-$)/g, '');
+			}
 		}
 	});
 
@@ -88,7 +92,7 @@
 			required
 		/>
 
-		<div class="flex flex-col gap-2">
+		<div class="flex flex-col gap-2 w-full">
 			<Input
 				label="Slug"
 				id="slug"
@@ -96,7 +100,7 @@
 				oninput={handleSlugInput}
 				placeholder="article-slug"
 				required
-				class="font-mono text-sm"
+				class="font-mono text-sm text-surface-950-50 bg-surface-50-950 border-surface-200-800"
 			/>
 		</div>
 	</div>
@@ -122,7 +126,7 @@
 		<div class="flex items-center justify-between">
 			<label
 				for="content"
-				class="text-muted-foreground text-xs font-black tracking-widest uppercase"
+				class="text-xs font-black tracking-widest uppercase text-surface-600-400"
 			>
 				Content (Markdown)
 			</label>
@@ -130,10 +134,10 @@
 		</div>
 
 		{#if uploadedImages.length > 0}
-			<div class="/30 flex flex-wrap gap-4 rounded-lg border border-stone-100 bg-stone-50/30 p-4">
+			<div class="flex flex-wrap gap-4 rounded-lg border border-surface-200-800 bg-surface-50-950/30 p-4">
 				{#each uploadedImages as img (img)}
 					<div
-						class="group border-border relative h-20 w-20 overflow-hidden rounded-md border bg-white dark:border-stone-700"
+						class="group relative h-20 w-20 overflow-hidden rounded-md border border-surface-200-800 bg-surface-50-950"
 					>
 						<img src={img} alt="Uploaded" class="h-full w-full object-cover" />
 						<div
@@ -141,14 +145,14 @@
 						>
 							<button
 								type="button"
-								class="text-foreground rounded bg-white px-2 py-1 text-[10px] font-bold hover:bg-stone-100"
+								class="rounded bg-surface-50-950 px-2 py-1 text-[10px] font-bold text-surface-950-50 hover:bg-surface-200-800"
 								onclick={() => handleImageUpload(img, 'image')}
 							>
 								Insert
 							</button>
 							<button
 								type="button"
-								class="absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-white transition-colors hover:bg-red-600"
+								class="absolute top-1 right-1 flex h-5 w-5 items-center justify-center rounded-full bg-error-500 text-white transition-colors hover:bg-error-600"
 								onclick={() => removeImage(img)}
 								aria-label="Remove image"
 							>
@@ -168,7 +172,7 @@
 			rows="15"
 			placeholder="# Writing starts here..."
 			required
-			class="/50 w-full rounded-sm border-2 border-stone-100 bg-stone-50/50 p-6 font-mono text-sm leading-relaxed focus:border-stone-900 focus:outline-none dark:focus:border-stone-100"
+			class="w-full rounded-sm border-2 border-surface-200-800 bg-surface-50-950 p-6 font-mono text-sm leading-relaxed text-surface-950-50 focus:border-primary-500 focus:outline-none"
 		></textarea>
 	</div>
 
@@ -182,13 +186,13 @@
 	<div class="flex items-center gap-4 pt-8">
 		<button
 			type="submit"
-			class="btn-polished btn-polished-primary bg-card px-12 py-4 text-sm font-bold text-white transition-all hover:scale-[1.02] hover:bg-black"
+			class="btn preset-filled-primary-500 px-12 py-4 text-sm font-bold text-white transition-all hover:scale-[1.02]"
 		>
 			{submitLabel}
 		</button>
 		<a
 			href={resolve('/admin')}
-			class="text-muted-foreground hover:text-foreground text-sm font-bold transition-colors dark:hover:text-stone-100"
+			class="text-sm font-bold text-surface-600-400 transition-colors hover:text-surface-950-50"
 		>
 			Cancel
 		</a>

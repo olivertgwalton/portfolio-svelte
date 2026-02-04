@@ -18,21 +18,21 @@
 <div class="container mx-auto max-w-6xl px-6 py-32">
 	<header class="mb-24 flex items-end justify-between">
 		<div>
-			<h1 class="text-foreground font-heading text-6xl font-black tracking-tight">
-				Dashboard<span class="text-muted-foreground">.</span>
+			<h1 class="font-heading text-6xl font-black tracking-tight text-surface-950-50">
+				Dashboard<span class="text-surface-600-400">.</span>
 			</h1>
-			<p class="text-muted-foreground mt-4 text-xl">Manage your content.</p>
+			<p class="mt-4 text-xl text-surface-600-400">Manage your content.</p>
 		</div>
 	</header>
 
 	<div class="mx-auto max-w-4xl">
 		<!-- Articles Section -->
 		<section class="space-y-8">
-			<div class="border-border flex items-center justify-between border-b pb-4">
-				<h2 class="text-foreground font-heading text-3xl font-bold">Articles</h2>
+			<div class="flex items-center justify-between border-b border-surface-200-800 pb-4">
+				<h2 class="font-heading text-3xl font-bold text-surface-950-50">Articles</h2>
 				<a
 					href={resolve('/admin/articles/create')}
-					class="btn-polished btn-polished-primary bg-card px-6 py-2 text-xs font-bold text-white hover:bg-black"
+					class="btn preset-filled-primary-500 px-6 py-2 text-xs font-bold text-white hover:brightness-110"
 				>
 					+ New Article
 				</a>
@@ -42,17 +42,17 @@
 				{#if data?.posts?.length}
 					{#each data.posts as post (post.id)}
 						<li
-							class="group /50 flex items-center justify-between rounded-lg border border-stone-100 bg-white p-4 transition-all hover:border-stone-300 hover:shadow-sm"
+							class="group flex items-center justify-between rounded-lg border border-surface-200-800 bg-surface-50-950 p-4 transition-all hover:border-surface-300-700 hover:shadow-sm"
 						>
 							<div class="min-w-0 flex-1 pr-4">
 								<a
 									href={resolve(`/blog/${post.slug}`)}
-									class="text-foreground block truncate font-bold"
+									class="block truncate font-bold text-surface-950-50"
 									target="_blank"
 								>
 									{post.title}
 								</a>
-								<span class="text-muted-foreground text-xs font-medium">
+								<span class="text-xs font-medium text-surface-600-400">
 									{safeDate(post.publishedAt)}
 								</span>
 							</div>
@@ -61,7 +61,7 @@
 							>
 								<a
 									href={resolve(`/admin/articles/${post.id}`)}
-									class="text-muted-foreground hover:bg-card hover:text-foreground rounded px-3 py-1 text-xs font-bold"
+									class="rounded px-3 py-1 text-xs font-bold text-surface-600-400 hover:bg-surface-200-800 hover:text-surface-950-50"
 								>
 									Edit
 								</a>
@@ -83,7 +83,7 @@
 									<input type="hidden" name="id" value={post.id} />
 									<button
 										type="submit"
-										class="rounded px-3 py-1 text-xs font-bold text-red-500 hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-900/20"
+										class="rounded px-3 py-1 text-xs font-bold text-error-500 hover:bg-error-500/10"
 										onclick={(e) => !confirm('Delete this article?') && e.preventDefault()}
 									>
 										Delete
@@ -93,7 +93,7 @@
 						</li>
 					{/each}
 				{:else}
-					<li class="text-muted-foreground py-8 text-center text-sm">No articles yet.</li>
+					<li class="py-8 text-center text-sm text-surface-600-400">No articles yet.</li>
 				{/if}
 			</ul>
 		</section>

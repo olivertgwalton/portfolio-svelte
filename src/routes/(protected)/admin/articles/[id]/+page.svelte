@@ -10,13 +10,13 @@
 <div class="container mx-auto max-w-4xl px-6 py-24">
 	<header class="mb-12 flex items-center justify-between">
 		<div>
-			<h1 class="text-foreground font-heading text-5xl font-black tracking-tight">Edit Article.</h1>
-			<p class="text-muted-foreground mt-4">Polishing the draft.</p>
+			<h1 class="font-heading text-5xl font-black tracking-tight text-surface-950-50">Edit Article.</h1>
+			<p class="mt-4 text-surface-600-400">Polishing the draft.</p>
 		</div>
 	</header>
 
 	{#if form?.message}
-		<div class="mb-8 rounded bg-red-50 p-4 text-sm font-bold text-red-600 dark:bg-red-900/20">
+		<div class="mb-8 rounded p-4 text-sm font-bold preset-tonal-error">
 			{form.message}
 		</div>
 	{/if}

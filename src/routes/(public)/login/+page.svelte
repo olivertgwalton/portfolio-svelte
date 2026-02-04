@@ -2,14 +2,31 @@
 	import { Button } from 'bits-ui';
 	import { reveal } from '$lib/actions';
 	import InteractiveGrid from '$lib/components/visuals/InteractiveGrid.svelte';
+	import { authClient } from '$lib/auth/client';
+	import { goto } from '$app/navigation';
+    import { toast } from 'svelte-sonner';
 
 	let email = $state('');
 	let password = $state('');
+    let loading = $state(false);
 
-	function handleSubmit(e: Event) {
+	async function handleSubmit(e: Event) {
 		e.preventDefault();
-		// Auth logic goes here
-		console.log('Login attempt:', { email, password });
+        loading = true;
+
+        const { data, error } = await authClient.signIn.email({
+            email,
+            password
+        });
+
+        if (error) {
+            toast.error(error.message || 'Login failed');
+            loading = false;
+            return;
+        }
+
+        toast.success('Signed in successfully');
+        goto('/admin');
 	}
 </script>
 
@@ -18,20 +35,20 @@
 	<meta name="description" content="Access the secure admin dashboard." />
 </svelte:head>
 
-<section class="relative flex min-h-screen w-full items-center justify-center p-8">
+<section class="relative flex min-h-screen w-full items-center justify-center p-8 bg-surface-50-950">
 	<InteractiveGrid fixed={true} />
 	<div
 		class="relative z-10 mx-auto flex w-full flex-col justify-center space-y-6 sm:w-87.5"
 		use:reveal={{ delay: 0, y: 20 }}
 	>
 		<div
-			class="/60 rounded-2xl border border-black/5 bg-white/60 p-8 shadow-xl backdrop-blur-xl dark:border-white/10"
+			class="rounded-2xl border border-surface-200-800 bg-surface-50-950/60 p-8 shadow-xl backdrop-blur-xl"
 		>
 			<div class="mb-8 space-y-2 text-center">
-				<h1 class="text-foreground font-heading text-3xl font-black tracking-tighter">
+				<h1 class="font-heading text-3xl font-black tracking-tighter text-surface-950-50">
 					Welcome back
 				</h1>
-				<p class="text-muted-foreground text-xs font-bold">
+				<p class="text-xs font-bold text-surface-600-400">
 					Enter your credentials to access the admin panel
 				</p>
 			</div>
@@ -41,7 +58,7 @@
 				<div class="space-y-2">
 					<label
 						for="email"
-						class="text-muted-foreground text-xs font-black tracking-widest uppercase"
+						class="text-xs font-black tracking-widest uppercase text-surface-600-400"
 					>
 						Email
 					</label>
@@ -53,7 +70,7 @@
 						bind:value={email}
 						required
 						autocomplete="email"
-						class="text-foreground w-full border-b-2 border-stone-300 bg-transparent py-2 font-heading text-lg font-bold dark:focus:border-stone-100"
+						class="w-full border-b-2 border-surface-200-800 bg-transparent py-2 font-heading text-lg font-bold text-surface-950-50 focus:border-primary-500 focus:outline-none"
 					/>
 				</div>
 
@@ -62,7 +79,7 @@
 					<div class="flex items-center justify-between">
 						<label
 							for="password"
-							class="text-muted-foreground text-xs font-black tracking-widest uppercase"
+							class="text-xs font-black tracking-widest uppercase text-surface-600-400"
 						>
 							Password
 						</label>
@@ -74,15 +91,15 @@
 						bind:value={password}
 						required
 						autocomplete="current-password"
-						class="text-foreground w-full border-b-2 border-stone-300 bg-transparent py-2 font-heading text-lg font-bold dark:focus:border-stone-100"
+						class="w-full border-b-2 border-surface-200-800 bg-transparent py-2 font-heading text-lg font-bold text-surface-950-50 focus:border-primary-500 focus:outline-none"
 					/>
 				</div>
 
 				<!-- Submit -->
 				<div class="pt-2">
-					<Button.Root type="submit" class="btn-polished btn-polished-primary w-full py-4 text-sm">
-						Login
-					</Button.Root>
+					<button type="submit" class="btn preset-filled-primary-500 w-full py-4 text-sm font-bold" disabled={loading}>
+						{loading ? 'Signing in...' : 'Login'}
+					</button>
 				</div>
 			</form>
 		</div>
