@@ -2,9 +2,12 @@
 	import { page } from '$app/state';
 	import { resolve, asset } from '$app/paths';
 	import ListIcon from 'phosphor-svelte/lib/ListIcon';
+    import SignOutIcon from 'phosphor-svelte/lib/SignOutIcon';
 	import { Menu, Portal } from '@skeletonlabs/skeleton-svelte';
 	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
 	import { reveal } from '$lib/actions';
+    import { authClient } from '$lib/auth/client';
+    import { goto } from '$app/navigation';
 
 	const links = [
 		{ href: '/', label: 'Home' },
@@ -12,6 +15,18 @@
 		{ href: '/about', label: 'About' },
 		{ href: '/contact', label: 'Contact' }
 	] as const;
+
+    const session = authClient.useSession();
+
+    async function signOut() {
+        await authClient.signOut({
+            fetchOptions: {
+                onSuccess: () => {
+                    goto('/');
+                }
+            }
+        });
+    }
 </script>
 
 <nav
@@ -51,6 +66,17 @@
 		<div class="flex items-center gap-4" use:reveal={{ delay: 300, y: -4, duration: 800 }}>
 			<!-- Theme Toggle -->
 			<ThemeSwitcher />
+
+            {#if $session.data}
+                <button 
+                    onclick={signOut}
+                    class="btn-icon hover:preset-tonal"
+                    aria-label="Sign Out"
+                    title="Sign Out"
+                >
+                    <SignOutIcon size={20} weight="bold" />
+                </button>
+            {/if}
 
 			<!-- Mobile Menu Button -->
 			<div class="md:hidden">
