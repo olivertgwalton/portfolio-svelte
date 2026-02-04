@@ -73,11 +73,16 @@
 			{:else if t.type === 'codespan'}
 				<code>{t.text}</code>
 			{:else if t.type === 'link'}
-				<a href={t.href.startsWith('/') ? resolve(t.href) : t.href} title={t.title}
-					><!-- @todo: fix this false positive with a proper check -->
+				{#if t.href.startsWith('/')}
+					<a href={resolve(t.href)} title={t.title}>
+						{t.text}
+					</a>
+				{:else}
 					<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-					{t.text}</a
-				>
+					<a href={t.href} title={t.title}>
+						{t.text}
+					</a>
+				{/if}
 			{:else if t.type === 'br'}
 				<br />
 			{:else if t.type === 'del'}

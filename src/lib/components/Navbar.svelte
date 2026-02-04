@@ -1,19 +1,21 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { resolve, asset } from '$app/paths';
+	import { tick } from 'svelte';
 	import Sun from 'phosphor-svelte/lib/Sun';
 	import Moon from 'phosphor-svelte/lib/Moon';
 	import List from 'phosphor-svelte/lib/List';
 	import { Button, DropdownMenu } from 'bits-ui';
 	import { Switch } from '@skeletonlabs/skeleton-svelte';
-	import { theme } from '$lib/theme.svelte';
+	import { mode, setMode } from 'mode-watcher';
+	import { reveal } from '$lib/actions';
 
 	const links = [
 		{ href: '/', label: 'Home' },
 		{ href: '/blog', label: 'Writing' },
 		{ href: '/about', label: 'About' },
 		{ href: '/contact', label: 'Contact' }
-	];
+	] as const;
 
 	// Store click coordinates for the view transition as Switch onclick is specific
 	let clickCoords = { x: 0, y: 0 };
@@ -23,46 +25,66 @@
 	}
 
 	function handleSwitchChange() {
-		// Pass the captured coordinates to the theme store
-		theme.toggle({ clientX: clickCoords.x, clientY: clickCoords.y });
+		const next = mode.current === 'dark' ? 'light' : 'dark';
+
+		if (!document.startViewTransition) {
+			setMode(next);
+			return;
+		}
+
+		const x = clickCoords.x;
+		const y = clickCoords.y;
+		const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+
+		document.documentElement.style.setProperty('--x', `${x}px`);
+		document.documentElement.style.setProperty('--y', `${y}px`);
+		document.documentElement.style.setProperty('--r', `${endRadius}px`);
+
+		document.startViewTransition(async () => {
+			setMode(next);
+			await tick();
+		});
 	}
 </script>
 
 <nav
-	class="sticky top-0 z-50 w-full border-b border-stone-200 bg-(--color-base)/90 backdrop-blur-md transition-all duration-300 dark:border-stone-800"
+	class="sticky top-0 z-50 w-full border-b border-border bg-base/90 backdrop-blur-md transition-all duration-300 dark:border-stone-800"
 >
-	<div class="container mx-auto flex items-center justify-between px-6 py-4">
+	<div class="container mx-auto flex items-center justify-between px-6 pt-3 pb-4">
 		<!-- Logo -->
 		<a
+			use:reveal={{ delay: 0, y: -4, duration: 800 }}
 			href={resolve('/')}
-			class="font-serif text-2xl font-bold tracking-tighter text-stone-900 transition-opacity hover:opacity-70 dark:text-stone-100"
+			class="font-heading text-2xl font-bold tracking-tighter text-primary"
 		>
-			Oliver<span class="text-stone-400">.</span>
+			Oliver<span class="text-muted">.</span>
 		</a>
 
 		<!-- Desktop Links -->
-		<div class="hidden items-center gap-8 md:flex">
-			{#each links as link (link.href)}
+		<div class="hidden items-center justify-center gap-8 md:flex">
+			{#each links as link, i (link.href)}
 				{@const isActive = page.url.pathname === link.href}
 				<a
+					use:reveal={{ delay: 100 + i * 30, y: -4, duration: 800 }}
 					href={resolve(link.href)}
 					aria-current={isActive ? 'page' : undefined}
-					class="relative text-sm font-semibold tracking-wide text-stone-600 transition-colors hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-200
-								{isActive ? 'text-stone-900 dark:text-stone-100' : ''}"
+					class="group relative text-sm leading-none font-semibold tracking-wide text-secondary transition-colors hover:text-primary dark:text-muted dark:hover:text-stone-200
+								{isActive ? 'text-primary' : ''}"
 				>
 					{link.label}
-					{#if isActive}
-						<span class="absolute -bottom-1 left-0 h-px w-full bg-stone-900 dark:bg-stone-100"
-						></span>
-					{/if}
+					<span
+						class="absolute -bottom-1 left-0 h-px w-full origin-left bg-surface transition-transform duration-300 ease-out dark:bg-stone-100 {isActive
+							? 'scale-x-100'
+							: 'scale-x-0 group-hover:scale-x-100'}"
+					></span>
 				</a>
 			{/each}
 		</div>
 
-		<div class="flex items-center gap-4">
+		<div class="flex items-center gap-4" use:reveal={{ delay: 300, y: -4, duration: 800 }}>
 			<!-- Theme Toggle (Skeleton Switch) -->
 			<Switch
-				checked={theme.isDark}
+				checked={mode.current === 'dark'}
 				onCheckedChange={handleSwitchChange}
 				onclick={captureClick}
 				aria-label="Toggle Dark Mode"
@@ -75,8 +97,8 @@
 					<Switch.Thumb
 						class="pointer-events-none block h-6 w-6 translate-x-1 rounded-full bg-white shadow-lg transition-transform duration-200 will-change-transform data-[state=checked]:translate-x-7"
 					>
-						<div class="flex h-full w-full items-center justify-center text-stone-900">
-							{#if theme.isDark}
+						<div class="flex h-full w-full items-center justify-center text-primary">
+							{#if mode.current === 'dark'}
 								<Moon size={14} weight="bold" />
 							{:else}
 								<Sun size={14} weight="bold" />
@@ -89,14 +111,11 @@
 			<!-- Mobile Menu Button -->
 			<div class="md:hidden">
 				<DropdownMenu.Root>
-					<DropdownMenu.Trigger
-						class="rounded-md p-2 text-stone-900 dark:text-stone-100"
-						aria-label="Open Menu"
-					>
+					<DropdownMenu.Trigger class="rounded-md p-2 text-primary" aria-label="Open Menu">
 						<List size={24} weight="bold" />
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content
-						class="z-50 w-64 rounded-xl border border-stone-200 bg-white p-2 shadow-lg dark:border-stone-800 dark:bg-stone-900"
+						class="z-50 w-64 rounded-xl border border-border bg-white p-2 shadow-lg dark:border-stone-800 dark:bg-surface"
 						align="end"
 						sideOffset={8}
 					>
@@ -104,8 +123,8 @@
 							{@const isActive = page.url.pathname === link.href}
 							<DropdownMenu.Item
 								class="rounded-lg px-4 py-3 text-sm font-bold {isActive
-									? 'bg-stone-100 text-stone-900 dark:bg-stone-800 dark:text-stone-100'
-									: 'text-stone-600 hover:bg-stone-50 dark:text-stone-400 dark:hover:bg-stone-800/50'}"
+									? 'bg-stone-100 text-primary'
+									: 'text-secondary hover:bg-stone-50 dark:text-muted dark:hover:bg-stone-800/50'}"
 							>
 								<a href={resolve(link.href)} class="block w-full">{link.label}</a>
 							</DropdownMenu.Item>

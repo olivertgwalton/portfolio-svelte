@@ -4,8 +4,10 @@
 	import { resolve } from '$app/paths';
 	import { reveal } from '$lib/actions';
 	import { untrack } from 'svelte';
+	import { SvelteURLSearchParams } from 'svelte/reactivity';
 	import ArrowRight from 'phosphor-svelte/lib/ArrowRight';
 	import MagnifyingGlass from 'phosphor-svelte/lib/MagnifyingGlass';
+	import InteractiveGrid from '$lib/components/visuals/InteractiveGrid.svelte';
 
 	let { data } = $props();
 	let searchQuery = $state(untrack(() => data.search)); // eslint-disable-line svelte/prefer-writable-derived
@@ -21,25 +23,26 @@
 
 		clearTimeout(timer);
 		timer = setTimeout(() => {
-			const url = new URL(page.url);
+			const currentParams = new SvelteURLSearchParams(page.url.searchParams);
 			if (value) {
-				url.searchParams.set('q', value);
+				currentParams.set('q', value);
 			} else {
-				url.searchParams.delete('q');
+				currentParams.delete('q');
 			}
 			// eslint-disable-next-line svelte/no-navigation-without-resolve
-			goto(url, { keepFocus: true, noScroll: true });
+			goto(resolve('/blog') + `?${currentParams.toString()}`, { keepFocus: true, noScroll: true });
 		}, 300);
 	}
 
 	function handleTagClick(tag: string) {
-		const url = new URL(page.url);
+		const currentParams = new SvelteURLSearchParams(page.url.searchParams);
 		if (data.currentTag === tag) {
-			url.searchParams.delete('tag');
+			currentParams.delete('tag');
 		} else {
-			url.searchParams.set('tag', tag);
+			currentParams.set('tag', tag);
 		}
-		goto(url, { keepFocus: true, noScroll: true });
+		// eslint-disable-next-line svelte/no-navigation-without-resolve
+		goto(resolve('/blog') + `?${currentParams.toString()}`, { keepFocus: true, noScroll: true });
 	}
 
 	function formatDate(date: Date | null) {
@@ -57,28 +60,36 @@
 	<meta name="description" content="Thoughts on software engineering, design, and systems." />
 </svelte:head>
 
-<section class="min-h-screen border-b border-stone-200 bg-(--color-base) dark:border-stone-800">
-	<div class="container mx-auto max-w-5xl px-6 py-32">
-		<!-- Header -->
-		<div class="mb-20 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
+<section class="relative min-h-[30vh] w-full overflow-hidden border-b border-border">
+	<InteractiveGrid />
+	<div
+		class="relative z-10 container mx-auto flex h-full min-h-[30vh] flex-col justify-end px-6 pt-32 pb-12"
+	>
+		<div class="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
 			<div>
 				<h1
-					class="font-serif text-6xl font-black tracking-tighter text-stone-900 md:text-8xl dark:text-stone-100"
+					use:reveal={{ delay: 0, y: 20 }}
+					class="font-heading text-6xl font-black tracking-tighter text-primary"
 				>
 					Writing.
 				</h1>
 			</div>
 			<p
-				class="hidden max-w-xs text-right text-sm font-bold tracking-wide text-stone-500 md:block dark:text-stone-400"
+				use:reveal={{ delay: 100, y: 20 }}
+				class="hidden max-w-xs text-right text-sm font-bold tracking-wide text-muted md:block dark:text-muted"
 			>
 				Archive of thoughts <br />and technical notes.
 			</p>
 		</div>
+	</div>
+</section>
 
+<section class="min-h-screen bg-base">
+	<div class="container mx-auto max-w-5xl px-6 py-20">
 		<!-- Search & Filter Bar -->
-		<div class="mb-8">
+		<div class="mb-8" use:reveal={{ delay: 200, y: 20 }}>
 			<div class="relative max-w-md">
-				<div class="absolute top-1/2 left-4 -translate-y-1/2 text-stone-400">
+				<div class="absolute top-1/2 left-4 -translate-y-1/2 text-muted">
 					<MagnifyingGlass size={20} weight="bold" />
 				</div>
 				<input
@@ -86,21 +97,21 @@
 					placeholder="Search articles..."
 					value={searchQuery}
 					oninput={handleSearch}
-					class="w-full rounded-full border-2 border-stone-200 bg-transparent py-4 pr-6 pl-12 text-sm font-bold text-stone-900 placeholder-stone-400 transition-colors outline-none focus:border-stone-900 dark:border-stone-800 dark:text-stone-100 dark:focus:border-stone-100"
+					class="w-full rounded-full border-2 border-border bg-transparent py-4 pr-6 pl-12 text-sm font-bold text-primary dark:focus:border-stone-100"
 				/>
 			</div>
 		</div>
 
 		<!-- Tag Filters -->
 		{#if data.tags.length > 0}
-			<div class="mb-20 flex flex-wrap gap-2">
+			<div class="mb-20 flex flex-wrap gap-2" use:reveal={{ delay: 300, y: 20 }}>
 				{#each data.tags as tag (tag)}
 					<button
 						onclick={() => handleTagClick(tag)}
 						class="rounded-full border px-3 py-1 text-xs font-bold tracking-wide uppercase transition-colors
-						{data.currentTag === tag
-							? 'border-stone-900 bg-stone-900 text-white dark:border-stone-100 dark:bg-stone-100 dark:text-stone-900'
-							: 'border-stone-200 bg-transparent text-stone-500 hover:border-stone-400 hover:text-stone-900 dark:border-stone-800 dark:text-stone-400 dark:hover:border-stone-600 dark:hover:text-stone-100'}"
+											{data.currentTag === tag
+							? 'border-primary bg-primary text-base'
+							: 'border-border bg-transparent text-muted hover:border-muted hover:text-primary'}"
 					>
 						{tag}
 					</button>
@@ -114,7 +125,7 @@
 				<li>
 					<a
 						href={resolve(`/blog/${post.slug}`)}
-						class="group block border-b-2 border-stone-900 transition-colors hover:bg-stone-50 dark:border-stone-100 dark:hover:bg-stone-900"
+						class="group block border-b-2 border-stone-900 transition-colors hover:bg-stone-50 dark:border-stone-100 dark:hover:bg-surface"
 					>
 						<article
 							use:reveal={{ delay: i * 50 }}
@@ -123,7 +134,7 @@
 							<!-- Date -->
 							<time
 								datetime={post.publishedAt ? new Date(post.publishedAt).toISOString() : ''}
-								class="font-mono text-sm font-bold tracking-wider text-stone-500 uppercase dark:text-stone-400"
+								class="font-mono text-sm font-bold tracking-wider text-muted uppercase dark:text-muted"
 							>
 								{formatDate(post.publishedAt ? new Date(post.publishedAt) : null)}
 							</time>
@@ -131,19 +142,17 @@
 							<!-- Content -->
 							<div class="space-y-6">
 								<h3
-									class="font-serif text-3xl leading-tight font-bold tracking-tight text-stone-900 transition-colors group-hover:text-stone-600 md:text-3xl dark:text-stone-100 dark:group-hover:text-stone-300"
+									class="font-heading text-3xl leading-tight font-bold tracking-tight text-primary transition-colors group-hover:text-secondary"
 								>
 									{post.title}
 								</h3>
-								<p
-									class="line-clamp-2 max-w-2xl text-base leading-relaxed font-medium text-stone-600 dark:text-stone-400"
-								>
+								<p class="line-clamp-2 max-w-2xl leading-relaxed font-medium text-base">
 									{post.excerpt}
 								</p>
 								{#if post.tags}
 									<div class="flex flex-wrap gap-2">
 										{#each post.tags.split(',') as tag (tag)}
-											<span class="font-mono text-xs font-bold text-stone-400 dark:text-stone-500"
+											<span class="font-mono text-xs font-bold text-muted dark:text-muted"
 												>#{tag.trim()}</span
 											>
 										{/each}
@@ -153,9 +162,7 @@
 
 							<!-- Arrow -->
 							<div class="hidden md:block">
-								<span
-									class="text-stone-900 transition-transform duration-300 group-hover:translate-x-4 dark:text-stone-100"
-								>
+								<span class="text-primary">
 									<ArrowRight size={32} weight="light" />
 								</span>
 							</div>
@@ -164,7 +171,7 @@
 				</li>
 			{:else}
 				<li class="py-32 text-center">
-					<p class="font-serif text-3xl font-bold text-stone-400">No articles found.</p>
+					<p class="font-heading text-3xl font-bold text-muted">No articles found.</p>
 				</li>
 			{/each}
 		</ul>

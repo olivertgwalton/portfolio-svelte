@@ -8,6 +8,7 @@
 	import IconPython from '$lib/components/icons/IconPython.svelte';
 	import IconC from '$lib/components/icons/IconC.svelte';
 	import IconLinux from '$lib/components/icons/IconLinux.svelte';
+	import { reveal } from '$lib/actions';
 
 	interface IconProps {
 		class?: string;
@@ -57,29 +58,32 @@
 	}
 </script>
 
-<section class="border-t border-stone-200 bg-(--color-base) dark:border-stone-800">
+<section class="border-t border-border bg-(--color-base) dark:border-stone-800">
 	<div class="relative z-10 container mx-auto max-w-7xl px-6 py-32">
 		<!-- Header: Matching Blog/Projects Design -->
 		<div class="mb-20 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
 			<div>
 				<h2
-					class="font-serif text-5xl font-black tracking-tighter text-black md:text-6xl dark:text-white"
+					use:reveal={{ delay: 0, y: 20 }}
+					class="font-heading text-5xl font-black tracking-tighter text-primary md:text-6xl dark:text-white"
 				>
 					Technologies.
 				</h2>
 			</div>
 			<p
-				class="hidden max-w-xs text-right text-sm font-bold tracking-wide text-stone-500 md:block dark:text-stone-400"
+				use:reveal={{ delay: 100, y: 20 }}
+				class="hidden max-w-xs text-right text-sm font-bold tracking-wide text-muted md:block dark:text-muted"
 			>
 				The tools I use <br />to build high-performance software.
 			</p>
 		</div>
 
 		<ul class="flex flex-wrap justify-start gap-6 md:gap-8" use:setupObserver>
-			{#each technologies as tech (tech.name)}
+			{#each technologies as tech, i (tech.name)}
 				{@const Icon = tech.component}
 				<li
-					class="tech-card group relative flex h-32 w-32 flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl border border-stone-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-stone-800 dark:bg-stone-900 dark:hover:shadow-2xl dark:hover:shadow-black/50"
+					use:reveal={{ delay: i * 50, y: 20 }}
+					class="tech-card group relative flex h-32 w-32 flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl border border-stone-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-stone-800 dark:bg-surface dark:hover:shadow-2xl dark:hover:shadow-black/50"
 					style="--tech-color: {tech.color}; --tech-level: {tech.level}%"
 				>
 					<!-- Fill Background -->
@@ -87,7 +91,7 @@
 
 					<!-- Icon Container -->
 					<div
-						class="relative z-10 h-12 w-12 text-stone-400 transition-colors duration-300 group-hover:text-(--tech-color) dark:text-stone-500"
+						class="relative z-10 h-12 w-12 text-muted transition-colors duration-300 group-hover:text-(--tech-color) dark:text-muted"
 						aria-hidden="true"
 					>
 						<Icon class="h-full w-full" />
@@ -96,7 +100,7 @@
 					<!-- Label -->
 					<div class="relative z-10 flex flex-col items-center gap-0.5 text-center">
 						<span
-							class="font-sans text-[10px] font-bold tracking-widest text-stone-400 uppercase transition-colors group-hover:text-stone-900 dark:text-stone-500 dark:group-hover:text-stone-200"
+							class="font-sans text-[10px] font-bold tracking-widest text-muted uppercase transition-colors group-hover:text-primary dark:text-muted dark:group-hover:text-stone-200"
 							style="background-color: transparent;"
 						>
 							{tech.name}

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import InteractiveGrid from '$lib/components/visuals/InteractiveGrid.svelte';
 	import { reveal } from '$lib/actions';
+	import InteractiveGrid from '$lib/components/visuals/InteractiveGrid.svelte';
 </script>
 
 <svelte:head>
@@ -12,15 +12,15 @@
 </svelte:head>
 
 <section
-	class="relative min-h-[30vh] w-full overflow-hidden border-b border-stone-200 dark:border-stone-800"
+	class="relative min-h-[30vh] w-full overflow-hidden border-b border-border"
 >
 	<InteractiveGrid />
-
 	<div
 		class="relative z-10 container mx-auto flex h-full min-h-[30vh] flex-col justify-end px-6 pt-32 pb-12"
 	>
 		<h1
-			class="max-w-4xl font-serif text-6xl font-black tracking-tight text-stone-900 md:text-8xl dark:text-stone-100"
+			use:reveal={{ delay: 0, y: 20 }}
+			class="max-w-4xl font-heading text-6xl font-black tracking-tight text-primary"
 		>
 			Background.
 		</h1>
@@ -30,9 +30,9 @@
 <section class="container mx-auto px-6 py-24">
 	<div class="grid gap-16 lg:grid-cols-[1fr_1fr] lg:gap-32">
 		<!-- Left Column: The Narrative -->
-		<div class="space-y-12 text-lg leading-relaxed text-stone-600 dark:text-stone-400">
+		<div class="space-y-12 text-lg leading-relaxed text-secondary">
 			<div use:reveal={{ delay: 0 }}>
-				<h2 class="mb-6 font-serif text-3xl font-bold text-stone-900 dark:text-stone-100">
+				<h2 class="mb-6 font-heading text-3xl font-bold text-primary">
 					Systematic Curiosity
 				</h2>
 				<p>
@@ -49,7 +49,7 @@
 			</div>
 
 			<div use:reveal={{ delay: 200 }}>
-				<h2 class="mb-6 font-serif text-3xl font-bold text-stone-900 dark:text-stone-100">
+				<h2 class="mb-6 font-heading text-3xl font-bold text-primary">
 					Beyond the Code
 				</h2>
 				<p>
@@ -71,29 +71,29 @@
 
 		<!-- Right Column: Stats / Highlights -->
 		<div class="space-y-16" use:reveal={{ delay: 400 }}>
-			<div class="border-t border-stone-200 pt-8 dark:border-stone-800">
-				<div class="mb-2 font-mono text-xs font-bold tracking-widest text-stone-400 uppercase">
+			<div class="border-t border-border pt-8 dark:border-stone-800">
+				<div class="mb-2 font-mono text-xs font-bold tracking-widest text-muted uppercase">
 					Location
 				</div>
-				<div class="font-serif text-4xl font-bold text-stone-900 dark:text-stone-100">
+				<div class="font-heading text-4xl font-bold text-primary">
 					Soihull, United Kingdom
 				</div>
 			</div>
 
-			<div class="border-t border-stone-200 pt-8 dark:border-stone-800">
-				<div class="mb-2 font-mono text-xs font-bold tracking-widest text-stone-400 uppercase">
+			<div class="border-t border-border pt-8 dark:border-stone-800">
+				<div class="mb-2 font-mono text-xs font-bold tracking-widest text-muted uppercase">
 					Focus
 				</div>
-				<div class="font-serif text-4xl font-bold text-stone-900 dark:text-stone-100">
+				<div class="font-heading text-4xl font-bold text-primary">
 					Systems & Frontend
 				</div>
 			</div>
 
-			<div class="border-t border-stone-200 pt-8 dark:border-stone-800">
-				<div class="mb-2 font-mono text-xs font-bold tracking-widest text-stone-400 uppercase">
+			<div class="border-t border-border pt-8 dark:border-stone-800">
+				<div class="mb-2 font-mono text-xs font-bold tracking-widest text-muted uppercase">
 					Experience
 				</div>
-				<div class="font-serif text-4xl font-bold text-stone-900 dark:text-stone-100">
+				<div class="font-heading text-4xl font-bold text-primary">
 					22 Years Old
 				</div>
 			</div>

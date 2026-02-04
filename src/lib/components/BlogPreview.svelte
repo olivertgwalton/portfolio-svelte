@@ -23,18 +23,20 @@
 	}
 </script>
 
-<section class="border-t border-stone-200 px-6 py-32 dark:border-stone-800">
+<section class="border-t border-border px-6 py-32 dark:border-stone-800">
 	<div class="relative z-10 container mx-auto max-w-7xl">
 		<div class="mb-20 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
 			<div>
 				<h2
-					class="font-serif text-5xl font-black tracking-tighter text-black md:text-6xl dark:text-white"
+					use:reveal={{ delay: 0, y: 20 }}
+					class="font-heading text-5xl font-black tracking-tighter text-primary md:text-6xl dark:text-white"
 				>
 					Writing.
 				</h2>
 			</div>
 			<p
-				class="hidden max-w-xs text-right text-sm font-bold tracking-wide text-stone-600 md:block dark:text-stone-400"
+				use:reveal={{ delay: 100, y: 20 }}
+				class="hidden max-w-xs text-right text-sm font-bold tracking-wide text-secondary md:block dark:text-muted"
 			>
 				Thoughts on code, design, <br />and the future of the web.
 			</p>
@@ -45,7 +47,7 @@
 				<li>
 					<a
 						href={resolve(`/blog/${post.slug}`)}
-						class="group block border-b-2 border-black transition-colors hover:bg-stone-50 dark:border-white dark:hover:bg-stone-900"
+						class="group block border-b-2 border-black transition-colors hover:bg-stone-50 dark:border-white dark:hover:bg-surface"
 					>
 						<article
 							use:reveal={{ delay: i * 100 }}
@@ -54,7 +56,7 @@
 							<!-- Date -->
 							<time
 								datetime={post.publishedAt ? new Date(post.publishedAt).toISOString() : ''}
-								class="font-mono text-sm font-bold tracking-wider text-stone-600 uppercase dark:text-stone-400"
+								class="font-mono text-sm font-bold tracking-wider text-secondary uppercase dark:text-muted"
 							>
 								{formatDate(post.publishedAt ? new Date(post.publishedAt) : null)}
 							</time>
@@ -62,12 +64,12 @@
 							<!-- Content -->
 							<div class="space-y-6">
 								<h3
-									class="font-serif text-3xl leading-tight font-bold tracking-tight text-black transition-colors group-hover:text-stone-600 md:text-3xl dark:text-white dark:group-hover:text-stone-300"
+									class="font-heading text-3xl leading-tight font-bold tracking-tight text-primary transition-colors group-hover:text-secondary md:text-3xl dark:text-white dark:group-hover:text-stone-300"
 								>
 									{post.title}
 								</h3>
 								<p
-									class="line-clamp-2 max-w-2xl text-base leading-relaxed font-medium text-stone-600 dark:text-stone-400"
+									class="line-clamp-2 max-w-2xl text-base leading-relaxed font-medium text-secondary"
 								>
 									{post.excerpt}
 								</p>
@@ -76,7 +78,7 @@
 							<!-- Arrow -->
 							<div class="hidden md:block">
 								<span
-									class="text-black transition-transform duration-300 group-hover:translate-x-4 dark:text-white"
+									class="text-primary transition-transform duration-300 group-hover:translate-x-4 dark:text-white"
 								>
 									<ArrowRight size={32} weight="light" />
 								</span>
@@ -86,7 +88,7 @@
 				</li>
 			{:else}
 				<li class="py-32 text-center">
-					<p class="font-serif text-3xl font-bold text-stone-400">Coming soon.</p>
+					<p class="font-heading text-3xl font-bold text-muted">Coming soon.</p>
 				</li>
 			{/each}
 		</ul>

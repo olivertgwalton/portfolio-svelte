@@ -5,19 +5,21 @@
 	import ArrowUpRight from 'phosphor-svelte/lib/ArrowUpRight';
 </script>
 
-<section class="border-t border-stone-200 bg-(--color-base) px-6 py-32 dark:border-stone-800">
+<section class="border-t border-border bg-(--color-base) px-6 py-32 dark:border-stone-800">
 	<div class="relative z-10 container mx-auto max-w-7xl">
 		<!-- Header: Consistent with previous sections -->
 		<div class="mb-20 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
 			<div>
 				<h2
-					class="font-serif text-5xl font-black tracking-tighter text-black md:text-6xl dark:text-white"
+					use:reveal={{ delay: 0, y: 20 }}
+					class="font-heading text-5xl font-black tracking-tighter text-primary md:text-6xl dark:text-white"
 				>
 					About Me.
 				</h2>
 			</div>
 			<p
-				class="hidden max-w-xs text-right text-sm font-bold tracking-wide text-stone-600 md:block dark:text-stone-400"
+				use:reveal={{ delay: 100, y: 20 }}
+				class="hidden max-w-xs text-right text-sm font-bold tracking-wide text-secondary md:block dark:text-muted"
 			>
 				A brief introduction <br />to who I am and what I do.
 			</p>
@@ -27,7 +29,7 @@
 			<!-- Left Column: About/Bio -->
 			<div class="space-y-12" use:reveal={{ delay: 0 }}>
 				<div
-					class="max-w-xl space-y-8 text-lg leading-relaxed font-medium text-stone-600 dark:text-stone-400"
+					class="max-w-xl space-y-8 text-lg leading-relaxed font-medium text-secondary"
 				>
 					<p>
 						I'm a developer who likes building software that works well and looks good. I believe
@@ -41,50 +43,48 @@
 				</div>
 				<a
 					href={resolve('/about')}
-					class="inline-flex items-center gap-3 border-b-2 border-stone-900 pb-1 text-lg font-bold text-stone-900 transition-colors hover:border-stone-600 hover:text-stone-700 dark:border-stone-100 dark:text-stone-100 dark:hover:border-stone-400 dark:hover:text-stone-300"
+					class="inline-flex items-center gap-3 border-b-2 border-stone-900 pb-1 text-lg font-bold text-primary dark:hover:border-stone-400 dark:hover:text-stone-300"
 				>
 					Read full bio <ArrowRight size={16} weight="bold" />
 				</a>
 			</div>
 
 			<!-- Right Column: Links & Footer Info -->
-			<div
-				class="flex flex-col justify-between space-y-16 md:items-end"
-				use:reveal={{ delay: 200 }}
-			>
+			<div class="flex flex-col justify-between space-y-16 md:items-end">
 				<div class="space-y-8 md:text-right">
 					<h3
-						class="font-serif text-3xl font-bold tracking-tight text-stone-900 dark:text-stone-100"
+						use:reveal={{ delay: 200, y: 20 }}
+						class="font-heading text-3xl font-bold tracking-tight text-primary"
 					>
 						Connect.
 					</h3>
-					<ul class="space-y-4 text-lg font-medium text-stone-600 dark:text-stone-400">
-						<li>
+					<ul class="space-y-4 text-lg font-medium text-secondary">
+						<li use:reveal={{ delay: 300, y: 10 }}>
 							<a
 								href="https://github.com/olivertgwalton"
 								target="_blank"
 								rel="noopener noreferrer"
-								class="flex items-center gap-2 transition-colors hover:text-stone-900 md:justify-end dark:hover:text-stone-100"
+								class="flex items-center gap-2 transition-colors hover:text-primary md:justify-end dark:hover:text-stone-100"
 							>
 								Github <ArrowUpRight size={16} class="opacity-50" />
 							</a>
 						</li>
-						<li>
+						<li use:reveal={{ delay: 350, y: 10 }}>
 							<a
 								href="https://www.linkedin.com/in/oliver-walton03/"
 								target="_blank"
 								rel="noopener noreferrer"
-								class="flex items-center gap-2 transition-colors hover:text-stone-900 md:justify-end dark:hover:text-stone-100"
+								class="flex items-center gap-2 transition-colors hover:text-primary md:justify-end dark:hover:text-stone-100"
 							>
 								LinkedIn <ArrowUpRight size={16} class="opacity-50" />
 							</a>
 						</li>
-						<li>
+						<li use:reveal={{ delay: 400, y: 10 }}>
 							<a
 								href="https://instagram.com/olivertgwalton03"
 								target="_blank"
 								rel="noopener noreferrer"
-								class="flex items-center gap-2 transition-colors hover:text-stone-900 md:justify-end dark:hover:text-stone-100"
+								class="flex items-center gap-2 transition-colors hover:text-primary md:justify-end dark:hover:text-stone-100"
 							>
 								Instagram <ArrowUpRight size={16} class="opacity-50" />
 							</a>
@@ -92,11 +92,11 @@
 					</ul>
 				</div>
 
-				<div class="flex flex-col gap-2 md:items-end">
-					<div class="font-serif text-2xl font-bold text-stone-900 dark:text-stone-100">
+				<div class="flex flex-col gap-2 md:items-end" use:reveal={{ delay: 500, y: 20 }}>
+					<div class="font-heading text-2xl font-bold text-primary">
 						Oliver.
 					</div>
-					<div class="text-sm font-medium text-stone-400 dark:text-stone-600">
+					<div class="text-sm font-medium text-muted dark:text-secondary">
 						&copy; {new Date().getFullYear()} Oliver Walton. All rights reserved.
 					</div>
 				</div>
