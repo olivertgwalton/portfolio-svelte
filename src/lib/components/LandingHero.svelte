@@ -30,18 +30,16 @@
 
 				<!-- Headline -->
 
-				<h1
-					use:reveal={{ delay: 100, y: 20 }}
-					class="text-foreground mb-8 font-heading leading-[0.9] font-black tracking-tighter"
-				>
-					<span class="block text-5xl md:text-8xl"> Oliver Walton. </span>
-
-					<span class="text-muted-foreground mt-2 block text-2xl font-bold md:text-4xl">
-						Software Engineer.
-					</span>
-				</h1>
-
-				<!-- Bio -->
+				                				<h1
+				                					use:reveal={{ delay: 100, y: 20 }}
+				                					class="mb-8 font-heading leading-[0.9] font-black tracking-tighter text-foreground"
+				                				>
+				                					<span class="block text-5xl md:text-8xl"> Oliver Walton. </span>
+				                
+				                					<span class="mt-2 block text-2xl font-bold text-surface-600-400 md:text-4xl">
+				                						Software Engineer.
+				                					</span>
+				                				</h1>				<!-- Bio -->
 
 				<p
 					use:reveal={{ delay: 200, y: 20 }}
