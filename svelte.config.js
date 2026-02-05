@@ -22,8 +22,9 @@ const config = {
 				'connect-src': [
 					'self',
 					'https://cdn.jsdelivr.net',
-					'http://localhost:5173',
-					'https://oliverwalton.uk'
+					'http://localhost:5173', // Vite Dev
+					'http://localhost:3000', // Local Prod Preview / Docker
+					'https://oliverwalton.uk' // Production Domain
 				],
 				'object-src': ['none'],
 				'base-uri': ['self']
