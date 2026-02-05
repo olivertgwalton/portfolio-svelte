@@ -19,16 +19,15 @@ const config = {
 				// connect-src needs to allow the auth server. In dev it's localhost:5173.
 				// In prod it will be 'self' (if same origin) or the specific domain.
 				// We add localhost explicitly for dev.
-				                'connect-src': [
-				                    'self',
-				                    'https://cdn.jsdelivr.net',
-				                    'http://localhost:5173',
-				                    'ws://localhost:5173',
-				                    'http://localhost:3000',
-				                    'ws://localhost:3000',
-				                    'https://oliverwalton.uk',
-				                    process.env.PUBLIC_BETTER_AUTH_URL // Allow dynamic auth URL
-				                ].filter(Boolean),				'object-src': ['none'],
+				                				'connect-src': [
+				                					'self',
+				                					'https://cdn.jsdelivr.net',
+				                					// Allow dev server connections if running in dev
+				                					process.env.NODE_ENV === 'development' ? 'http://localhost:5173' : '',
+				                					process.env.NODE_ENV === 'development' ? 'ws://localhost:5173' : '',
+				                					// Allow dynamic auth URL from env
+				                					process.env.PUBLIC_BETTER_AUTH_URL
+				                				].filter(Boolean),				'object-src': ['none'],
 				'base-uri': ['self']
 			}
 		}
