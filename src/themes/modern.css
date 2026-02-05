@@ -15,7 +15,7 @@
        50 = Cream/White
        950 = Black/Dark
     */
-	--color-surface-50: #fffcf5;  /* Warm Cream */
+	--color-surface-50: #fffcf5; /* Warm Cream */
 	--color-surface-100: #fefce8;
 	--color-surface-200: #e5e7eb;
 	--color-surface-300: #d1d5db;
@@ -49,10 +49,10 @@
 	/* Status Colors */
 	--color-success-500: light-dark(#22c55e, #4ade80);
 	--color-success-contrast-500: #000000;
-	
+
 	--color-warning-500: light-dark(#eab308, #facc15);
 	--color-warning-contrast-500: #000000;
-	
+
 	--color-error-500: light-dark(#ef4444, #f87171);
 	--color-error-contrast-500: #ffffff;
 

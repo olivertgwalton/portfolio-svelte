@@ -10,7 +10,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	return await resolve(event, {
-		transformPageChunk: ({ html }) =>
-			html.replace('%sveltekit.html.attributes%', htmlAttributes)
+		transformPageChunk: ({ html }) => html.replace('%sveltekit.html.attributes%', htmlAttributes)
 	});
 };

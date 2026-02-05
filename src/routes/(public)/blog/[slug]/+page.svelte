@@ -5,11 +5,7 @@
 	let { data } = $props();
 </script>
 
-<MetaTags
-	title={data.meta.title}
-	description={data.meta.description}
-	type="article"
-/>
+<MetaTags title={data.meta.title} description={data.meta.description} type="article" />
 
 <article class="container mx-auto max-w-3xl px-6 py-24">
 	<header class="mb-12 text-center">
@@ -19,17 +15,19 @@
 				<span>•</span>
 				<div class="flex gap-2">
 					{#each data.meta.tags as tag}
-						<span class="text-primary-500 uppercase tracking-wider">{tag}</span>
+						<span class="tracking-wider text-primary-500 uppercase">{tag}</span>
 					{/each}
 				</div>
 			{/if}
 		</div>
-		<h1 class="font-heading text-4xl font-black tracking-tighter text-surface-950-50 sm:text-5xl md:text-6xl">
+		<h1
+			class="font-heading text-4xl font-black tracking-tighter text-surface-950-50 sm:text-5xl md:text-6xl"
+		>
 			{data.meta.title}
 		</h1>
 	</header>
 
-	<div class="prose prose-lg dark:prose-invert mx-auto">
+	<div class="mx-auto prose prose-lg dark:prose-invert">
 		{@html data.content}
 	</div>
 </article>

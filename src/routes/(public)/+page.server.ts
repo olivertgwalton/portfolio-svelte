@@ -1,28 +1,20 @@
-import { db } from '$lib/server/db';
-import { posts } from '$lib/server/db/schema';
-import { desc } from 'drizzle-orm';
+import type { PageServerLoad } from './$types';
 
-async function getPosts() {
-	try {
-		return await db
-			.select({
-				id: posts.id,
-				title: posts.title,
-				slug: posts.slug,
-				excerpt: posts.excerpt,
-				publishedAt: posts.published_at
-			})
-			.from(posts)
-			.orderBy(desc(posts.published_at))
-			.limit(3);
-	} catch (e) {
-		console.error('Posts Load Error:', e);
-		return [];
-	}
-}
+export const load: PageServerLoad = async () => {
+	const posts = import.meta.glob('/src/lib/posts/*.md', { eager: true });
 
-export const load = async () => {
+	const sortedPosts = Object.entries(posts)
+		.map(([path, file]) => {
+			const slug = path.split('/').pop()?.replace('.md', '');
+			return {
+				slug,
+				...(file as { metadata: any }).metadata
+			};
+		})
+		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+		.slice(0, 3); // Get only the latest 3 posts
+
 	return {
-		posts: getPosts()
+		posts: sortedPosts
 	};
 };

@@ -1,8 +1,8 @@
 ---
-title: "Hello World"
-description: "My first post on the new markdown blog."
-date: "2026-02-05"
-tags: ["svelte", "markdown"]
+title: 'Hello World'
+description: 'My first post on the new markdown blog.'
+date: '2026-02-05'
+tags: ['svelte', 'markdown']
 ---
 
 # Hello World
