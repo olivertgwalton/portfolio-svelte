@@ -19,14 +19,16 @@ const config = {
 				// connect-src needs to allow the auth server. In dev it's localhost:5173.
 				// In prod it will be 'self' (if same origin) or the specific domain.
 				// We add localhost explicitly for dev.
-				'connect-src': [
-					'self',
-					'https://cdn.jsdelivr.net',
-					'http://localhost:5173', // Vite Dev
-					'http://localhost:3000', // Local Prod Preview / Docker
-					'https://oliverwalton.uk' // Production Domain
-				],
-				'object-src': ['none'],
+				                'connect-src': [
+				                    'self',
+				                    'https://cdn.jsdelivr.net',
+				                    'http://localhost:5173',
+				                    'ws://localhost:5173',
+				                    'http://localhost:3000',
+				                    'ws://localhost:3000',
+				                    'https://oliverwalton.uk',
+				                    process.env.PUBLIC_BETTER_AUTH_URL // Allow dynamic auth URL
+				                ].filter(Boolean),				'object-src': ['none'],
 				'base-uri': ['self']
 			}
 		}
