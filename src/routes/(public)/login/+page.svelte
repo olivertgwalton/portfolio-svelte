@@ -1,32 +1,32 @@
 <script lang="ts">
-	import { Button } from 'bits-ui';
 	import { reveal } from '$lib/actions';
 	import InteractiveGrid from '$lib/components/visuals/InteractiveGrid.svelte';
 	import { authClient } from '$lib/auth/client';
 	import { goto } from '$app/navigation';
-    import { toast } from 'svelte-sonner';
+	import { resolve } from '$app/paths';
+	import { toast } from 'svelte-sonner';
 
 	let email = $state('');
 	let password = $state('');
-    let loading = $state(false);
+	let loading = $state(false);
 
 	async function handleSubmit(e: Event) {
 		e.preventDefault();
-        loading = true;
+		loading = true;
 
-        const { data, error } = await authClient.signIn.email({
-            email,
-            password
-        });
+		const { error } = await authClient.signIn.email({
+			email,
+			password
+		});
 
-        if (error) {
-            toast.error(error.message || 'Login failed');
-            loading = false;
-            return;
-        }
+		if (error) {
+			toast.error(error.message || 'Login failed');
+			loading = false;
+			return;
+		}
 
-        toast.success('Signed in successfully');
-        goto('/admin');
+		toast.success('Signed in successfully');
+		await goto(resolve('/admin'));
 	}
 </script>
 
@@ -35,7 +35,9 @@
 	<meta name="description" content="Access the secure admin dashboard." />
 </svelte:head>
 
-<section class="relative flex min-h-screen w-full items-center justify-center p-8 bg-surface-50-950">
+<section
+	class="relative flex min-h-screen w-full items-center justify-center bg-surface-50-950 p-8"
+>
 	<InteractiveGrid fixed={true} />
 	<div
 		class="relative z-10 mx-auto flex w-full flex-col justify-center space-y-6 sm:w-87.5"
@@ -58,7 +60,7 @@
 				<div class="space-y-2">
 					<label
 						for="email"
-						class="text-xs font-black tracking-widest uppercase text-surface-600-400"
+						class="text-xs font-black tracking-widest text-surface-600-400 uppercase"
 					>
 						Email
 					</label>
@@ -79,7 +81,7 @@
 					<div class="flex items-center justify-between">
 						<label
 							for="password"
-							class="text-xs font-black tracking-widest uppercase text-surface-600-400"
+							class="text-xs font-black tracking-widest text-surface-600-400 uppercase"
 						>
 							Password
 						</label>
@@ -97,7 +99,11 @@
 
 				<!-- Submit -->
 				<div class="pt-2">
-					<button type="submit" class="btn preset-filled-primary-500 w-full py-4 text-sm font-bold" disabled={loading}>
+					<button
+						type="submit"
+						class="btn w-full preset-filled-primary-500 py-4 text-sm font-bold"
+						disabled={loading}
+					>
 						{loading ? 'Signing in...' : 'Login'}
 					</button>
 				</div>
