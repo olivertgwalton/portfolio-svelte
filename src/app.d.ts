@@ -4,9 +4,14 @@ declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			theme: 'light' | 'dark' | undefined;
+			session: import('better-auth').Session | null;
+			user: import('better-auth').User | null;
+			theme: string;
 		}
-		// interface PageData {}
+		interface PageData {
+			session: import('better-auth').Session | null;
+			user: import('better-auth').User | null;
+		}
 		// interface PageState {}
 		// interface Platform {}
 	}
