@@ -23,7 +23,7 @@
 </script>
 
 <div class="flex flex-col gap-2">
-	<label for={id} class="text-xs font-black tracking-widest uppercase text-surface-600-400">
+	<label for={id} class="text-xs font-black tracking-widest text-surface-600-400 uppercase">
 		{label}
 	</label>
 	<textarea

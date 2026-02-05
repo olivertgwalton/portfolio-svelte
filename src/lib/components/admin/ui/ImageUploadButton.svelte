@@ -47,7 +47,7 @@
 	/>
 	<button
 		type="button"
-		class="btn btn-sm preset-tonal-surface px-3 py-1 text-xs font-bold disabled:opacity-50"
+		class="btn preset-tonal-surface btn-sm px-3 py-1 text-xs font-bold disabled:opacity-50"
 	>
 		{isUploading ? 'Uploading...' : '+ Insert Image'}
 	</button>

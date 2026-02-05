@@ -92,7 +92,7 @@
 			required
 		/>
 
-		<div class="flex flex-col gap-2 w-full">
+		<div class="flex w-full flex-col gap-2">
 			<Input
 				label="Slug"
 				id="slug"
@@ -100,7 +100,7 @@
 				oninput={handleSlugInput}
 				placeholder="article-slug"
 				required
-				class="font-mono text-sm text-surface-950-50 bg-surface-50-950 border-surface-200-800"
+				class="border-surface-200-800 bg-surface-50-950 font-mono text-sm text-surface-950-50"
 			/>
 		</div>
 	</div>
@@ -126,7 +126,7 @@
 		<div class="flex items-center justify-between">
 			<label
 				for="content"
-				class="text-xs font-black tracking-widest uppercase text-surface-600-400"
+				class="text-xs font-black tracking-widest text-surface-600-400 uppercase"
 			>
 				Content (Markdown)
 			</label>
@@ -134,7 +134,9 @@
 		</div>
 
 		{#if uploadedImages.length > 0}
-			<div class="flex flex-wrap gap-4 rounded-lg border border-surface-200-800 bg-surface-50-950/30 p-4">
+			<div
+				class="flex flex-wrap gap-4 rounded-lg border border-surface-200-800 bg-surface-50-950/30 p-4"
+			>
 				{#each uploadedImages as img (img)}
 					<div
 						class="group relative h-20 w-20 overflow-hidden rounded-md border border-surface-200-800 bg-surface-50-950"
