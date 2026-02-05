@@ -4,22 +4,22 @@
 	import ArrowRightIcon from 'phosphor-svelte/lib/ArrowRightIcon';
 
 	interface Post {
-		id: number;
-		title: string;
 		slug: string;
-		excerpt: string | null;
-		publishedAt: Date | null;
+		title: string;
+		description: string;
+		date: string;
+		tags?: string[];
 	}
 
 	let { posts = [] }: { posts: Post[] } = $props();
 
-	function formatDate(date: Date | null) {
-		if (!date) return '';
+	function formatDate(dateStr: string) {
+		if (!dateStr) return '';
 		return new Intl.DateTimeFormat('en-US', {
 			year: 'numeric',
 			month: 'long',
 			day: 'numeric'
-		}).format(date);
+		}).format(new Date(dateStr));
 	}
 </script>
 
@@ -43,7 +43,7 @@
 		</div>
 
 		<ul class="grid gap-0 border-t-2 border-surface-950-50">
-			{#each posts as post, i (post.id)}
+			{#each posts as post, i (post.slug)}
 				<li>
 					<a
 						href={resolve(`/blog/${post.slug}`)}
@@ -55,10 +55,10 @@
 						>
 							<!-- Date -->
 							<time
-								datetime={post.publishedAt ? new Date(post.publishedAt).toISOString() : ''}
+								datetime={post.date}
 								class="font-mono text-sm font-bold tracking-wider text-surface-600-400 uppercase"
 							>
-								{formatDate(post.publishedAt ? new Date(post.publishedAt) : null)}
+								{formatDate(post.date)}
 							</time>
 
 							<!-- Content -->
@@ -71,7 +71,7 @@
 								<p
 									class="line-clamp-2 max-w-2xl text-base leading-relaxed font-medium text-surface-600-400"
 								>
-									{post.excerpt}
+									{post.description}
 								</p>
 							</div>
 

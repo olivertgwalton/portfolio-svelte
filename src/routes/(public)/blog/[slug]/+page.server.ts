@@ -1,15 +1,24 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ params }) => {
-	try {
-		const post = await import(`../../../../lib/posts/${params.slug}.md`);
+interface PostMeta {
+	title: string;
+	description: string;
+	date: string;
+	tags?: string[];
+}
 
-		return {
-			content: post.default.render().html,
-			meta: post.metadata
-		};
-	} catch (e) {
+export const load: PageServerLoad = async ({ params }) => {
+	const posts = import.meta.glob('/src/lib/posts/*.md', { eager: true });
+	const path = `/src/lib/posts/${params.slug}.md`;
+	const post = posts[path] as { metadata: PostMeta } | undefined;
+
+	if (!post) {
 		throw error(404, `Post not found: ${params.slug}`);
 	}
+
+	return {
+		meta: post.metadata,
+		slug: params.slug
+	};
 };

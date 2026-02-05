@@ -79,7 +79,7 @@
 								</p>
 								{#if post.tags}
 									<div class="flex flex-wrap gap-2">
-										{#each post.tags as tag}
+										{#each post.tags as tag (tag)}
 											<span class="text-muted-foreground font-mono text-xs font-bold">#{tag}</span>
 										{/each}
 									</div>

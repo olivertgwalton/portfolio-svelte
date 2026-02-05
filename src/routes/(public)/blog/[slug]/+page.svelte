@@ -1,8 +1,32 @@
 <script lang="ts">
 	import { formatDate } from '$lib/utils';
 	import MetaTags from '$lib/components/MetaTags.svelte';
+	import type { Component } from 'svelte';
 
-	let { data } = $props();
+	interface Props {
+		data: {
+			meta: {
+				title: string;
+				description: string;
+				date: string;
+				tags?: string[];
+			};
+			slug: string;
+		};
+	}
+
+	let { data }: Props = $props();
+
+	// Dynamically import the markdown component
+	let PostComponent = $state<Component | null>(null);
+
+	$effect(() => {
+		if (data.slug) {
+			import(`../../../../lib/posts/${data.slug}.md`).then((m) => {
+				PostComponent = m.default;
+			});
+		}
+	});
 </script>
 
 <MetaTags title={data.meta.title} description={data.meta.description} type="article" />
@@ -14,7 +38,7 @@
 			{#if data.meta.tags}
 				<span>•</span>
 				<div class="flex gap-2">
-					{#each data.meta.tags as tag}
+					{#each data.meta.tags as tag (tag)}
 						<span class="tracking-wider text-primary-500 uppercase">{tag}</span>
 					{/each}
 				</div>
@@ -28,6 +52,12 @@
 	</header>
 
 	<div class="mx-auto prose prose-lg dark:prose-invert">
-		{@html data.content}
+		{#if PostComponent}
+			<PostComponent />
+		{:else}
+			<div class="flex h-32 items-center justify-center">
+				<p class="animate-pulse font-bold text-surface-400">Loading content...</p>
+			</div>
+		{/if}
 	</div>
 </article>
