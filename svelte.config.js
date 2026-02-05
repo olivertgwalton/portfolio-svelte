@@ -1,25 +1,43 @@
-import adapter from '@sveltejs/adapter-auto';
+import adapter from 'svelte-adapter-bun';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	kit: {
-		// adapter-auto only supports some environments, see https://svelte.dev/docs/kit/adapter-auto for a list.
-		// If your environment is not supported, or you settled on a specific environment, switch out the adapter.
-		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
+		// adapter-bun handles Bun runtime environments perfectly
 		adapter: adapter(),
 		csp: {
-			mode: 'nonce',
+			mode: 'auto',
 			directives: {
 				'default-src': ['self'],
-				'script-src': ['self', 'strict-dynamic'],
-				'style-src': ['self'],
-				'img-src': ['self', 'data:'],
-				'font-src': ['self', 'https://cdn.jsdelivr.net'],
-				'connect-src': ['self', 'https://cdn.jsdelivr.net'],
+				'script-src': ['self'],
+				// SvelteKit and many UI libraries rely heavily on inline styles (animations, etc).
+				// 'unsafe-inline' for style-src is often required unless using strict hash-based policies for every style block.
+				'style-src': ['self', 'unsafe-inline'],
+				'style-src-attr': ['self', 'unsafe-inline'],
+				'img-src': ['self', 'data:', 'https://cdn.bsky.app', 'https://picsum.photos'],
+				'font-src': ['self', 'data:', 'https://cdn.jsdelivr.net'],
+				// connect-src needs to allow the auth server. In dev it's localhost:5173.
+				// In prod it will be 'self' (if same origin) or the specific domain.
+				// We add localhost explicitly for dev.
+				'connect-src': [
+					'self',
+					'https://cdn.jsdelivr.net',
+					'http://localhost:5173',
+					'https://oliverwalton.uk'
+				],
 				'object-src': ['none'],
-				'base-uri': ['self'],
-				'frame-ancestors': ['none']
+				'base-uri': ['self']
 			}
+		}
+	},
+	vite: {
+		build: {
+			rollupOptions: {
+				external: ['bun:sqlite']
+			}
+		},
+		ssr: {
+			external: ['bun:sqlite']
 		}
 	}
 };
