@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: portfolio-app
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      # Database
+      - DATABASE_URL=file:/data/local.db
+
+      # Auth (Replace with your actual domain in prod)
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - BETTER_AUTH_URL=https://oliverwalton.uk
+      - PUBLIC_BETTER_AUTH_URL=https://oliverwalton.uk
+      - BETTER_AUTH_TRUSTED_ORIGINS=https://oliverwalton.uk
+
+      # App
+      - ORIGIN=https://oliverwalton.uk
+      - PORT=3000
+    volumes:
+      # Persist the SQLite database
+      - ./data:/data
+      # Persist uploads if you store them in static/uploads (which might need a change in app logic for docker)
+      # Usually better to mount a volume to where the app writes files.
+      # SvelteKit static files in build are read-only.
+      # If you upload to 'static/uploads', in Docker that path is inside the container.
+      # You need to mount a volume to persist it.
+      # Assuming your upload logic writes to 'static/uploads' relative to CWD.
+      - ./uploads:/app/build/client/uploads
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
