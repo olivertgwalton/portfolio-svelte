@@ -16,6 +16,7 @@
 @import '@skeletonlabs/skeleton/themes/sahara';
 /* Custom Themes */
 @import '../themes/t3-chat.css';
+@import '../themes/modern.css';
 
 /* CSS Variables & Settings */
 :root {
@@ -74,4 +75,14 @@ html.dark {
 	z-index: 9999;
 	/* Prevent flash by initializing clip to 0 at the click coordinates */
 	clip-path: circle(0px at var(--x) var(--y));
+}
+
+/* 
+   Fix: Force hide SvelteKit's route announcer using Tailwind's sr-only utility.
+   Placing it in @layer base ensures it handles the element regardless of where it's injected.
+*/
+@layer base {
+	#svelte-announcer {
+		@apply sr-only;
+	}
 }

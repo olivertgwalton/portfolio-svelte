@@ -8,6 +8,7 @@
 	import { onMount, tick } from 'svelte';
 
 	const themes = [
+		{ id: 'modern', name: 'Modern' },
 		{ id: 'cerberus', name: 'Cerberus' },
 		{ id: 'rose', name: 'Rose' },
 		{ id: 'nosh', name: 'Nosh' },
