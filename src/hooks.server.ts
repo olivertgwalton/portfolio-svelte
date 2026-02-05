@@ -1,6 +1,6 @@
 import { building } from '$app/environment';
 import { auth } from '$lib/auth';
-import type { Handle, RequestEvent, ResolveOptions } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit';
 import { svelteKitHandler } from 'better-auth/svelte-kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -14,14 +14,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	return svelteKitHandler({
 		event,
-		resolve: async (event: RequestEvent, opts?: ResolveOptions) => {
+		resolve: async (event) => {
 			return resolve(event, {
-				...opts,
 				transformPageChunk: ({ html }) =>
 					html.replace('%sveltekit.html.attributes%', htmlAttributes)
 			});
 		},
-		auth,
-		building
+		auth
 	});
 };

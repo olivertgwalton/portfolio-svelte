@@ -13,18 +13,10 @@ export const auth = betterAuth({
 		enabled: true
 	},
 	rateLimit: {
-		window: 60, // time window in seconds
-		max: 100 // max requests per window
+		window: 60,
+		max: 100
 	},
 	secret: env.BETTER_AUTH_SECRET,
-	advanced: {
-		useSecureCookies: true,
-		cookiePrefix: 'oliverwalton'
-	},
 	baseURL: env.BETTER_AUTH_URL,
-	// Ensure trustedOrigins includes both localhost (dev) and the production domain from env
-	trustedOrigins: [
-		'http://localhost:5173',
-		...(env.BETTER_AUTH_TRUSTED_ORIGINS ? env.BETTER_AUTH_TRUSTED_ORIGINS.split(',') : [])
-	]
+	trustedOrigins: ['http://localhost:5173', 'http://localhost:3000', ...(env.BETTER_AUTH_TRUSTED_ORIGINS?.split(',') ?? [])]
 });
