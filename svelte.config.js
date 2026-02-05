@@ -1,4 +1,4 @@
-import adapter from 'svelte-adapter-bun';
+import adapter from '@sveltejs/adapter-vercel';
 import { mdsvex } from 'mdsvex';
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -34,16 +34,7 @@ const config = {
 			}
 		}
 	},
-	vite: {
-		build: {
-			rollupOptions: {
-				external: ['bun:sqlite']
-			}
-		},
-		ssr: {
-			external: ['bun:sqlite']
-		}
-	}
+
 };
 
 export default config;

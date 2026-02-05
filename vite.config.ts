@@ -7,10 +7,5 @@ export default defineConfig({
 	plugins: [tailwindcss(), enhancedImages(), sveltekit()],
 	preview: {
 		allowedHosts: ['oliverwalton.uk']
-	},
-	build: {
-		rollupOptions: {
-			external: ['bun:sqlite']
-		}
 	}
 });
