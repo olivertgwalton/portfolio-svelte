@@ -1,47 +1,19 @@
-import { db } from '$lib/server/db';
-import { posts } from '$lib/server/db/schema';
-import { desc, like, and } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ url }) => {
-	const search = url.searchParams.get('q') || '';
-	const tag = url.searchParams.get('tag') || '';
+export const load: PageServerLoad = async () => {
+	const posts = import.meta.glob('/src/lib/posts/*.md', { eager: true });
 
-	const conditions = [];
-	if (search) conditions.push(like(posts.title, `%${search}%`));
-	if (tag) conditions.push(like(posts.tags, `%${tag}%`));
-
-	const allPosts = await db
-		.select({
-			id: posts.id,
-			title: posts.title,
-			slug: posts.slug,
-			excerpt: posts.excerpt,
-			publishedAt: posts.published_at,
-			tags: posts.tags
+	const sortedPosts = Object.entries(posts)
+		.map(([path, file]) => {
+			const slug = path.split('/').pop()?.replace('.md', '');
+			return {
+				slug,
+				...(file as { metadata: any }).metadata
+			};
 		})
-		.from(posts)
-		.where(conditions.length > 0 ? and(...conditions) : undefined)
-		.orderBy(desc(posts.published_at));
-
-	// Get all unique tags for filter
-	const allTagsQuery = await db.select({ tags: posts.tags }).from(posts);
-	const uniqueTags = new Set<string>();
-	allTagsQuery.forEach((p) => {
-		if (p.tags) {
-			p.tags
-				.split(',')
-				.map((t) => t.trim())
-				.forEach((t) => {
-					if (t) uniqueTags.add(t);
-				});
-		}
-	});
+		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
 	return {
-		posts: allPosts,
-		search,
-		currentTag: tag,
-		tags: Array.from(uniqueTags).sort()
+		posts: sortedPosts
 	};
 };
