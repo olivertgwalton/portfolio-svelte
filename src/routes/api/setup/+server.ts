@@ -20,9 +20,10 @@ export const GET: RequestHandler = async ({ url }) => {
 		auth.api.signUpEmail({
 			body: { email, password, name }
 		});
-		return new Response(`SUCCESS: Account created for ${email}.\n\nDELETE THIS FILE IMMEDIATELY: src/routes/api/setup/+server.ts`);
+		return new Response(
+			`SUCCESS: Account created for ${email}.\n\nDELETE THIS FILE IMMEDIATELY: src/routes/api/setup/+server.ts`
+		);
 	} catch (e) {
 		return new Response(`Error: ${(e as Error).message}`, { status: 500 });
 	}
 };
-
