@@ -44,10 +44,10 @@
 					Direct
 				</h3>
 				<a
-					href="mailto:[EMAIL_ADDRESS]"
+					href="mailto:olivertgwalton03@gmail.com"
 					class="text-foreground block font-heading text-2xl font-bold"
 				>
-					[EMAIL_ADDRESS]
+					olivertgwalton03@gmail.com
 				</a>
 			</div>
 
