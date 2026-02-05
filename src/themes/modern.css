@@ -1,0 +1,67 @@
+:root[data-theme='modern'] {
+	/* 
+       Modern Theme (Neobrutalist / Cream & Dark)
+       
+       Fixed: Using a PHYSICAL Scale for Surface Colors.
+       50 is ALWAYS Light.
+       950 is ALWAYS Dark.
+       
+       This allows Skeleton's utilities (e.g. bg-surface-50-950) to correctly 
+       swap between Light (50) and Dark (950) modes.
+    */
+
+	/* 
+       Surface Scale (Physical)
+       50 = Cream/White
+       950 = Black/Dark
+    */
+	--color-surface-50: #fffcf5;  /* Warm Cream */
+	--color-surface-100: #fefce8;
+	--color-surface-200: #e5e7eb;
+	--color-surface-300: #d1d5db;
+	--color-surface-400: #9ca3af;
+	--color-surface-500: #6b7280; /* Mid-gray */
+	--color-surface-600: #4b5563;
+	--color-surface-700: #374151;
+	--color-surface-800: #1f2937;
+	--color-surface-900: #111827;
+	--color-surface-950: #0a0a0a; /* Deep Black */
+
+	/* 
+       Primary (Salmon Pink)
+       Vibrant accent for buttons/highlights.
+    */
+	--color-primary-500: light-dark(#ff8ea6, #ff8ea6);
+	--color-primary-contrast-500: #000000;
+
+	/* 
+       Secondary (Pale Blue/Cyan)
+    */
+	--color-secondary-500: light-dark(#bae6fd, #bae6fd);
+	--color-secondary-contrast-500: #000000;
+
+	/* 
+       Tertiary (Mint)
+    */
+	--color-tertiary-500: light-dark(#6ee7b7, #6ee7b7);
+	--color-tertiary-contrast-500: #000000;
+
+	/* Status Colors */
+	--color-success-500: light-dark(#22c55e, #4ade80);
+	--color-success-contrast-500: #000000;
+	
+	--color-warning-500: light-dark(#eab308, #facc15);
+	--color-warning-contrast-500: #000000;
+	
+	--color-error-500: light-dark(#ef4444, #f87171);
+	--color-error-contrast-500: #ffffff;
+
+	/* 
+       Core Mappings
+       These determine the default body look.
+       Light Mode: Bg=50 (Cream), Text=950 (Black)
+       Dark Mode: Bg=950 (Black), Text=50 (Cream)
+    */
+	--base-font-color: light-dark(var(--color-surface-950), var(--color-surface-50));
+	--body-background-color: light-dark(var(--color-surface-50), var(--color-surface-950));
+}
