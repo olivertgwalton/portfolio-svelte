@@ -79,6 +79,16 @@
 						</li>
 						<li use:reveal={{ delay: 400, y: 10 }}>
 							<a
+								href="https://t.me/oliverwalton03"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="flex items-center gap-2 transition-colors hover:text-surface-950-50 md:justify-end"
+							>
+								Telegram <ArrowUpRightIcon size={16} class="opacity-50" />
+							</a>
+						</li>
+						<li use:reveal={{ delay: 400, y: 10 }}>
+							<a
 								href="https://instagram.com/olivertgwalton03"
 								target="_blank"
 								rel="noopener noreferrer"

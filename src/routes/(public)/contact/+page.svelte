@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { reveal } from '$lib/actions';
-	import ArrowUpRight from 'phosphor-svelte/lib/ArrowUpRight';
+	import ArrowUpRightIcon from 'phosphor-svelte/lib/ArrowUpRightIcon';
 	import InteractiveGrid from '$lib/components/visuals/InteractiveGrid.svelte';
 </script>
 
@@ -64,7 +64,7 @@
 							rel="noopener noreferrer"
 							class="hover:text-muted-foreground flex items-center gap-2 transition-colors"
 						>
-							Github <ArrowUpRight size={20} weight="bold" class="text-muted-foreground" />
+							Github <ArrowUpRightIcon size={20} weight="bold" class="text-muted-foreground" />
 						</a>
 					</li>
 					<li>
@@ -74,7 +74,17 @@
 							rel="noopener noreferrer"
 							class="hover:text-muted-foreground flex items-center gap-2 transition-colors"
 						>
-							LinkedIn <ArrowUpRight size={20} weight="bold" class="text-muted-foreground" />
+							LinkedIn <ArrowUpRightIcon size={20} weight="bold" class="text-muted-foreground" />
+						</a>
+					</li>
+					<li>
+						<a
+							href="https://t.me/oliverwalton03"
+							target="_blank"
+							rel="noopener noreferrer"
+							class="hover:text-muted-foreground flex items-center gap-2 transition-colors"
+						>
+							Telegram <ArrowUpRightIcon size={20} weight="bold" class="text-muted-foreground" />
 						</a>
 					</li>
 					<li>
@@ -84,7 +94,7 @@
 							rel="noopener noreferrer"
 							class="hover:text-muted-foreground flex items-center gap-2 transition-colors"
 						>
-							Instagram <ArrowUpRight size={20} weight="bold" class="text-muted-foreground" />
+							Instagram <ArrowUpRightIcon size={20} weight="bold" class="text-muted-foreground" />
 						</a>
 					</li>
 				</ul>
