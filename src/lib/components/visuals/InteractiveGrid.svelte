@@ -35,32 +35,56 @@
 	let points: Point[] = [];
 	let ctx: CanvasRenderingContext2D | null = null;
 	let animationId: number;
+	let isMobile = false;
 
 	function initGrid() {
 		if (!canvas) return;
 
+		// Check for mobile/reduced motion
+
+		isMobile =
+			window.matchMedia('(max-width: 768px)').matches ||
+			window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 		// Use canvas dimensions (which match parent due to CSS) instead of window
+
 		width = canvas.width = canvas.offsetWidth;
+
 		height = canvas.height = canvas.offsetHeight;
 
+		// On mobile, increase spacing to reduce point count drastically
+
+		const spacing = isMobile ? GRID_SPACING * 1.5 : GRID_SPACING;
+
 		// Add extra columns/rows to cover edges completely
-		const cols = Math.ceil(width / GRID_SPACING) + 2;
-		const rows = Math.ceil(height / GRID_SPACING) + 2;
+
+		const cols = Math.ceil(width / spacing) + 2;
+
+		const rows = Math.ceil(height / spacing) + 2;
 
 		// Reset points
+
 		points = new Array(cols * rows);
+
 		let index = 0;
 
 		for (let i = 0; i < cols; i++) {
 			for (let j = 0; j < rows; j++) {
-				const x = (i - 1) * GRID_SPACING; // Start slightly off-screen
-				const y = (j - 1) * GRID_SPACING;
+				const x = (i - 1) * spacing; // Start slightly off-screen
+
+				const y = (j - 1) * spacing;
+
 				points[index++] = {
 					x,
+
 					y,
+
 					originX: x,
+
 					originY: y,
+
 					vx: 0,
+
 					vy: 0
 				};
 			}
@@ -69,14 +93,34 @@
 
 	function updateThemeColor() {
 		if (typeof window === 'undefined') return;
+
 		// Use computed body text color which ensures we get a resolved color value (rgb/hex)
+
 		// rather than potentially getting the raw 'light-dark()' function string from a variable.
+
 		const style = getComputedStyle(document.body);
+
 		dotColor = style.color || '#000000';
 	}
 
 	function animate() {
 		if (!ctx) return;
+
+		// If mobile, just draw once and stop to save battery/perf
+		if (isMobile) {
+			ctx.clearRect(0, 0, width, height);
+			ctx.globalAlpha = 0.15;
+			ctx.fillStyle = dotColor;
+			ctx.beginPath();
+			for (let i = 0; i < points.length; i++) {
+				const p = points[i];
+				if (!p) continue;
+				ctx.moveTo(p.x + DOT_RADIUS, p.y);
+				ctx.arc(p.x, p.y, DOT_RADIUS, 0, Math.PI * 2);
+			}
+			ctx.fill();
+			return; // Stop animation loop
+		}
 
 		// Clear
 		ctx.clearRect(0, 0, width, height);
