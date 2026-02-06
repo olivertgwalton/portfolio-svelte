@@ -6,6 +6,8 @@
 	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
 	import { reveal } from '$lib/actions';
 
+	let { theme, mode } = $props();
+
 	const links = [
 		{ href: '/', label: 'Home' },
 		{ href: '/blog', label: 'Writing' },
@@ -50,7 +52,7 @@
 
 		<div class="flex items-center gap-4" use:reveal={{ delay: 300, y: -4, duration: 800 }}>
 			<!-- Theme Toggle -->
-			<ThemeSwitcher />
+			<ThemeSwitcher {theme} {mode} />
 
 			<!-- Mobile Menu Button -->
 			<div class="md:hidden">

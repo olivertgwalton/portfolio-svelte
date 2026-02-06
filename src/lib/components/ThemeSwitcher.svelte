@@ -5,7 +5,7 @@
 	import SunIcon from 'phosphor-svelte/lib/SunIcon';
 	import MonitorIcon from 'phosphor-svelte/lib/MonitorIcon';
 	import { Menu } from '@skeletonlabs/skeleton-svelte';
-	import { onMount, tick } from 'svelte';
+	import { tick, untrack } from 'svelte';
 
 	const themes = [
 		{ id: 'modern', name: 'Modern' },
@@ -23,51 +23,30 @@
 		{ id: 'system', name: 'System', icon: MonitorIcon }
 	];
 
-	let currentTheme = $state('cerberus');
+	let { theme: initialTheme = 'modern', mode: initialMode = 'system' } = $props();
 
-	let currentMode = $state('system');
-
+	let currentTheme = $state(untrack(() => initialTheme));
+	let currentMode = $state(untrack(() => initialMode));
 	let systemDark = $state(false);
 
 	function setCookie(name: string, value: string) {
 		document.cookie = `${name}=${value}; max-age=31536000; path=/; SameSite=Lax`;
 	}
 
-	function getCookie(name: string) {
-		return document.cookie
-			.split('; ')
-			.find((row) => row.startsWith(name + '='))
-			?.split('=')[1];
-	}
-
-	// Reactive: Sync System Preference
-
+	// Reactive: Sync System Preference & Update DOM
 	$effect(() => {
+		// 1. Monitor System Preference
 		const media = window.matchMedia('(prefers-color-scheme: dark)');
-
 		systemDark = media.matches;
-
-		const onChange = (e: MediaQueryListEvent) => {
-			systemDark = e.matches;
-		};
-
+		const onChange = (e: MediaQueryListEvent) => (systemDark = e.matches);
 		media.addEventListener('change', onChange);
 
-		return () => media.removeEventListener('change', onChange);
-	});
-
-	// Reactive: Update DOM for Dark Mode
-
-	$effect(() => {
+		// 2. Synchronize DOM (Runes will re-run this when currentMode, currentTheme, or systemDark changes)
 		const isDark = currentMode === 'dark' || (currentMode === 'system' && systemDark);
-
 		document.documentElement.classList.toggle('dark', isDark);
-	});
-
-	// Reactive: Update DOM for Theme
-
-	$effect(() => {
 		document.documentElement.setAttribute('data-theme', currentTheme);
+
+		return () => media.removeEventListener('change', onChange);
 	});
 
 	// Helper to perform the circular transition
@@ -135,22 +114,6 @@
 			setCookie('mode', mode);
 		}, event);
 	}
-
-	onMount(() => {
-		// Initialize state from cookie (server-side sync)
-
-		const savedTheme = getCookie('theme');
-
-		if (savedTheme && themes.find((t) => t.id === savedTheme)) {
-			currentTheme = savedTheme;
-		}
-
-		const savedMode = getCookie('mode');
-
-		if (savedMode) {
-			currentMode = savedMode;
-		}
-	});
 </script>
 
 <Menu>
