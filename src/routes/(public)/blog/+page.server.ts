@@ -12,6 +12,7 @@ interface Post {
 	description: string;
 	date: string;
 	tags?: string[];
+	image?: string;
 }
 
 export const load: PageServerLoad = async () => {

@@ -1,7 +1,14 @@
 <script lang="ts">
-	import { reveal } from '$lib/actions';
 	import ArrowUpRightIcon from 'phosphor-svelte/lib/ArrowUpRightIcon';
 	import InteractiveGrid from '$lib/components/visuals/InteractiveGrid.svelte';
+	import { fly } from 'svelte/transition';
+	import { onMount } from 'svelte';
+
+	let ready = $state(false);
+
+	onMount(() => {
+		ready = true;
+	});
 </script>
 
 <svelte:head>
@@ -9,96 +16,114 @@
 	<meta name="description" content="Get in touch via email or social media." />
 </svelte:head>
 
-<section class="border-border relative min-h-[30vh] w-full overflow-hidden border-b">
+<section class="relative min-h-[30vh] w-full overflow-hidden border-b border-surface-200-800">
 	<InteractiveGrid />
 	<div
 		class="relative z-10 container mx-auto flex h-full min-h-[30vh] flex-col justify-end px-6 pt-32 pb-12"
 	>
-		<h1
-			use:reveal={{ delay: 0, y: 20 }}
-			class="text-foreground max-w-4xl font-heading text-6xl font-black tracking-tight"
-		>
-			Say Hello.
-		</h1>
+		<div class="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
+			<div>
+				{#if ready}
+					<h1
+						in:fly={{ y: 20, duration: 600, delay: 0 }}
+						class="font-heading text-6xl font-black tracking-tighter text-surface-950-50 sm:text-7xl md:text-8xl"
+					>
+						Say Hello.
+					</h1>
+				{/if}
+			</div>
+			{#if ready}
+				<p
+					in:fly={{ y: 20, duration: 600, delay: 100 }}
+					class="hidden max-w-xs text-right font-mono text-sm tracking-wide text-surface-600-400 md:block"
+				>
+					Open for new projects <br />and technical discussions.
+				</p>
+			{/if}
+		</div>
 	</div>
 </section>
 
-<section class="container mx-auto px-6 py-24">
-	<div class="space-y-16">
-		<div
-			class="text-muted-foreground max-w-3xl space-y-6 text-xl leading-relaxed"
-			use:reveal={{ delay: 100 }}
-		>
-			<p>
-				I’m always open to discussing new projects, technical challenges, or simply chatting about
-				Formula 1 and systems architecture.
-			</p>
-
-			<p>The best way to reach me is via email or through any of my social profiles below.</p>
-		</div>
-
-		<div class="grid gap-12 md:grid-cols-2 lg:gap-24">
-			<!-- Email -->
-			<div class="space-y-4" use:reveal={{ delay: 200, y: 20 }}>
-				<h3 class="text-muted-foreground font-mono text-xs font-bold tracking-widest uppercase">
-					Direct
-				</h3>
-				<a
-					href="mailto:olivertgwalton03@gmail.com"
-					class="text-foreground block font-heading text-2xl font-bold"
+<section class="min-h-screen bg-surface-50-950 px-6 py-24">
+	<div class="container mx-auto">
+		<div class="space-y-16">
+			{#if ready}
+				<div
+					class="max-w-3xl space-y-6 text-xl leading-relaxed text-surface-600-400"
+					in:fly={{ y: 20, duration: 600, delay: 200 }}
 				>
-					olivertgwalton03@gmail.com
-				</a>
-			</div>
+					<p>
+						I’m always open to discussing new projects, technical challenges, or simply chatting about
+						Formula 1 and systems architecture.
+					</p>
 
-			<!-- Socials -->
-			<div class="space-y-4 md:pl-12" use:reveal={{ delay: 300, y: 20 }}>
-				<h3 class="text-muted-foreground font-mono text-xs font-bold tracking-widest uppercase">
-					Socials
-				</h3>
-				<ul class="text-foreground space-y-4 font-heading text-2xl font-bold">
-					<li>
+					<p>The best way to reach me is via email or through any of my social profiles below.</p>
+				</div>
+
+				<div class="grid gap-12 md:grid-cols-2 lg:gap-24">
+					<!-- Email -->
+					<div class="space-y-4" in:fly={{ y: 20, duration: 600, delay: 300 }}>
+						<h3 class="font-mono text-xs font-bold tracking-widest text-surface-500 uppercase">
+							Direct
+						</h3>
 						<a
-							href="https://github.com/olivertgwalton"
-							target="_blank"
-							rel="noopener noreferrer"
-							class="hover:text-muted-foreground flex items-center gap-2 transition-colors"
+							href="mailto:olivertgwalton03@gmail.com"
+							class="block font-heading text-2xl font-bold text-surface-950-50"
 						>
-							Github <ArrowUpRightIcon size={20} weight="bold" class="text-muted-foreground" />
+							olivertgwalton03@gmail.com
 						</a>
-					</li>
-					<li>
-						<a
-							href="https://www.linkedin.com/in/oliver-walton03/"
-							target="_blank"
-							rel="noopener noreferrer"
-							class="hover:text-muted-foreground flex items-center gap-2 transition-colors"
-						>
-							LinkedIn <ArrowUpRightIcon size={20} weight="bold" class="text-muted-foreground" />
-						</a>
-					</li>
-					<li>
-						<a
-							href="https://t.me/oliverwalton03"
-							target="_blank"
-							rel="noopener noreferrer"
-							class="hover:text-muted-foreground flex items-center gap-2 transition-colors"
-						>
-							Telegram <ArrowUpRightIcon size={20} weight="bold" class="text-muted-foreground" />
-						</a>
-					</li>
-					<li>
-						<a
-							href="https://instagram.com/olivertgwalton03"
-							target="_blank"
-							rel="noopener noreferrer"
-							class="hover:text-muted-foreground flex items-center gap-2 transition-colors"
-						>
-							Instagram <ArrowUpRightIcon size={20} weight="bold" class="text-muted-foreground" />
-						</a>
-					</li>
-				</ul>
-			</div>
+					</div>
+
+					<!-- Socials -->
+					<div class="space-y-4 md:pl-12" in:fly={{ y: 20, duration: 600, delay: 400 }}>
+						<h3 class="font-mono text-xs font-bold tracking-widest text-surface-500 uppercase">
+							Socials
+						</h3>
+						<ul class="space-y-4 font-heading text-2xl font-bold text-surface-950-50">
+							<li>
+								<a
+									href="https://github.com/olivertgwalton"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="flex items-center gap-2 transition-colors hover:text-surface-600-400"
+								>
+									Github <ArrowUpRightIcon size={20} weight="bold" class="text-surface-500" />
+								</a>
+							</li>
+							<li>
+								<a
+									href="https://www.linkedin.com/in/oliver-walton03/"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="flex items-center gap-2 transition-colors hover:text-surface-600-400"
+								>
+									LinkedIn <ArrowUpRightIcon size={20} weight="bold" class="text-surface-50" />
+								</a>
+							</li>
+							<li>
+								<a
+									href="https://t.me/oliverwalton03"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="flex items-center gap-2 transition-colors hover:text-surface-600-400"
+								>
+									Telegram <ArrowUpRightIcon size={20} weight="bold" class="text-surface-500" />
+								</a>
+							</li>
+							<li>
+								<a
+									href="https://instagram.com/olivertgwalton03"
+									target="_blank"
+									rel="noopener noreferrer"
+									class="flex items-center gap-2 transition-colors hover:text-surface-600-400"
+								>
+									Instagram <ArrowUpRightIcon size={20} weight="bold" class="text-surface-500" />
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			{/if}
 		</div>
 	</div>
 </section>

@@ -3,6 +3,7 @@ title: 'Hello World'
 description: 'My first post on the new markdown blog.'
 date: '2026-02-05'
 tags: ['svelte', 'markdown']
+image: '/src/lib/assets/hello-world.jpg'
 ---
 
 This is my first post written in **Markdown**. It is fast, version-controlled, and beautiful.

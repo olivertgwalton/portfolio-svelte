@@ -22,7 +22,7 @@
 	// Ensure the image URL is absolute (required by most social platforms)
 	// Robust slash handling: remove trailing slash from base and leading from path
 	const baseUrl = siteConfig.url.replace(/\/$/, '');
-	const imagePath = image.startsWith('/') ? image.substring(1) : image;
+	const imagePath = $derived(image.startsWith('/') ? image.substring(1) : image);
 	const absoluteImage = $derived(image.startsWith('http') ? image : `${baseUrl}/${imagePath}`);
 </script>
 
