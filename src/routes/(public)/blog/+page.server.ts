@@ -1,5 +1,11 @@
 import type { PageServerLoad } from './$types';
 
+export const config = {
+	isr: {
+		expiration: 3600
+	}
+};
+
 interface Post {
 	slug: string;
 	title: string;

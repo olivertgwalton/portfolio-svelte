@@ -1,6 +1,12 @@
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
+export const config = {
+	isr: {
+		expiration: 3600
+	}
+};
+
 interface PostMeta {
 	title: string;
 	description: string;
