@@ -23,9 +23,9 @@
 	}
 </script>
 
-<section class="border-t border-surface-200-800 px-6 py-32">
-	<div class="relative z-10 container mx-auto max-w-7xl">
-		<div class="mb-20 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
+<section class="border-t border-surface-200-800 bg-surface-50-950 px-6 py-24">
+	<div class="container mx-auto max-w-7xl">
+		<div class="mb-16 grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
 			<div>
 				<h2
 					use:reveal={{ delay: 0, y: 20 }}
@@ -34,63 +34,62 @@
 					Writing.
 				</h2>
 			</div>
-			<p
-				use:reveal={{ delay: 100, y: 20 }}
-				class="hidden max-w-xs text-right text-sm font-bold tracking-wide text-surface-600-400 md:block"
-			>
-				Thoughts on code, design, <br />and the future of the web.
-			</p>
+			<div use:reveal={{ delay: 100, y: 20 }} class="hidden md:block">
+				<a href={resolve('/blog')} class="variant-soft-surface btn font-bold"> View Archive </a>
+			</div>
 		</div>
 
-		<ul class="grid gap-0 border-t-2 border-surface-950-50">
+		<div class="flex flex-col gap-6">
 			{#each posts as post, i (post.slug)}
-				<li>
-					<a
-						href={resolve(`/blog/${post.slug}`)}
-						class="group block border-b-2 border-surface-950-50 transition-colors hover:bg-surface-100-900"
-					>
-						<article
-							use:reveal={{ delay: i * 100 }}
-							class="grid gap-8 py-12 md:grid-cols-[200px_1fr_auto] md:items-baseline md:px-6"
+				<a
+					href={resolve(`/blog/${post.slug}`)}
+					class="group bg-surface-100-800 hover:bg-surface-200-700 relative flex flex-col gap-6 rounded-xl border border-surface-200-800 p-8 transition-all hover:border-primary-500/50 md:flex-row md:items-center md:gap-12"
+					use:reveal={{ delay: i * 50 }}
+				>
+					<!-- Date -->
+					<div class="shrink-0 md:w-32">
+						<time
+							datetime={post.date}
+							class="font-mono text-xs font-bold tracking-wider text-surface-500 uppercase"
 						>
-							<!-- Date -->
-							<time
-								datetime={post.date}
-								class="font-mono text-sm font-bold tracking-wider text-surface-600-400 uppercase"
-							>
-								{formatDate(post.date)}
-							</time>
+							{formatDate(post.date)}
+						</time>
+					</div>
 
-							<!-- Content -->
-							<div class="space-y-6">
-								<h3
-									class="font-heading text-3xl leading-tight font-bold tracking-tight text-surface-950-50 transition-colors group-hover:text-surface-600-400 md:text-3xl"
-								>
-									{post.title}
-								</h3>
-								<p
-									class="line-clamp-2 max-w-2xl text-base leading-relaxed font-medium text-surface-600-400"
-								>
-									{post.description}
-								</p>
+					<!-- Content -->
+					<div class="grow space-y-2">
+						<h3
+							class="font-heading text-2xl leading-tight font-bold tracking-tight text-surface-950-50 transition-colors group-hover:text-primary-500"
+						>
+							{post.title}
+						</h3>
+						{#if post.tags}
+							<div class="flex flex-wrap gap-2">
+								{#each post.tags as tag (tag)}
+									<span class="text-xs font-medium text-surface-500">#{tag}</span>
+								{/each}
 							</div>
+						{/if}
+					</div>
 
-							<!-- Arrow -->
-							<div class="hidden md:block">
-								<span
-									class="text-surface-950-50 transition-transform duration-300 group-hover:translate-x-4"
-								>
-									<ArrowRightIcon size={32} weight="light" />
-								</span>
-							</div>
-						</article>
-					</a>
-				</li>
+					<!-- Arrow -->
+					<div
+						class="hidden text-surface-400 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-primary-500 md:block"
+					>
+						<ArrowRightIcon size={24} />
+					</div>
+				</a>
 			{:else}
-				<li class="py-32 text-center">
-					<p class="font-heading text-3xl font-bold text-surface-600-400">Coming soon.</p>
-				</li>
+				<div class="py-12 text-center">
+					<p class="font-heading text-2xl font-bold text-surface-600-400">Coming soon.</p>
+				</div>
 			{/each}
-		</ul>
+
+			<div class="mt-8 block md:hidden">
+				<a href={resolve('/blog')} class="variant-soft-surface btn w-full font-bold">
+					View Archive
+				</a>
+			</div>
+		</div>
 	</div>
 </section>
