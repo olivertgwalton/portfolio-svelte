@@ -21,7 +21,7 @@
 <section class="relative min-h-[30vh] w-full overflow-hidden border-b border-surface-200-800">
 	<InteractiveGrid />
 	<div
-		class="relative z-10 container mx-auto flex h-full min-h-[30vh] flex-col justify-end px-6 pt-32 pb-12"
+		class="relative z-10 container mx-auto flex h-full min-h-[30vh] max-w-7xl flex-col justify-end px-6 pt-32 pb-12"
 	>
 		<div class="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
 			<div>
@@ -48,7 +48,7 @@
 
 <section class="min-h-screen bg-surface-50-950 px-6 py-24">
 	{#if ready}
-		<div class="container mx-auto grid gap-16 lg:grid-cols-[1fr_1fr] lg:gap-32">
+		<div class="container mx-auto grid max-w-7xl gap-16 lg:grid-cols-[1fr_1fr] lg:gap-32">
 			<!-- Left Column: The Narrative -->
 			<div class="space-y-12 text-lg leading-relaxed text-surface-600-400">
 				<div in:fly={{ y: 20, duration: 600, delay: 200 }}>

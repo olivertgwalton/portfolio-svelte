@@ -4,15 +4,9 @@
 	import ListIcon from 'phosphor-svelte/lib/ListIcon';
 	import { Menu, Portal } from '@skeletonlabs/skeleton-svelte';
 	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
-	import { fly } from 'svelte/transition';
-	import { onMount } from 'svelte';
+	import { reveal } from '$lib/actions';
 
 	let { theme, mode } = $props();
-	let ready = $state(false);
-
-	onMount(() => {
-		ready = true;
-	});
 
 	const links = [
 		{ href: '/', label: 'Home' },
@@ -25,103 +19,94 @@
 <nav
 	class="sticky top-0 z-50 w-full border-b border-surface-200-800 bg-surface-50-950/90 backdrop-blur-md transition-all duration-300"
 >
-	<div class="container mx-auto flex items-center justify-between px-6 pt-3 pb-4">
+	<div class="container mx-auto flex max-w-7xl items-center justify-between px-6 pt-3 pb-4">
 		<!-- Logo -->
-		{#if ready}
-			<a
-				in:fly={{ y: -4, duration: 600, delay: 0 }}
-				href={resolve('/')}
-				class="font-heading text-2xl font-bold tracking-tighter text-surface-950-50"
-			>
-				Oliver<span class="text-surface-600-400">.</span>
-			</a>
-		{/if}
+		<a
+			use:reveal={{ delay: 0, y: -10 }}
+			href={resolve('/')}
+			class="font-heading text-2xl font-bold tracking-tighter text-surface-950-50"
+		>
+			Oliver<span class="text-surface-600-400">.</span>
+		</a>
 
 		<!-- Desktop Links -->
 		<div class="hidden items-center justify-center gap-8 md:flex">
-			{#if ready}
-				{#each links as link, i (link.href)}
-					{@const isActive = page.url.pathname === link.href}
-					<a
-						in:fly={{ y: -4, duration: 600, delay: 100 + i * 30 }}
-						href={resolve(link.href)}
-						aria-current={isActive ? 'page' : undefined}
-						class="group relative text-sm leading-none font-semibold tracking-wide text-surface-600-400 transition-colors hover:text-surface-950-50
-								{isActive ? 'text-surface-950-50' : ''}"
-					>
-						{link.label}
-						<span
-							class="absolute -bottom-1 left-0 h-px w-full origin-left bg-surface-950-50 transition-transform duration-300 ease-out {isActive
-								? 'scale-x-100'
-								: 'scale-x-0 group-hover:scale-x-100'}"
-						></span>
-					</a>
-				{/each}
-			{/if}
+			{#each links as link, i (link.href)}
+				{@const isActive = page.url.pathname === link.href}
+				<a
+					use:reveal={{ delay: 100 + i * 30, y: -10 }}
+					href={resolve(link.href)}
+					aria-current={isActive ? 'page' : undefined}
+					class="group relative text-sm leading-none font-semibold tracking-wide text-surface-600-400 transition-colors hover:text-surface-950-50
+							{isActive ? 'text-surface-950-50' : ''}"
+				>
+					{link.label}
+					<span
+						class="absolute -bottom-1 left-0 h-px w-full origin-left bg-surface-950-50 transition-transform duration-300 ease-out {isActive
+							? 'scale-x-100'
+							: 'scale-x-0 group-hover:scale-x-100'}"
+					></span>
+				</a>
+			{/each}
 		</div>
 
 		<div class="flex items-center gap-4">
-			{#if ready}
-				<div class="flex items-center gap-4" in:fly={{ y: -4, duration: 600, delay: 300 }}>
-					<!-- Theme Toggle -->
-					<ThemeSwitcher {theme} {mode} />
+			<div use:reveal={{ delay: 300, y: -10 }} class="flex items-center gap-4">
+				<!-- Theme Toggle -->
+				<ThemeSwitcher {theme} {mode} />
 
-					<!-- Mobile Menu Button -->
-					<div class="md:hidden">
-						<Menu>
-							<Menu.Trigger class="rounded-md p-2 text-surface-950-50" aria-label="Open Menu">
-								<ListIcon size={24} weight="bold" />
-							</Menu.Trigger>
-							<Portal>
-								<Menu.Positioner>
-									<Menu.Content
-										class="z-50 w-64 rounded-xl border border-surface-200-800 bg-surface-50-950 p-2 shadow-lg"
-									>
-										{#each links as link (link.href)}
-											{@const isActive = page.url.pathname === link.href}
-											<Menu.Item value={link.href}>
-												{#snippet element(attributes)}
-													<a
-														{...attributes as import('svelte/elements').HTMLAnchorAttributes}
-														href={resolve(link.href)}
-														class="block w-full rounded-lg px-4 py-3 text-sm font-bold {isActive
-															? 'bg-surface-200-800 text-surface-950-50'
-															: 'text-surface-600-400 hover:bg-surface-100-900'}"
-													>
-														{link.label}
-													</a>
-												{/snippet}
-											</Menu.Item>
-										{/each}
-										<Menu.Separator class="my-2 h-px bg-surface-200-800" />
-										<Menu.Item value="cv">
+				<!-- Mobile Menu Button -->
+				<div class="md:hidden">
+					<Menu>
+						<Menu.Trigger class="rounded-md p-2 text-surface-950-50" aria-label="Open Menu">
+							<ListIcon size={24} weight="bold" />
+						</Menu.Trigger>
+						<Portal>
+							<Menu.Positioner>
+								<Menu.Content
+									class="z-50 w-64 rounded-xl border border-surface-200-800 bg-surface-50-950 p-2 shadow-lg"
+								>
+									{#each links as link (link.href)}
+										{@const isActive = page.url.pathname === link.href}
+										<Menu.Item value={link.href}>
 											{#snippet element(attributes)}
 												<a
 													{...attributes as import('svelte/elements').HTMLAnchorAttributes}
-													href={asset('/CV.pdf')}
-													class="btn block w-full preset-outlined-surface-200-800 btn-sm py-2 text-center text-xs"
+													href={resolve(link.href)}
+													class="block w-full rounded-lg px-4 py-3 text-sm font-bold {isActive
+														? 'bg-surface-200-800 text-surface-950-50'
+														: 'text-surface-600-400 hover:bg-surface-100-900'}"
 												>
-													Download CV
+													{link.label}
 												</a>
 											{/snippet}
 										</Menu.Item>
-									</Menu.Content>
-								</Menu.Positioner>
-							</Portal>
-						</Menu>
-					</div>
-
-					<!-- CTA Button -->
-					<div class="hidden md:block">
-						<a
-							href={asset('/CV.pdf')}
-							class="btn preset-filled-primary-500 btn-sm px-5 py-2 text-xs"
-						>
-							CV
-						</a>
-					</div>
+									{/each}
+									<Menu.Separator class="my-2 h-px bg-surface-200-800" />
+									<Menu.Item value="cv">
+										{#snippet element(attributes)}
+											<a
+												{...attributes as import('svelte/elements').HTMLAnchorAttributes}
+												href={asset('/CV.pdf')}
+												class="btn block w-full preset-outlined-surface-200-800 btn-sm py-2 text-center text-xs"
+											>
+												Download CV
+											</a>
+										{/snippet}
+									</Menu.Item>
+								</Menu.Content>
+							</Menu.Positioner>
+						</Portal>
+					</Menu>
 				</div>
-			{/if}
+
+				<!-- CTA Button -->
+				<div class="hidden md:block">
+					<a href={asset('/CV.pdf')} class="btn preset-filled-primary-500 btn-sm px-5 py-2 text-xs">
+						CV
+					</a>
+				</div>
+			</div>
 		</div>
 	</div>
 </nav>

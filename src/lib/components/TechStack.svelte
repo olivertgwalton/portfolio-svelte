@@ -8,14 +8,7 @@
 	import IconPython from '$lib/components/icons/IconPython.svelte';
 	import IconC from '$lib/components/icons/IconC.svelte';
 	import IconLinux from '$lib/components/icons/IconLinux.svelte';
-	import { fly } from 'svelte/transition';
-	import { onMount } from 'svelte';
-
-	let ready = $state(false);
-
-	onMount(() => {
-		ready = true;
-	});
+	import { reveal } from '$lib/actions';
 
 	interface IconProps {
 		class?: string;
@@ -53,7 +46,6 @@
 			{ threshold: 0.6 }
 		);
 
-		// Observe all direct children (li elements)
 		const items = node.querySelectorAll('.tech-card');
 		items.forEach((item) => observer.observe(item));
 
@@ -67,63 +59,57 @@
 
 <section class="border-t border-surface-200-800 bg-surface-50-950">
 	<div class="relative z-10 container mx-auto max-w-7xl px-6 py-32">
-		<!-- Header: Matching Blog/Projects Design -->
+		<!-- Header -->
 		<div class="mb-20 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
 			<div>
-				{#if ready}
-					<h2
-						in:fly={{ y: 20, duration: 600, delay: 0 }}
-						class="font-heading text-5xl font-black tracking-tighter text-surface-950-50 md:text-6xl"
-					>
-						Technologies.
-					</h2>
-				{/if}
+				<h2
+					use:reveal={{ delay: 0 }}
+					class="font-heading text-5xl font-black tracking-tighter text-surface-950-50 md:text-6xl"
+				>
+					Technologies.
+				</h2>
 			</div>
 			<div class="hidden md:block">
-				{#if ready}
-					<p
-						in:fly={{ y: 20, duration: 600, delay: 100 }}
-						class="hidden max-w-xs text-right text-sm font-bold tracking-wide text-surface-600-400 md:block"
-					>
-						The tools I use <br />to build high-performance software.
-					</p>
-				{/if}
+				<p
+					use:reveal={{ delay: 100 }}
+					class="hidden max-w-xs text-right text-sm font-bold tracking-wide text-surface-600-400 md:block"
+				>
+					The tools I use <br />to build high-performance software.
+				</p>
 			</div>
 		</div>
 
+		<!-- Tech Cards -->
 		<ul class="flex flex-wrap justify-start gap-6 md:gap-8" use:setupObserver>
-			{#if ready}
-				{#each technologies as tech, i (tech.name)}
-					{@const Icon = tech.component}
-					<li
-						in:fly={{ y: 20, duration: 600, delay: i * 50 }}
-						class="tech-card group relative flex h-32 w-32 flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl border border-surface-200-800 bg-surface-50-950 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:hover:shadow-black/50"
-						style="--tech-color: {tech.color}; --tech-level: {tech.level}%"
+			{#each technologies as tech, i (tech.name)}
+				{@const Icon = tech.component}
+				<li
+					use:reveal={{ delay: 200 + i * 50 }}
+					class="tech-card group relative flex h-32 w-32 flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl border border-surface-200-800 bg-surface-50-950 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:hover:shadow-black/50"
+					style="--tech-color: {tech.color}; --tech-level: {tech.level}%"
+				>
+					<!-- Fill Background -->
+					<div class="tech-fill"></div>
+
+					<!-- Icon Container -->
+					<div
+						class="relative z-10 h-12 w-12 text-surface-600-400 transition-colors duration-300 group-hover:text-(--tech-color)"
+						aria-hidden="true"
 					>
-						<!-- Fill Background -->
-						<div class="tech-fill"></div>
+						<Icon class="h-full w-full" />
+					</div>
 
-						<!-- Icon Container -->
-						<div
-							class="relative z-10 h-12 w-12 text-surface-600-400 transition-colors duration-300 group-hover:text-(--tech-color)"
-							aria-hidden="true"
+					<!-- Label -->
+					<div class="relative z-10 flex flex-col items-center gap-0.5 text-center">
+						<span
+							class="font-sans text-[10px] font-bold tracking-widest text-surface-600-400 uppercase transition-colors group-hover:text-surface-950-50"
 						>
-							<Icon class="h-full w-full" />
-						</div>
-
-						<!-- Label -->
-						<div class="relative z-10 flex flex-col items-center gap-0.5 text-center">
-							<span
-								class="font-sans text-[10px] font-bold tracking-widest text-surface-600-400 uppercase transition-colors group-hover:text-surface-950-50"
-								style="background-color: transparent;"
-							>
-								{tech.name}
-							</span>
-							<span class="sr-only">Proficiency: {tech.level}%</span>
-						</div>
-					</li>
-				{/each}
-			{/if}
+							{tech.name}
+						</span>
+						<span class="sr-only">Proficiency: {tech.level}%</span>
+					</div>
+				</li>
+			{/each}
 		</ul>
 	</div>
 </section>

@@ -19,7 +19,7 @@
 <section class="relative min-h-[30vh] w-full overflow-hidden border-b border-surface-200-800">
 	<InteractiveGrid />
 	<div
-		class="relative z-10 container mx-auto flex h-full min-h-[30vh] flex-col justify-end px-6 pt-32 pb-12"
+		class="relative z-10 container mx-auto flex h-full min-h-[30vh] max-w-7xl flex-col justify-end px-6 pt-32 pb-12"
 	>
 		<div class="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
 			<div>
@@ -45,7 +45,7 @@
 </section>
 
 <section class="min-h-screen bg-surface-50-950 px-6 py-24">
-	<div class="container mx-auto">
+	<div class="container mx-auto max-w-7xl">
 		<div class="space-y-16">
 			{#if ready}
 				<div

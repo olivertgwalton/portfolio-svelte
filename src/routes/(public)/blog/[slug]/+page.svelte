@@ -42,7 +42,7 @@
 <MetaTags title={data.meta.title} description={data.meta.description} type="article" />
 
 <div class="min-h-screen bg-surface-50-950 pb-24">
-	<div class="container mx-auto max-w-6xl px-6 py-12 lg:py-24">
+	<div class="container mx-auto max-w-7xl px-6 py-12 lg:py-24">
 		<!-- Back Link -->
 		{#if ready}
 			<a
