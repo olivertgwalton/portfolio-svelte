@@ -11,7 +11,6 @@ const config = {
 	],
 	kit: {
 		adapter: adapter(),
-		runtime: 'experimental_bun1.x',
 		csp: {
 			mode: 'auto',
 			directives: {
