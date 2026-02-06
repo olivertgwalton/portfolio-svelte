@@ -11,6 +11,7 @@ const config = {
 	],
 	kit: {
 		adapter: adapter(),
+		runtime: 'experimental_bun1.x',
 		csp: {
 			mode: 'auto',
 			directives: {
@@ -20,21 +21,12 @@ const config = {
 				'style-src-attr': ['self', 'unsafe-inline'],
 				'img-src': ['self', 'data:', 'https://cdn.bsky.app', 'https://picsum.photos'],
 				'font-src': ['self', 'data:', 'https://cdn.jsdelivr.net'],
-				'connect-src': [
-					'self',
-					'https://cdn.jsdelivr.net',
-					// Allow dev server connections if running in dev
-					process.env.NODE_ENV === 'development' ? 'http://localhost:5173' : '',
-					process.env.NODE_ENV === 'development' ? 'ws://localhost:5173' : '',
-					// Allow dynamic auth URL from env
-					process.env.PUBLIC_BETTER_AUTH_URL
-				].filter(Boolean),
+				'connect-src': ['self', 'https://cdn.jsdelivr.net'].filter(Boolean),
 				'object-src': ['none'],
 				'base-uri': ['self']
 			}
 		}
-	},
-
+	}
 };
 
 export default config;
