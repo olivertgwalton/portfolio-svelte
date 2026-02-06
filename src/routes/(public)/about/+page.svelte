@@ -56,10 +56,10 @@
 						Systematic Curiosity
 					</h2>
 					<p>
-						My interest in technology started early, not with games, but with operating systems. Since
-						age 10, I’ve been using Linux as my daily driver. It wasn't always smooth sailing, but
-						troubleshooting display drivers and configuring window managers taught me resilience and a
-						deep appreciation for how software interacts with hardware.
+						My interest in technology started early, not with games, but with operating systems.
+						Since age 10, I’ve been using Linux as my daily driver. It wasn't always smooth sailing,
+						but troubleshooting display drivers and configuring window managers taught me resilience
+						and a deep appreciation for how software interacts with hardware.
 					</p>
 					<p class="mt-4">
 						That foundation naturally evolved into a career in software engineering. I don't just
@@ -71,9 +71,9 @@
 				<div in:fly={{ y: 20, duration: 600, delay: 300 }}>
 					<h2 class="mb-6 font-heading text-3xl font-bold text-surface-950-50">Beyond the Code</h2>
 					<p>
-						I’m driven by an appreciation for complex systems, whether they are digital or physical. I
-						follow Formula 1 for the relentless engineering optimization, and I love architecture for
-						the marriage of structure and aesthetics.
+						I’m driven by an appreciation for complex systems, whether they are digital or physical.
+						I follow Formula 1 for the relentless engineering optimization, and I love architecture
+						for the marriage of structure and aesthetics.
 					</p>
 					<p class="mt-4">
 						At home, you'll find me tinkering with my homelab—optimizing my local network and
@@ -90,9 +90,7 @@
 			<!-- Right Column: Stats / Highlights -->
 			<div class="space-y-16" in:fly={{ y: 20, duration: 600, delay: 400 }}>
 				<div class="border-t border-surface-200-800 pt-8">
-					<div
-						class="mb-2 font-mono text-xs font-bold tracking-widest text-surface-500 uppercase"
-					>
+					<div class="mb-2 font-mono text-xs font-bold tracking-widest text-surface-500 uppercase">
 						Location
 					</div>
 					<div class="font-heading text-4xl font-bold text-surface-950-50">
@@ -101,18 +99,14 @@
 				</div>
 
 				<div class="border-t border-surface-200-800 pt-8">
-					<div
-						class="mb-2 font-mono text-xs font-bold tracking-widest text-surface-500 uppercase"
-					>
+					<div class="mb-2 font-mono text-xs font-bold tracking-widest text-surface-500 uppercase">
 						Focus
 					</div>
 					<div class="font-heading text-4xl font-bold text-surface-950-50">Systems & Frontend</div>
 				</div>
 
 				<div class="border-t border-surface-200-800 pt-8">
-					<div
-						class="mb-2 font-mono text-xs font-bold tracking-widest text-surface-500 uppercase"
-					>
+					<div class="mb-2 font-mono text-xs font-bold tracking-widest text-surface-500 uppercase">
 						Experience
 					</div>
 					<div class="font-heading text-4xl font-bold text-surface-950-50">22 Years Old</div>

@@ -65,7 +65,7 @@
 					>
 						<div class="flex items-center gap-2 text-surface-500">
 							<CalendarBlankIcon class="size-4" />
-							<time datetime={data.meta.date} class="font-mono font-bold uppercase tracking-wider"
+							<time datetime={data.meta.date} class="font-mono font-bold tracking-wider uppercase"
 								>{formatDate(data.meta.date)}</time
 							>
 						</div>

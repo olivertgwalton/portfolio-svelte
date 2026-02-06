@@ -53,8 +53,8 @@
 					in:fly={{ y: 20, duration: 600, delay: 200 }}
 				>
 					<p>
-						I’m always open to discussing new projects, technical challenges, or simply chatting about
-						Formula 1 and systems architecture.
+						I’m always open to discussing new projects, technical challenges, or simply chatting
+						about Formula 1 and systems architecture.
 					</p>
 
 					<p>The best way to reach me is via email or through any of my social profiles below.</p>
