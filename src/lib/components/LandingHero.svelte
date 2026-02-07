@@ -7,7 +7,7 @@
 </script>
 
 <section
-	class="border-border dark:border-border relative flex min-h-[80vh] w-full items-center justify-center overflow-hidden border-b"
+	class="relative flex min-h-[80vh] w-full items-center justify-center overflow-hidden border-b border-surface-200-800/80"
 >
 	<InteractiveGrid />
 	<div class="relative z-10 container mx-auto max-w-7xl px-6">
@@ -65,7 +65,7 @@
 				<div use:reveal={{ delay: 400 }} class="group relative mx-auto aspect-3/4 w-full max-w-sm">
 					<!-- Glass Background/Frame -->
 					<div
-						class="/30 absolute -inset-4 rounded-3xl border border-surface-200-800/50 bg-surface-50-950/30 backdrop-blur-xl transition-all duration-500 group-hover:-inset-6 group-hover:bg-surface-50-950/40"
+						class="/30 absolute -inset-4 rounded-3xl border border-surface-200-800/80 bg-surface-50-950/30 backdrop-blur-xl transition-all duration-500 group-hover:-inset-6 group-hover:bg-surface-50-950/40"
 					></div>
 
 					<!-- Image Container -->

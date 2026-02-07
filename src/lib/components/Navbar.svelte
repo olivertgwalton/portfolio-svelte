@@ -10,14 +10,15 @@
 
 	const links = [
 		{ href: '/', label: 'Home' },
-		{ href: '/blog', label: 'Writing' },
+		{ href: '/projects', label: 'Projects' },
+		{ href: '/blog', label: 'Blog' },
 		{ href: '/about', label: 'About' },
 		{ href: '/contact', label: 'Contact' }
 	] as const;
 </script>
 
 <nav
-	class="sticky top-0 z-50 w-full border-b border-surface-200-800 bg-surface-50-950/90 backdrop-blur-md transition-all duration-300"
+	class="sticky top-0 z-50 w-full border-b border-surface-200-800/80 bg-surface-50-950/90 backdrop-blur-md transition-all duration-300"
 >
 	<div class="container mx-auto flex max-w-7xl items-center justify-between px-6 pt-3 pb-4">
 		<!-- Logo -->

@@ -5,8 +5,8 @@
 	import { reveal } from '$lib/actions';
 </script>
 
-<section class="border-t border-surface-200-800 bg-surface-50-950 px-6 py-32">
-	<div class="relative z-10 container mx-auto max-w-7xl">
+<section class="border-t border-surface-200-800/80 bg-surface-50-950 py-32">
+	<div class="relative z-10 container mx-auto max-w-7xl px-6">
 		<!-- Header -->
 		<div class="mb-20 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
 			<div>

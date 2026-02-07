@@ -16,7 +16,7 @@
 	<meta name="description" content="Get in touch via email or social media." />
 </svelte:head>
 
-<section class="relative min-h-[30vh] w-full overflow-hidden border-b border-surface-200-800">
+<section class="relative min-h-[30vh] w-full overflow-hidden border-b border-surface-200-800/80">
 	<InteractiveGrid />
 	<div
 		class="relative z-10 container mx-auto flex h-full min-h-[30vh] max-w-7xl flex-col justify-end px-6 pt-32 pb-12"
@@ -37,15 +37,15 @@
 					in:fly={{ y: 20, duration: 600, delay: 100 }}
 					class="hidden max-w-xs text-right font-mono text-sm tracking-wide text-surface-600-400 md:block"
 				>
-					Open for new projects <br />and technical discussions.
+					Open for new projects, <br />and technical discussions.
 				</p>
 			{/if}
 		</div>
 	</div>
 </section>
 
-<section class="min-h-screen bg-surface-50-950 px-6 py-24">
-	<div class="container mx-auto max-w-7xl">
+<section class="min-h-screen bg-surface-50-950 py-24">
+	<div class="container mx-auto max-w-7xl px-6">
 		<div class="space-y-16">
 			{#if ready}
 				<div

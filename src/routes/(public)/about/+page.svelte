@@ -18,12 +18,12 @@
 	/>
 </svelte:head>
 
-<section class="relative min-h-[30vh] w-full overflow-hidden border-b border-surface-200-800">
+<section class="relative min-h-[30vh] w-full overflow-hidden border-b border-surface-200-800/80">
 	<InteractiveGrid />
 	<div
 		class="relative z-10 container mx-auto flex h-full min-h-[30vh] max-w-7xl flex-col justify-end px-6 pt-32 pb-12"
 	>
-		<div class="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
+		<div class="grid gap-6 lg:grid-cols-[1fr_1fr] lg:items-end lg:gap-32">
 			<div>
 				{#if ready}
 					<h1
@@ -34,21 +34,23 @@
 					</h1>
 				{/if}
 			</div>
-			{#if ready}
-				<p
-					in:fly={{ y: 20, duration: 600, delay: 100 }}
-					class="hidden max-w-xs text-right font-mono text-sm tracking-wide text-surface-600-400 md:block"
-				>
-					Breaking Linux installs <br />since age 10.
-				</p>
-			{/if}
+			<div class="hidden lg:block">
+				{#if ready}
+					<p
+						in:fly={{ y: 20, duration: 600, delay: 100 }}
+						class="max-w-xs text-right font-mono text-sm tracking-wide text-surface-600-400 lg:ml-auto"
+					>
+						Breaking Linux installs <br />since age 10.
+					</p>
+				{/if}
+			</div>
 		</div>
 	</div>
 </section>
 
-<section class="min-h-screen bg-surface-50-950 px-6 py-24">
+<section class="min-h-screen bg-surface-50-950 py-24">
 	{#if ready}
-		<div class="container mx-auto grid max-w-7xl gap-16 lg:grid-cols-[1fr_1fr] lg:gap-32">
+		<div class="container mx-auto grid max-w-7xl gap-16 px-6 lg:grid-cols-[1fr_1fr] lg:gap-32">
 			<!-- Left Column: The Narrative -->
 			<div class="space-y-12 text-lg leading-relaxed text-surface-600-400">
 				<div in:fly={{ y: 20, duration: 600, delay: 200 }}>
@@ -56,15 +58,16 @@
 						Systematic Curiosity
 					</h2>
 					<p>
-						My interest in technology started early, not with games, but with operating systems.
-						Since age 10, I’ve been using Linux as my daily driver. It wasn't always smooth sailing,
-						but troubleshooting display drivers and configuring window managers taught me resilience
-						and a deep appreciation for how software interacts with hardware.
+						My interest in technology started early, with an incredibly fast Intel® i3 4150 and HDD.
+						I quickly discovered Linux, and delved into the world of operating systems. Since age
+						10, I’ve been using Linux as my daily driver - it wasn't always smooth sailing, but
+						troubleshooting display drivers and configuring window managers taught me resilience and
+						a deep appreciation for how software interacts with hardware.
 					</p>
 					<p class="mt-4">
-						That foundation naturally evolved into a career in software engineering. I don't just
-						write code; I try to understand the entire stack, from the kernel up to the pixel on the
-						screen.
+						That foundation naturally evolved into a career in software engineering (with a side
+						hustle of embedded systems). I don't just write code; I try to understand the entire
+						stack, from the kernel up to the pixel on the screen.
 					</p>
 				</div>
 
@@ -76,8 +79,8 @@
 						for the marriage of structure and aesthetics.
 					</p>
 					<p class="mt-4">
-						At home, you'll find me tinkering with my homelab—optimizing my local network and
-						self-hosting services—or working on electronics projects. It's a way to keep learning
+						At home, you'll find me tinkering with my homelab—optimising my local network and
+						self-hosting services, or working on electronics projects. It's a way to keep learning
 						without the pressure of a deadline.
 					</p>
 					<p class="mt-4">
@@ -107,7 +110,7 @@
 
 				<div class="border-t border-surface-200-800 pt-8">
 					<div class="mb-2 font-mono text-xs font-bold tracking-widest text-surface-500 uppercase">
-						Experience
+						Age
 					</div>
 					<div class="font-heading text-4xl font-bold text-surface-950-50">22 Years Old</div>
 				</div>

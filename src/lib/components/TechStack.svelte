@@ -57,7 +57,7 @@
 	}
 </script>
 
-<section class="border-t border-surface-200-800 bg-surface-50-950">
+<section class="border-t border-surface-200-800/80 bg-surface-50-950">
 	<div class="relative z-10 container mx-auto max-w-7xl px-6 py-32">
 		<!-- Header -->
 		<div class="mb-20 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
@@ -85,7 +85,7 @@
 				{@const Icon = tech.component}
 				<li
 					use:reveal={{ delay: 200 + i * 50 }}
-					class="tech-card group relative flex h-32 w-32 flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl border border-surface-200-800 bg-surface-50-950 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:hover:shadow-black/50"
+					class="tech-card group relative flex h-32 w-32 flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl border border-surface-200-800 bg-surface-50-950 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:hover:shadow-black/80"
 					style="--tech-color: {tech.color}; --tech-level: {tech.level}%"
 				>
 					<!-- Fill Background -->
