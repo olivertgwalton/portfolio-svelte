@@ -1,9 +1,16 @@
-export function formatDate(date: string | Date | undefined) {
-	if (!date) return '';
-	const d = new Date(date);
-	return d.toLocaleDateString('en-US', {
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric'
-	});
-}
+export const dateFormatter = new Intl.DateTimeFormat('en-US', {
+	year: 'numeric',
+	month: 'long',
+	day: 'numeric'
+});
+
+export const monthYearFormatter = new Intl.DateTimeFormat('en-US', {
+	year: 'numeric',
+	month: 'long'
+});
+
+export const getHSL = (str: string) => {
+	let hash = 0;
+	for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
+	return `hsl(${hash % 360} 70% 50% / 0.15)`;
+};
