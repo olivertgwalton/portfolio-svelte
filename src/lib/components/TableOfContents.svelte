@@ -107,7 +107,7 @@
 						class="size-4 text-surface-400 transition-transform duration-300 group-open:-rotate-180"
 					/>
 				</summary>
-				<nav class="border-t border-surface-200-800 bg-surface-100-900/50 px-6 py-6">
+				<nav class="border-t border-surface-200-800 bg-surface-100-900/80 px-6 py-6">
 					<ul class="relative space-y-4 text-sm">
 						<!-- Decorative timeline line -->
 						<div

@@ -33,6 +33,13 @@ html.dark {
 	color-scheme: dark;
 }
 
+/* Shiki Dual Themes */
+html.dark .shiki,
+html.dark .shiki span {
+	background-color: var(--shiki-dark-bg) !important;
+	color: var(--shiki-dark) !important;
+}
+
 @theme {
 	--font-heading: var(--font-heading);
 	--font-body: var(--font-body);
