@@ -3,10 +3,12 @@ title: 'Hello World'
 description: 'My first post on the new markdown blog.'
 date: '2026-02-05'
 tags: ['svelte', 'markdown']
-image: '/src/lib/assets/hello-world.jpg'
+image: '/src/lib/assets/blog/hello-world.png'
 ---
 
 This is my first post written in **Markdown**. It is fast, version-controlled, and beautiful.
+
+![A beautiful placeholder from the assets folder](/src/lib/assets/blog/hello-world.png)
 
 ## Introduction
 
