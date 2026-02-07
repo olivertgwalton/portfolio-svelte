@@ -11,15 +11,14 @@
 	import type { ContentMetadata } from '$lib/content';
 
 	type RoutePath = Parameters<typeof resolve>[0];
-	type Category = 'experience' | 'education' | 'projects';
+	type Category = 'experience' | 'education';
 
 	interface Props {
-		projects?: ContentMetadata[];
 		experience?: ContentMetadata[];
 		education?: ContentMetadata[];
 	}
 
-	let { projects = [], experience = [], education = [] }: Props = $props();
+	let { experience = [], education = [] }: Props = $props();
 
 	let activeTab = $state<Category>('experience');
 
@@ -40,8 +39,7 @@
 
 	const categories: Record<Category, CategoryConfig> = {
 		experience: { label: 'Experience', icon: BriefcaseIcon },
-		education: { label: 'Education', icon: GraduationCapIcon },
-		projects: { label: 'Projects', icon: CodeIcon }
+		education: { label: 'Education', icon: GraduationCapIcon }
 	};
 
 	function mapContentToTimeline(items: ContentMetadata[]): TimelineItem[] {
@@ -49,10 +47,7 @@
 			let link: TimelineItem['link'] = undefined;
 
 			// Handle links based on type
-			if (item.type === 'Project') {
-				// Internal link for projects
-				link = { collection: 'projects', slug: item.slug };
-			} else if (item.github) {
+			if (item.github) {
 				link = item.github;
 			} else if (item.demo) {
 				link = item.demo;
@@ -79,8 +74,7 @@
 
 	const data = $derived<Record<Category, TimelineItem[]>>({
 		experience: mapContentToTimeline(experience),
-		education: mapContentToTimeline(education),
-		projects: mapContentToTimeline(projects)
+		education: mapContentToTimeline(education)
 	});
 
 	const activeItems = $derived(data[activeTab]);
@@ -203,22 +197,6 @@
 						</div>
 					</div>
 				{/each}
-
-				{#if activeTab === 'projects'}
-					<div
-						use:reveal={{ delay: 200 + activeItems.length * 75 }}
-						class="relative pl-16 md:pl-20"
-					>
-						<div class="flex items-center gap-4">
-							<a
-								href={resolve('/(public)/[collection=collection]', { collection: 'projects' })}
-								class="variant-soft-primary btn font-bold"
-							>
-								Explore All Projects <ArrowRightIcon size={16} class="ml-2" />
-							</a>
-						</div>
-					</div>
-				{/if}
 			</div>
 		</div>
 	</div>
