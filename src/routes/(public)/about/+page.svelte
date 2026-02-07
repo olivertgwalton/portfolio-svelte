@@ -75,7 +75,7 @@
 					<h2 class="mb-6 font-heading text-3xl font-bold text-surface-950-50">Beyond the Code</h2>
 					<p>
 						I’m driven by an appreciation for complex systems, whether they are digital or physical.
-						I follow Formula 1 for the relentless engineering optimization, and I love architecture
+						I follow Formula 1 for the relentless engineering optimisation, and I love architecture
 						for the marriage of structure and aesthetics.
 					</p>
 					<p class="mt-4">
