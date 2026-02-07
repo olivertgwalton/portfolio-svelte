@@ -14,13 +14,8 @@
 	}>();
 
 	let activeTab = $state<'projects' | 'posts'>('projects');
-	
+
 	const items = $derived(activeTab === 'projects' ? projects : posts);
-	const viewAllLink = $derived(
-		resolve('/(public)/[collection=collection]', { 
-			collection: activeTab === 'projects' ? 'projects' : 'blog' 
-		})
-	);
 </script>
 
 <section class="border-t border-surface-200-800/80 bg-surface-50-950 py-24 md:py-32">
@@ -33,7 +28,7 @@
 				>
 					Selected Work.
 				</h2>
-				
+
 				<!-- Tabs -->
 				<div use:reveal={{ delay: 100 }} class="flex flex-wrap gap-2">
 					<button
@@ -60,7 +55,9 @@
 			<div class="hidden md:block">
 				<div use:reveal={{ delay: 150 }}>
 					<a
-						href={viewAllLink}
+						href={resolve('/(public)/[collection=collection]', {
+							collection: activeTab === 'projects' ? 'projects' : 'blog'
+						})}
 						class="variant-soft-surface btn font-bold"
 					>
 						View All {activeTab === 'projects' ? 'Projects' : 'Posts'}
@@ -73,11 +70,8 @@
 			{#each items as item, i (item.slug)}
 				{@const img = getEnhancedImage(item.image)}
 				{@const isProject = activeTab === 'projects'}
-				{@const link = resolve('/(public)/[collection=collection]/[slug]', {
-					collection: isProject ? 'projects' : 'blog',
-					slug: item.slug
-				})}
-				
+				{@const collection = isProject ? 'projects' : 'blog'}
+
 				<div
 					use:reveal={{ delay: 150 + i * 75 }}
 					class="group bg-surface-100-800 hover:bg-surface-200-700 relative flex flex-col overflow-hidden rounded-3xl border border-surface-200-800 transition-all hover:-translate-y-1 hover:border-primary-500/80"
@@ -113,41 +107,49 @@
 					<div class="flex grow flex-col p-8">
 						<div class="mb-4 flex items-center justify-between">
 							{#if isProject && item.type}
-								<span
-									class="font-mono text-xs font-bold tracking-wider text-primary-500 uppercase"
-								>
+								<span class="font-mono text-xs font-bold tracking-wider text-primary-500 uppercase">
 									{item.type}
 								</span>
 							{:else}
-								<time
-									class="font-mono text-xs font-bold tracking-wider text-surface-500 uppercase"
+								<time class="font-mono text-xs font-bold tracking-wider text-surface-500 uppercase"
 									>{dateFormatter.format(new Date(item.date))}</time
 								>
 							{/if}
 						</div>
-						
-						<a href={link}>
+
+						<a
+							href={resolve('/(public)/[collection=collection]/[slug]', {
+								collection,
+								slug: item.slug
+							})}
+						>
 							<h3
 								class="mb-4 font-heading text-2xl leading-tight font-bold tracking-tight text-surface-950-50 transition-colors group-hover:text-primary-500"
 							>
 								{item.title}
 							</h3>
 						</a>
-						
+
 						<p class="mb-6 line-clamp-3 grow text-base leading-relaxed text-surface-600-400">
 							{item.description}
 						</p>
-						
+
 						<div class="flex items-center justify-between border-t border-surface-200-800 pt-6">
 							<div class="flex flex-wrap gap-2">
 								{#if isProject && item.tech}
-									{#each item.tech.slice(0, 3) as t}<span class="text-xs font-bold tracking-wide text-surface-500 uppercase">{t}</span>{/each}
-									{#if item.tech.length > 3}<span class="text-xs font-bold text-surface-500">+{item.tech.length - 3}</span>{/if}
+									{#each item.tech.slice(0, 3) as t (t)}<span
+											class="text-xs font-bold tracking-wide text-surface-500 uppercase">{t}</span
+										>{/each}
+									{#if item.tech.length > 3}<span class="text-xs font-bold text-surface-500"
+											>+{item.tech.length - 3}</span
+										>{/if}
 								{:else if !isProject && item.tags}
-									{#each item.tags.slice(0, 3) as t}<span class="text-xs font-bold tracking-wide text-surface-500 uppercase">#{t}</span>{/each}
+									{#each item.tags.slice(0, 3) as t (t)}<span
+											class="text-xs font-bold tracking-wide text-surface-500 uppercase">#{t}</span
+										>{/each}
 								{/if}
 							</div>
-							
+
 							<div class="flex items-center gap-4">
 								{#if isProject && item.demo}
 									<a
@@ -161,8 +163,11 @@
 									</a>
 								{/if}
 								<a
-									href={link}
-									class="text-surface-400 transition-transform duration-300 hover:text-primary-500 group-hover:translate-x-1"
+									href={resolve('/(public)/[collection=collection]/[slug]', {
+										collection,
+										slug: item.slug
+									})}
+									class="text-surface-400 transition-transform duration-300 group-hover:translate-x-1 hover:text-primary-500"
 								>
 									<ArrowRightIcon size={20} />
 								</a>
@@ -182,7 +187,9 @@
 		<div class="mt-10 block md:hidden">
 			<div use:reveal={{ delay: 300 }}>
 				<a
-					href={viewAllLink}
+					href={resolve('/(public)/[collection=collection]', {
+						collection: activeTab === 'projects' ? 'projects' : 'blog'
+					})}
 					class="variant-soft-surface btn w-full font-bold"
 				>
 					View All {activeTab === 'projects' ? 'Projects' : 'Posts'}

@@ -88,8 +88,7 @@
 						<div class="flex items-center justify-between border-t border-surface-200-800 pt-6">
 							<div class="flex flex-wrap gap-2">
 								{#if project.tech}{#each project.tech.slice(0, 3) as t (t)}<span
-											class="text-xs font-bold tracking-wide text-surface-500 uppercase"
-											>{t}</span
+											class="text-xs font-bold tracking-wide text-surface-500 uppercase">{t}</span
 										>{/each}{#if project.tech.length > 3}<span
 											class="text-xs font-bold text-surface-500">+ {project.tech.length - 3}</span
 										>{/if}{/if}

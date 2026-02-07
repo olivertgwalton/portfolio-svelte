@@ -2,8 +2,6 @@
 	import { reveal } from '$lib/actions';
 	import BriefcaseIcon from 'phosphor-svelte/lib/BriefcaseIcon';
 	import GraduationCapIcon from 'phosphor-svelte/lib/GraduationCapIcon';
-	import CodeIcon from 'phosphor-svelte/lib/CodeIcon';
-	import ArrowRightIcon from 'phosphor-svelte/lib/ArrowRightIcon';
 	import ArrowSquareOutIcon from 'phosphor-svelte/lib/ArrowSquareOutIcon';
 	import type { Component } from 'svelte';
 	import type { IconWeight } from 'phosphor-svelte';
