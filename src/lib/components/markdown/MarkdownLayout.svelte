@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { mount, unmount } from 'svelte';
 	import CopyButton from './CopyButton.svelte';
-	import MarkdownImage from './MarkdownImage.svelte';
 
-	// We keep MarkdownImage as a mapped component as it works reliably
-	export const img = MarkdownImage;
+	let { children } = $props();
 
 	function enhanceCodeBlocks(node: HTMLElement) {
 		const components: ReturnType<typeof mount>[] = [];
@@ -33,5 +31,5 @@
 </script>
 
 <div use:enhanceCodeBlocks>
-	<slot />
+	{@render children?.()}
 </div>

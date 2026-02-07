@@ -8,19 +8,25 @@
 	import { ArrowLeftIcon, GithubLogoIcon, GlobeIcon, CalendarIcon, TagIcon } from 'phosphor-svelte';
 	import type { ContentMetadata, ContentType } from '$lib/content';
 
+	import { getEnhancedImage } from '$lib/images';
+
 	let { meta, slug, type }: { meta: ContentMetadata; slug: string; type: ContentType } = $props();
 
 	let ContentComponent = $state<Component | null>(null);
-	const postModules = import.meta.glob('/src/lib/posts/*.md');
-	const projectModules = import.meta.glob('/src/lib/projects/*.md');
+	// Unified directory-based structure: src/lib/posts/[slug]/index.md
+	const postModules = import.meta.glob('/src/lib/posts/**/index.md');
+	const projectModules = import.meta.glob('/src/lib/projects/**/index.md');
 
 	$effect(() => {
 		const modules = type === 'posts' ? postModules : projectModules;
-		const path = `/src/lib/${type === 'posts' ? 'posts' : 'projects'}/${slug}.md`;
+		const baseDir = `/src/lib/${type === 'posts' ? 'posts' : 'projects'}`;
+
+		const path = `${baseDir}/${slug}/index.md`;
 		modules[path]?.().then((m) => (ContentComponent = (m as { default: Component }).default));
 	});
 
 	const isProject = $derived(type === 'projects');
+	const featuredImage = $derived(getEnhancedImage(meta.image));
 </script>
 
 <MetaTags
@@ -50,6 +56,13 @@
 							class="mb-4 block font-mono text-sm font-bold tracking-widest text-primary-500 uppercase"
 						>
 							{meta.type}
+						</span>
+					{:else if !isProject}
+						<span
+							use:reveal={{ delay: 100 }}
+							class="mb-4 block font-mono text-sm font-bold tracking-widest text-primary-500 uppercase"
+						>
+							Blog Post
 						</span>
 					{/if}
 					<h1
@@ -112,14 +125,14 @@
 					{/if}
 				</div>
 
-				{#if isProject && meta.image}
+				{#if meta.image}
 					<div
 						use:reveal={{ delay: 300, y: 20 }}
 						class="aspect-video w-full max-w-xl overflow-hidden rounded-3xl border border-surface-200-800 shadow-2xl"
 					>
-						{#if meta.enhancedImage}
+						{#if featuredImage}
 							<enhanced:img
-								src={meta.enhancedImage}
+								src={featuredImage}
 								alt={meta.title}
 								class="h-full w-full object-cover"
 							/>

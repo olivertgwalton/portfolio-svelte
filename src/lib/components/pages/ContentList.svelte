@@ -50,6 +50,8 @@
 		(selectedTags = selectedTags.includes(t)
 			? selectedTags.filter((s) => s !== t)
 			: [...selectedTags, t]);
+
+	import { getEnhancedImage } from '$lib/images';
 </script>
 
 <svelte:head><title>{isPosts ? 'Blog' : 'Projects'} | Oliver Walton</title></svelte:head>
@@ -136,6 +138,7 @@
 			<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
 				{#each filtered as i, idx (i.slug)}
 					{@const tags = isPosts ? i.tags : i.tech}
+					{@const img = getEnhancedImage(i.image)}
 
 					<a
 						href={resolve('/(public)/[collection=collection]/[slug]', {
@@ -146,21 +149,25 @@
 						use:reveal={{ delay: idx * 75 }}
 						class="group bg-surface-100-800 hover:bg-surface-200-700 relative flex flex-col overflow-hidden rounded-3xl border border-surface-200-800 transition-all hover:-translate-y-1 hover:border-primary-500/80"
 					>
-						{#if i.image}
+						{#if img}
 							<div class="h-48 w-full overflow-hidden">
-								{#if i.enhancedImage}
-									<enhanced:img
-										src={i.enhancedImage}
-										alt={i.title}
-										class="h-full w-full object-cover transition-transform group-hover:scale-105"
-									/>
-								{:else}
-									<img
-										src={i.image}
-										alt={i.title}
-										class="h-full w-full object-cover transition-transform group-hover:scale-105"
-									/>
-								{/if}
+								<enhanced:img
+									src={img}
+									alt={i.title}
+									class="h-full w-full object-cover transition-transform group-hover:scale-105"
+								/>
+
+								<div
+									class="from-surface-100-800 absolute inset-0 bg-linear-to-t to-transparent"
+								></div>
+							</div>
+						{:else if i.image}
+							<div class="h-48 w-full overflow-hidden">
+								<img
+									src={i.image}
+									alt={i.title}
+									class="h-full w-full object-cover transition-transform group-hover:scale-105"
+								/>
 
 								<div
 									class="from-surface-100-800 absolute inset-0 bg-linear-to-t to-transparent"

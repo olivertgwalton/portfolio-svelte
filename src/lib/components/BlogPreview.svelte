@@ -5,6 +5,8 @@
 	import ArrowRightIcon from 'phosphor-svelte/lib/ArrowRightIcon';
 	import type { ContentMetadata } from '$lib/content';
 
+	import { getEnhancedImage } from '$lib/images';
+
 	let { posts = [] }: { posts: ContentMetadata[] } = $props();
 </script>
 
@@ -31,6 +33,7 @@
 
 		<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
 			{#each posts as post, i (post.slug)}
+				{@const img = getEnhancedImage(post.image)}
 				<a
 					href={resolve('/(public)/[collection=collection]/[slug]', {
 						collection: 'blog',
@@ -39,21 +42,21 @@
 					use:reveal={{ delay: 150 + i * 75 }}
 					class="group bg-surface-100-800 hover:bg-surface-200-700 relative flex flex-col overflow-hidden rounded-3xl border border-surface-200-800 transition-all hover:-translate-y-1 hover:border-primary-500/80"
 				>
-					{#if post.image}
+					{#if img}
 						<div class="h-48 w-full overflow-hidden">
-							{#if post.enhancedImage}
-								<enhanced:img
-									src={post.enhancedImage}
-									alt={post.title}
-									class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-								/>
-							{:else}
-								<img
-									src={post.image}
-									alt={post.title}
-									class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-								/>
-							{/if}
+							<enhanced:img
+								src={img}
+								alt={post.title}
+								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+							/>
+						</div>
+					{:else if post.image}
+						<div class="h-48 w-full overflow-hidden">
+							<img
+								src={post.image}
+								alt={post.title}
+								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+							/>
 						</div>
 					{:else}
 						<div

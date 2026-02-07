@@ -1,15 +1,8 @@
 // Hoist globs to top level for static analysis
-const postFiles = import.meta.glob('/src/lib/posts/*.md', { eager: true });
-const projectFiles = import.meta.glob('/src/lib/projects/*.md', { eager: true });
+const postFiles = import.meta.glob('/src/lib/posts/**/index.md', { eager: true });
+const projectFiles = import.meta.glob('/src/lib/projects/**/index.md', { eager: true });
 const experienceFiles = import.meta.glob('/src/lib/experience/*.md', { eager: true });
 const educationFiles = import.meta.glob('/src/lib/education/*.md', { eager: true });
-export const assetFiles = import.meta.glob(
-	'/src/lib/assets/**/*.{avif,gif,heif,jpeg,jpg,png,tiff,webp,svg}',
-	{
-		query: { enhanced: true },
-		eager: true
-	}
-);
 
 export interface ContentMetadata {
 	slug: string;
@@ -17,39 +10,25 @@ export interface ContentMetadata {
 	description: string;
 	date: string;
 	image?: string;
-	enhancedImage?: EnhancedImage;
-	tags?: string[]; // For blog
-	tech?: string[]; // For projects
-	type?: string; // For projects
-	github?: string; // For projects
-	demo?: string; // For projects
-	// For Experience/Education
+	tags?: string[];
+	tech?: string[];
+	type?: string;
+	github?: string;
+	demo?: string;
 	organization?: string;
 	period?: string;
 	current?: boolean;
 	highlights?: string[];
-	skills?: string[]; // specialized tech list for experience
+	skills?: string[];
 }
 
 export type ContentType = 'posts' | 'projects' | 'experience' | 'education';
 
-export interface EnhancedImage {
-	sources: Record<string, string>;
-	img: {
-		src: string;
-		w: number;
-		h: number;
-	};
-}
-
-export function resolveEnhancedImage(imagePath?: string): EnhancedImage | undefined {
-	if (!imagePath) return undefined;
-	// Try exact match, then match without leading slash, then match with leading slash
-	const match =
-		assetFiles[imagePath] ||
-		assetFiles[imagePath.startsWith('/') ? imagePath.slice(1) : '/' + imagePath];
-
-	return (match as { default: EnhancedImage })?.default;
+function resolveImage(slug: string, type: ContentType, image?: string) {
+	if (!image?.startsWith('./')) return image;
+	// Resolve relative path ./cover.jpg -> /src/lib/posts/slug/cover.jpg
+	const dir = type === 'posts' ? 'posts' : 'projects';
+	return `/src/lib/${dir}/${slug}/${image.slice(2)}`;
 }
 
 export function getContentList(type: ContentType): ContentMetadata[] {
@@ -74,46 +53,34 @@ export function getContentList(type: ContentType): ContentMetadata[] {
 
 	return Object.entries(files)
 		.map(([path, file]) => {
-			const slug = path.split('/').pop()?.replace('.md', '') || '';
+			// Extract slug from parent directory: /src/lib/posts/hello-world/index.md -> hello-world
+			const parts = path.split('/');
+			const slug = parts[parts.length - 2];
+
 			const metadata = (file as { metadata: Omit<ContentMetadata, 'slug'> }).metadata;
 			return {
 				slug,
 				...metadata,
-				enhancedImage: resolveEnhancedImage(metadata.image)
+				image: resolveImage(slug, type, metadata.image)
 			};
 		})
-		.sort((a, b) => {
-			// Sort by date (newest first)
-			// For experience/education, we might want to rely on the 'date' field in frontmatter
-			// as a sort key even if 'period' is displayed text.
-			return new Date(b.date).getTime() - new Date(a.date).getTime();
-		});
+		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
 export function getContentItem(type: ContentType, slug: string): ContentMetadata | null {
-	let files: Record<string, unknown>;
+	const files = type === 'posts' ? postFiles : projectFiles;
+	const dir = type === 'posts' ? 'posts' : 'projects';
 
-	if (type === 'posts') {
-		files = postFiles;
-		const path = `/src/lib/posts/${slug}.md`;
-		const file = files[path];
-		if (!file) return null;
-		const metadata = (file as { metadata: Omit<ContentMetadata, 'slug'> }).metadata;
-		return {
-			slug,
-			...metadata,
-			enhancedImage: resolveEnhancedImage(metadata.image)
-		};
-	} else {
-		files = projectFiles;
-		const path = `/src/lib/projects/${slug}.md`;
-		const file = files[path];
-		if (!file) return null;
-		const metadata = (file as { metadata: Omit<ContentMetadata, 'slug'> }).metadata;
-		return {
-			slug,
-			...metadata,
-			enhancedImage: resolveEnhancedImage(metadata.image)
-		};
-	}
+	// Direct lookup for directory based structure
+	const path = `/src/lib/${dir}/${slug}/index.md`;
+	const file = files[path];
+
+	if (!file) return null;
+	const metadata = (file as { metadata: Omit<ContentMetadata, 'slug'> }).metadata;
+
+	return {
+		slug,
+		...metadata,
+		image: resolveImage(slug, type, metadata.image)
+	};
 }
