@@ -20,17 +20,17 @@
 
 <section class="border-t border-surface-200-800/80 bg-surface-50-950 py-24 md:py-32">
 	<div class="container mx-auto max-w-7xl px-6">
-		<div class="mb-12 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-			<div class="space-y-6">
-				<h2
-					use:reveal={{ delay: 0 }}
-					class="font-heading text-5xl font-black tracking-tighter text-surface-950-50 md:text-6xl"
-				>
-					Selected Work.
-				</h2>
+		<div class="mb-12 space-y-6">
+			<h2
+				use:reveal={{ delay: 0 }}
+				class="font-heading text-5xl font-black tracking-tighter text-surface-950-50 md:text-6xl"
+			>
+				Selected Work.
+			</h2>
 
+			<div use:reveal={{ delay: 100 }} class="flex items-center justify-between gap-4">
 				<!-- Tabs -->
-				<div use:reveal={{ delay: 100 }} class="flex flex-wrap gap-2">
+				<div class="flex flex-wrap gap-2">
 					<button
 						onclick={() => (activeTab = 'projects')}
 						class="rounded-full px-5 py-2.5 font-mono text-xs font-bold tracking-wider uppercase transition-all
@@ -50,19 +50,15 @@
 						Writing
 					</button>
 				</div>
-			</div>
 
-			<div class="hidden md:block">
-				<div use:reveal={{ delay: 150 }}>
-					<a
-						href={resolve('/(public)/[collection=collection]', {
-							collection: activeTab === 'projects' ? 'projects' : 'blog'
-						})}
-						class="variant-soft-surface btn font-bold"
-					>
-						View All {activeTab === 'projects' ? 'Projects' : 'Posts'}
-					</a>
-				</div>
+				<a
+					href={resolve('/(public)/[collection=collection]', {
+						collection: activeTab === 'projects' ? 'projects' : 'blog'
+					})}
+					class="shrink-0 text-[10px] font-black tracking-widest text-surface-500 uppercase transition-colors hover:text-primary-500"
+				>
+					View All {activeTab === 'projects' ? 'Projects' : 'Posts'}
+				</a>
 			</div>
 		</div>
 
@@ -74,7 +70,10 @@
 
 				<div
 					use:reveal={{ delay: 150 + i * 75 }}
-					class="group bg-surface-100-800 hover:bg-surface-200-700 relative flex flex-col overflow-hidden rounded-3xl border border-surface-200-800 transition-all hover:-translate-y-1 hover:border-primary-500/80"
+					class="group bg-surface-100-800 hover:bg-surface-200-700 relative flex flex-col overflow-hidden rounded-3xl border border-surface-200-800 transition-all hover:-translate-y-1 hover:border-primary-500/80 {i >=
+					3
+						? 'hidden sm:flex'
+						: ''}"
 				>
 					{#if img}
 						<div class="h-48 w-full overflow-hidden">
@@ -182,19 +181,6 @@
 					</p>
 				</div>
 			{/each}
-		</div>
-
-		<div class="mt-10 block md:hidden">
-			<div use:reveal={{ delay: 300 }}>
-				<a
-					href={resolve('/(public)/[collection=collection]', {
-						collection: activeTab === 'projects' ? 'projects' : 'blog'
-					})}
-					class="variant-soft-surface btn w-full font-bold"
-				>
-					View All {activeTab === 'projects' ? 'Projects' : 'Posts'}
-				</a>
-			</div>
 		</div>
 	</div>
 </section>

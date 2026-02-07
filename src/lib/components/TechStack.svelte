@@ -58,9 +58,9 @@
 </script>
 
 <section class="border-t border-surface-200-800/80 bg-surface-50-950">
-	<div class="relative z-10 container mx-auto max-w-7xl px-6 py-32">
+	<div class="relative z-10 container mx-auto max-w-7xl px-6 pt-32 pb-24 md:pt-40 md:pb-32">
 		<!-- Header -->
-		<div class="mb-20 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
+		<div class="mb-16 grid gap-8 md:mb-20 md:grid-cols-[1fr_auto] md:items-end">
 			<div>
 				<h2
 					use:reveal={{ delay: 0 }}
@@ -72,7 +72,7 @@
 			<div class="hidden md:block">
 				<p
 					use:reveal={{ delay: 100 }}
-					class="hidden max-w-xs text-right text-sm font-bold tracking-wide text-surface-600-400 md:block"
+					class="max-w-xs text-right text-sm font-bold tracking-wide text-surface-600-400"
 				>
 					The tools I use <br />to build high-performance software.
 				</p>
@@ -80,12 +80,15 @@
 		</div>
 
 		<!-- Tech Cards -->
-		<ul class="flex flex-wrap justify-start gap-6 md:gap-8" use:setupObserver>
+		<ul
+			class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 md:gap-8 lg:grid-cols-8"
+			use:setupObserver
+		>
 			{#each technologies as tech, i (tech.name)}
 				{@const Icon = tech.component}
 				<li
 					use:reveal={{ delay: 200 + i * 50 }}
-					class="tech-card group relative flex h-32 w-32 flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl border border-surface-200-800 bg-surface-50-950 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:hover:shadow-black/80"
+					class="tech-card group relative flex h-40 w-full flex-col items-center justify-center gap-4 overflow-hidden rounded-2xl border border-surface-200-800 bg-surface-50-950 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:hover:shadow-black/80"
 					style="--tech-color: {tech.color}; --tech-level: {tech.level}%"
 				>
 					<!-- Fill Background -->
