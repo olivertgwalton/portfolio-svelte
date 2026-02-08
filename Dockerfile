@@ -1,5 +1,5 @@
 # Use the official Bun image
-FROM oven/bun:1.0 AS base
+FROM oven/bun:1 AS base
 WORKDIR /app
 
 # Install dependencies into temp directory

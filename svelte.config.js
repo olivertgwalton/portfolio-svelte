@@ -3,12 +3,8 @@ import { mdsvex, escapeSvelte } from 'mdsvex';
 import { createHighlighter } from 'shiki';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import path from 'node:path';
 import { visit } from 'unist-util-visit';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const highlighter = await createHighlighter({
 	themes: ['github-light', 'github-dark'],
@@ -103,7 +99,7 @@ const mdsvexOptions = {
 	remarkPlugins: [remarkEnhancedImages],
 	rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
 	layout: {
-		_: path.resolve(__dirname, './src/lib/components/markdown/MarkdownLayout.svelte')
+		_: path.resolve(import.meta.dirname, './src/lib/components/markdown/MarkdownLayout.svelte')
 	},
 	smartypants: true
 };
