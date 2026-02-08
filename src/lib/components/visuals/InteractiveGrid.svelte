@@ -3,167 +3,233 @@
 
 	// Svelte 5 Runes for element binding
 	let canvas = $state<HTMLCanvasElement>();
+	let offscreenCanvas: HTMLCanvasElement;
 
-	let { fixed = false } = $props();
+	let { fixed = false, spacing = 40 } = $props();
 
-	// Physics Constants
-	const GRID_SPACING = 40;
-	const DOT_RADIUS = 1.5;
-	const MOUSE_RADIUS = 250; // Increased radius
-	const PUSH_FORCE = 0.7; // Increased force
-	const SPRING_STIFFNESS = 0.02; // Reduced for softer return
-	const FRICTION = 0.85; // Increased damping (lower value) to stop oscillation
+	// Physics Constants (Base values in CSS pixels, will be scaled by DPR)
+	const BASE_DOT_RADIUS = 1.5;
+	const BASE_MOUSE_RADIUS = 250;
+	const PUSH_FORCE = 0.7;
+	const SPRING_STIFFNESS = 0.02;
+	const FRICTION = 0.85;
 
-	// State
+	// Calculated Constants (Scaled by DPR)
+	let dotRadius = 0;
+	let mouseRadiusSq = 0;
+
+	// State - Standard variables for high-frequency updates/internal state
 	let mouseX = -1000;
 	let mouseY = -1000;
 	let width = 0;
 	let height = 0;
-	let dotColor = 'rgba(0, 0, 0, 0.15)'; // Default cache matches layout.css
+	let dpr = 1;
+	let dotColor = 'rgb(0, 0, 0)';
+	let canvasRect = { left: 0, top: 0 };
 
-	// Data structure: Simple TypedArrays would be fastest, but objects are cleaner to read.
-	// For < 2000 points, objects are fine.
-	type Point = {
-		x: number;
-		y: number;
-		originX: number;
-		originY: number;
-		vx: number;
-		vy: number;
-	};
+	// SoA (Structure of Arrays) for performance
+	let xCoords: Float32Array;
+	let yCoords: Float32Array;
+	let originX: Float32Array;
+	let originY: Float32Array;
+	let vx: Float32Array;
+	let vy: Float32Array;
+	let numPoints = 0;
 
-	let points: Point[] = [];
 	let ctx: CanvasRenderingContext2D | null = null;
+	let offCtx: CanvasRenderingContext2D | null = null;
 	let animationId: number;
+
+	let lastSpacing: number;
 
 	function initGrid() {
 		if (!canvas) return;
 
-		// Use canvas dimensions (which match parent due to CSS) instead of window
+		dpr = window.devicePixelRatio || 1;
+		width = canvas.offsetWidth;
+		height = canvas.offsetHeight;
 
-		width = canvas.width = canvas.offsetWidth;
+		canvas.width = width * dpr;
+		canvas.height = height * dpr;
+		updateRect();
 
-		height = canvas.height = canvas.offsetHeight;
+		// Update scaled constants
+		dotRadius = BASE_DOT_RADIUS * dpr;
+		const scaledMouseRadius = BASE_MOUSE_RADIUS * dpr;
+		mouseRadiusSq = scaledMouseRadius * scaledMouseRadius;
 
-		// Add extra columns/rows to cover edges completely
+		const cols = Math.ceil(width / spacing) + 2;
+		const rows = Math.ceil(height / spacing) + 2;
+		numPoints = cols * rows;
 
-		const cols = Math.ceil(width / GRID_SPACING) + 2;
-
-		const rows = Math.ceil(height / GRID_SPACING) + 2;
-
-		// Reset points
-
-		points = new Array(cols * rows);
+		// Initialize TypedArrays
+		xCoords = new Float32Array(numPoints);
+		yCoords = new Float32Array(numPoints);
+		originX = new Float32Array(numPoints);
+		originY = new Float32Array(numPoints);
+		vx = new Float32Array(numPoints);
+		vy = new Float32Array(numPoints);
 
 		let index = 0;
-
 		for (let i = 0; i < cols; i++) {
 			for (let j = 0; j < rows; j++) {
-				const x = (i - 1) * GRID_SPACING; // Start slightly off-screen
-
-				const y = (j - 1) * GRID_SPACING;
-
-				points[index++] = {
-					x,
-					y,
-					originX: x,
-					originY: y,
-					vx: 0,
-					vy: 0
-				};
+				const x = (i - 1) * spacing * dpr;
+				const y = (j - 1) * spacing * dpr;
+				xCoords[index] = x;
+				yCoords[index] = y;
+				originX[index] = x;
+				originY[index] = y;
+				vx[index] = 0;
+				vy[index] = 0;
+				index++;
 			}
 		}
+	}
+
+	function createStamp() {
+		if (typeof document === 'undefined') return;
+		if (!offscreenCanvas) {
+			offscreenCanvas = document.createElement('canvas');
+		}
+
+		const size = Math.ceil(dotRadius * 2) + 2;
+		offscreenCanvas.width = size;
+		offscreenCanvas.height = size;
+
+		offCtx = offscreenCanvas.getContext('2d');
+		if (!offCtx) return;
+
+		offCtx.clearRect(0, 0, size, size);
+		offCtx.fillStyle = dotColor;
+		offCtx.globalAlpha = 0.15;
+
+		offCtx.beginPath();
+		offCtx.arc(size / 2, size / 2, dotRadius, 0, Math.PI * 2);
+		offCtx.fill();
 	}
 
 	function updateThemeColor() {
 		if (typeof window === 'undefined') return;
-
-		// Use computed body text color which ensures we get a resolved color value (rgb/hex)
-
-		// rather than potentially getting the raw 'light-dark()' function string from a variable.
-
 		const style = getComputedStyle(document.body);
+		let color = style.color || 'rgb(0, 0, 0)';
 
-		dotColor = style.color || '#000000';
+		// Convert any rgba/hsla color to its opaque version (rgb/hsl)
+		// This handles both comma-separated "(r, g, b, a)" and space/slash "(r g b / a)" syntax
+		if (color.includes('rgba') || color.includes('hsla')) {
+			color = color
+				.replace(/rgba?\(/, 'rgb(')
+				.replace(/hsla?\(/, 'hsl(')
+				.replace(/[,/]\s*[\d.]+\)$/, ')');
+		}
+
+		// Visibility Fix: If theme color is black (on dark bg), force white.
+		if (color.includes('0, 0, 0') || color === 'black' || color === 'rgb(0, 0, 0)') {
+			dotColor = 'rgb(255, 255, 255)';
+		} else {
+			dotColor = color;
+		}
+
+		createStamp();
+	}
+
+	function updateRect() {
+		if (canvas) {
+			const rect = canvas.getBoundingClientRect();
+			canvasRect.left = rect.left;
+			canvasRect.top = rect.top;
+		}
 	}
 
 	function animate() {
-		if (!ctx) return;
-
-		// Clear
-		ctx.clearRect(0, 0, width, height);
-		ctx.globalAlpha = 0.15;
-		ctx.fillStyle = dotColor;
-		ctx.beginPath();
-
-		for (let i = 0; i < points.length; i++) {
-			const p = points[i];
-			if (!p) continue;
-
-			// 1. Calculate Distance to Mouse
-			const dx = mouseX - p.x;
-			const dy = mouseY - p.y;
-			const distSq = dx * dx + dy * dy; // Avoid sqrt for check if possible
-
-			// 2. Mouse Repulsion (only if close)
-			if (distSq < MOUSE_RADIUS * MOUSE_RADIUS) {
-				const dist = Math.sqrt(distSq);
-				const angle = Math.atan2(dy, dx);
-				const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS;
-				const push = -force * PUSH_FORCE;
-
-				p.vx += Math.cos(angle) * push;
-				p.vy += Math.sin(angle) * push;
-			}
-
-			// 3. Spring back to origin
-			const ex = p.originX - p.x;
-			const ey = p.originY - p.y;
-
-			p.vx += ex * SPRING_STIFFNESS;
-			p.vy += ey * SPRING_STIFFNESS;
-
-			// 4. Apply Friction
-			p.vx *= FRICTION;
-			p.vy *= FRICTION;
-
-			// 5. Update Position
-			p.x += p.vx;
-			p.y += p.vy;
-
-			// 6. Draw (Batch path)
-			ctx.moveTo(p.x + DOT_RADIUS, p.y);
-			ctx.arc(p.x, p.y, DOT_RADIUS, 0, Math.PI * 2);
+		// Cleanest Svelte 5 approach: Handle prop changes in the loop
+		if (spacing !== lastSpacing) {
+			lastSpacing = spacing;
+			initGrid();
+			createStamp();
 		}
 
-		ctx.fill();
+		if (!ctx || !offscreenCanvas || numPoints === 0) {
+			animationId = requestAnimationFrame(animate);
+			return;
+		}
+
+		ctx.clearRect(0, 0, width * dpr, height * dpr);
+
+		const stampHalfSize = offscreenCanvas.width / 2;
+		const stampSize = offscreenCanvas.width;
+		const scaledMouseRadius = BASE_MOUSE_RADIUS * dpr;
+
+		for (let i = 0; i < numPoints; i++) {
+			// Physics: Already in pixel space
+			const dx = mouseX - xCoords[i];
+			const dy = mouseY - yCoords[i];
+			const distSq = dx * dx + dy * dy;
+
+			if (distSq < mouseRadiusSq) {
+				const dist = Math.sqrt(distSq);
+				const angle = Math.atan2(dy, dx);
+				const force = (scaledMouseRadius - dist) / scaledMouseRadius;
+				const push = -force * PUSH_FORCE * dpr;
+
+				vx[i] += Math.cos(angle) * push;
+				vy[i] += Math.sin(angle) * push;
+			}
+
+			const ex = originX[i] - xCoords[i];
+			const ey = originY[i] - yCoords[i];
+
+			vx[i] += ex * SPRING_STIFFNESS;
+			vy[i] += ey * SPRING_STIFFNESS;
+
+			vx[i] *= FRICTION;
+			vy[i] *= FRICTION;
+
+			xCoords[i] += vx[i];
+			yCoords[i] += vy[i];
+
+			// Render: Stamp already in pixel space
+			ctx.drawImage(
+				offscreenCanvas,
+				xCoords[i] - stampHalfSize,
+				yCoords[i] - stampHalfSize,
+				stampSize,
+				stampSize
+			);
+		}
+
 		animationId = requestAnimationFrame(animate);
 	}
 
 	function handleResize() {
 		initGrid();
 		updateThemeColor();
+		createStamp();
 	}
 
 	function handleMouseMove(e: MouseEvent) {
-		if (!canvas) return;
-		const rect = canvas.getBoundingClientRect();
-		mouseX = e.clientX - rect.left;
-		mouseY = e.clientY - rect.top;
+		if (fixed) {
+			mouseX = e.clientX * dpr;
+			mouseY = e.clientY * dpr;
+		} else {
+			mouseX = (e.clientX - canvasRect.left) * dpr;
+			mouseY = (e.clientY - canvasRect.top) * dpr;
+		}
 	}
 
 	function handleMouseLeave() {
-		mouseX = -1000;
-		mouseY = -1000;
+		mouseX = -1000 * dpr;
+		mouseY = -1000 * dpr;
 	}
 
 	onMount(() => {
 		if (!canvas) return;
 		ctx = canvas.getContext('2d', { alpha: true });
 
-		handleResize();
+		updateThemeColor();
+		lastSpacing = spacing;
+		initGrid();
+		createStamp();
 
-		// Observer for Dark Mode changes to update color instantly
 		const observer = new MutationObserver(updateThemeColor);
 		observer.observe(document.documentElement, {
 			attributes: true,
@@ -171,14 +237,17 @@
 		});
 
 		animationId = requestAnimationFrame(animate);
+
 		window.addEventListener('resize', handleResize);
+		window.addEventListener('scroll', updateRect, { passive: true });
 		window.addEventListener('mousemove', handleMouseMove);
-		window.addEventListener('mouseout', handleMouseLeave);
+		document.documentElement.addEventListener('mouseleave', handleMouseLeave);
 
 		return () => {
 			window.removeEventListener('resize', handleResize);
+			window.removeEventListener('scroll', updateRect);
 			window.removeEventListener('mousemove', handleMouseMove);
-			window.removeEventListener('mouseout', handleMouseLeave);
+			document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
 			cancelAnimationFrame(animationId);
 			observer.disconnect();
 		};
