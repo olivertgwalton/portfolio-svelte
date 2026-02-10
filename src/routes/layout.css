@@ -2,94 +2,47 @@
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
-/* Dark Mode Strategy */
+@theme {
+	--font-heading: 'Space Grotesk Variable', sans-serif;
+	--font-body: 'Manrope Variable', sans-serif;
+	--font-mono: 'JetBrains Mono Variable', monospace;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Skeleton Setup */
 @import '@skeletonlabs/skeleton';
-
-/* Preset Themes */
 @import '@skeletonlabs/skeleton/themes/cerberus';
 @import '@skeletonlabs/skeleton/themes/rose';
 @import '@skeletonlabs/skeleton/themes/nosh';
 @import '@skeletonlabs/skeleton/themes/mona';
 @import '@skeletonlabs/skeleton/themes/sahara';
-/* Custom Themes */
 @import '../themes/t3-chat.css';
 @import '../themes/modern.css';
 
-/* CSS Variables & Settings */
-:root {
-	/* Typography */
-	--font-heading: 'Space Grotesk Variable', sans-serif;
-	--font-body: 'Manrope Variable', sans-serif;
-	--font-mono: 'JetBrains Mono Variable', monospace;
-
-	/* Color Scheme */
-	color-scheme: light;
+@layer base {
+	:root { color-scheme: light; }
+	html.dark { color-scheme: dark; }
+	:focus-visible { @apply outline-primary-500 outline-2 outline-offset-2; }
+	#svelte-announcer { @apply sr-only; }
 }
 
-html.dark {
-	color-scheme: dark;
-}
-
-/* Shiki Dual Themes */
-html.dark .shiki,
-html.dark .shiki span {
-	background-color: var(--shiki-dark-bg) !important;
-	color: var(--shiki-dark) !important;
-}
-
-@theme {
-	--font-heading: var(--font-heading);
-	--font-body: var(--font-body);
-	--font-mono: var(--font-mono);
-}
-
-/* Authentic Dotted Grid */
-.bg-grid-paper {
+@utility bg-grid-paper {
 	background-color: light-dark(var(--color-surface-50), var(--color-surface-950));
-	background-image: radial-gradient(
-		light-dark(var(--color-surface-200), var(--color-surface-800)) 1.5px,
-		transparent 1.5px
-	);
+	background-image: radial-gradient(light-dark(var(--color-surface-200), var(--color-surface-800)) 1.5px, transparent 1.5px);
 	background-size: 40px 40px;
 }
 
-/* Swiss/Architectural Border */
-.swiss-border {
-	border: 1px solid light-dark(var(--color-surface-200), var(--color-surface-800));
+/* Shiki Dual Themes - Use light-dark() to auto-switch based on color-scheme */
+.shiki, .shiki span {
+	background-color: light-dark(var(--shiki-light-bg), var(--shiki-dark-bg));
+	color: light-dark(var(--shiki-light), var(--shiki-dark));
 }
 
-/* Global Focus Styles */
-:focus-visible {
-	outline: 2px solid var(--color-primary-500);
-	outline-offset: 2px;
-}
-
-/* View Transition Styles for Circular Animation */
-::view-transition-old(root),
-::view-transition-new(root) {
+/* View Transitions */
+::view-transition-old(root), ::view-transition-new(root) {
 	animation: none;
 	mix-blend-mode: normal;
 }
-
-::view-transition-old(root) {
-	z-index: 1;
-}
-
 ::view-transition-new(root) {
-	z-index: 9999;
-	/* Prevent flash by initializing clip to 0 at the click coordinates */
-	clip-path: circle(0px at var(--x) var(--y));
-}
-
-/* 
-   Fix: Force hide SvelteKit's route announcer using Tailwind's sr-only utility.
-   Placing it in @layer base ensures it handles the element regardless of where it's injected.
-*/
-@layer base {
-	#svelte-announcer {
-		@apply sr-only;
-	}
+	clip-path: circle(0px at var(--x, 50%) var(--y, 50%));
 }

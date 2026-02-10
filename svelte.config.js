@@ -20,40 +20,90 @@ function remarkEnhancedImages() {
 		const imports = [];
 		let count = 0;
 
-		visit(tree, 'image', (node) => {
-			const { url, alt } = node;
-
-			// Handle absolute /assets/ paths
-			if (url.startsWith('/assets/')) {
-				const importName = `enhanced_image_${count++}`;
-				// Resolve /assets/ to $lib/assets/
-				const resolvedPath = url.replace('/assets/', '$lib/assets/');
-
-				imports.push(`import ${importName} from '${resolvedPath}?enhanced';`);
-
-				// Change node type to html to inject the Svelte component
-				node.type = 'html';
-				node.value = `<MarkdownImage src={${importName}} alt="${alt || ''}" class="my-8 w-full h-auto rounded-xl shadow-lg" />`;
+		const newTreeChildren = [];
+		for (let i = 0; i < tree.children.length; i++) {
+			const node = tree.children[i];
+			if (node.type !== 'paragraph') {
+				newTreeChildren.push(node);
+				continue;
 			}
-			// Handle relative paths (e.g. ./cover.jpg)
-			else if (url.startsWith('./') && file.filename) {
-				const importName = `enhanced_image_${count++}`;
-				const markdownDir = path.dirname(file.filename);
-				// Resolve relative to the markdown file
-				const absolutePath = path.resolve(markdownDir, url);
 
-				// We need a path that Vite can import. Absolute paths usually work in Vite if they are within project root.
-				// Or we can convert to $lib relative path if inside src/lib.
+			const children = node.children;
+			let currentParagraphChildren = [];
+			let currentGroup = [];
 
-				// For simplicity, let's try the absolute path first, but ensure it's properly escaped if needed.
-				// But wait, if we import from absolute path in the generated svelte component, it should work.
+			const flushPara = () => {
+				if (currentParagraphChildren.length > 0) {
+					newTreeChildren.push({
+						type: 'paragraph',
+						children: currentParagraphChildren
+					});
+					currentParagraphChildren = [];
+				}
+			};
 
-				imports.push(`import ${importName} from '${absolutePath}?enhanced';`);
+			const flushGroup = () => {
+				if (currentGroup.length === 0) return;
 
-				node.type = 'html';
-				node.value = `<MarkdownImage src={${importName}} alt="${alt || ''}" class="my-8 w-full h-auto rounded-xl shadow-lg" />`;
+				flushPara(); // Text before images becomes its own paragraph
+
+				if (currentGroup.length > 1) {
+					const tags = currentGroup.map((img) => {
+						const { url, alt } = img;
+						let importName = `enhanced_image_${count++}`;
+						let importPath = url;
+						if (url.startsWith('/assets/')) {
+							importPath = url.replace('/assets/', '$lib/assets/');
+						} else if (url.startsWith('./') && file.filename) {
+							importPath = path.resolve(path.dirname(file.filename), url);
+						}
+						imports.push(`import ${importName} from '${importPath}?enhanced';`);
+						return `<MarkdownImage src={${importName}} alt="${alt || ''}" />`;
+					});
+					newTreeChildren.push({
+						type: 'html',
+						value: `<div class="markdown-image-grid">${tags.join('')}</div>`
+					});
+				} else {
+					const { url, alt } = currentGroup[0];
+					let importName = `enhanced_image_${count++}`;
+					let importPath = url;
+					if (url.startsWith('/assets/')) {
+						importPath = url.replace('/assets/', '$lib/assets/');
+					} else if (url.startsWith('./') && file.filename) {
+						importPath = path.resolve(path.dirname(file.filename), url);
+					}
+					imports.push(`import ${importName} from '${importPath}?enhanced';`);
+					newTreeChildren.push({
+						type: 'html',
+						value: `<MarkdownImage src={${importName}} alt="${alt || ''}" />`
+					});
+				}
+				currentGroup = [];
+			};
+
+			for (let j = 0; j < children.length; j++) {
+				const child = children[j];
+				if (child.type === 'image') {
+					currentGroup.push(child);
+				} else if (
+					child.type === 'text' &&
+					!child.value.trim() &&
+					((j > 0 && children[j - 1].type === 'image') ||
+						(j < children.length - 1 && children[j + 1].type === 'image'))
+				) {
+					// Ignore whitespace between images
+				} else {
+					if (currentGroup.length > 0) {
+						flushGroup();
+					}
+					currentParagraphChildren.push(child);
+				}
 			}
-		});
+			flushGroup();
+			flushPara();
+		}
+		tree.children = newTreeChildren;
 
 		if (imports.length > 0) {
 			imports.unshift(`import MarkdownImage from '$lib/components/markdown/MarkdownImage.svelte';`);
@@ -91,7 +141,8 @@ const mdsvexOptions = {
 				themes: {
 					light: 'github-light',
 					dark: 'github-dark'
-				}
+				},
+				defaultColor: false
 			});
 			return `{@html \`${escapeSvelte(html)}\`}`;
 		}
