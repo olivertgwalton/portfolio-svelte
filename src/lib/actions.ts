@@ -1,3 +1,5 @@
+import { mount, unmount } from 'svelte';
+import CopyButton from '$lib/components/markdown/CopyButton.svelte';
 import type { Action } from 'svelte/action';
 
 interface RevealParams {
@@ -82,6 +84,26 @@ export const tilt: Action<HTMLElement, TiltParams> = (el, params = {}) => {
 			el.removeEventListener('mouseenter', onEnter);
 			el.removeEventListener('mousemove', onMove);
 			el.removeEventListener('mouseleave', onLeave);
+		}
+	};
+};
+
+export const enhanceCodeBlocks: Action<HTMLElement> = (node) => {
+	const components: ReturnType<typeof mount>[] = [];
+	const pres = node.querySelectorAll('pre');
+
+	for (const pre of pres) {
+		pre.classList.add('relative', 'group');
+		const component = mount(CopyButton, {
+			target: pre,
+			props: { text: pre.innerText }
+		});
+		components.push(component);
+	}
+
+	return {
+		destroy() {
+			components.forEach((c) => unmount(c));
 		}
 	};
 };

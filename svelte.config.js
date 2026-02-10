@@ -23,11 +23,14 @@ function remarkEnhancedImages() {
 		const newTreeChildren = [];
 		for (let i = 0; i < tree.children.length; i++) {
 			const node = tree.children[i];
+			
+			// If not a paragraph, just push it and continue
 			if (node.type !== 'paragraph') {
 				newTreeChildren.push(node);
 				continue;
 			}
 
+			// It is a paragraph, let's look at its children
 			const children = node.children;
 			let currentParagraphChildren = [];
 			let currentGroup = [];
@@ -45,27 +48,16 @@ function remarkEnhancedImages() {
 			const flushGroup = () => {
 				if (currentGroup.length === 0) return;
 
-				flushPara(); // Text before images becomes its own paragraph
+				flushPara(); // Flush any text preceding the images
 
-				if (currentGroup.length > 1) {
-					const tags = currentGroup.map((img) => {
-						const { url, alt } = img;
-						let importName = `enhanced_image_${count++}`;
-						let importPath = url;
-						if (url.startsWith('/assets/')) {
-							importPath = url.replace('/assets/', '$lib/assets/');
-						} else if (url.startsWith('./') && file.filename) {
-							importPath = path.resolve(path.dirname(file.filename), url);
-						}
-						imports.push(`import ${importName} from '${importPath}?enhanced';`);
-						return `<MarkdownImage src={${importName}} alt="${alt || ''}" />`;
-					});
-					newTreeChildren.push({
-						type: 'html',
-						value: `<div class="markdown-image-grid">${tags.join('')}</div>`
-					});
-				} else {
-					const { url, alt } = currentGroup[0];
+				// If we have multiple images, or even just one, we process them.
+				// The user specifically wants them adjacent if there are multiple.
+				// If there's only one, it will be a grid of 1, which is fine (full width).
+				// Or we can differentiate. Let's strictly group if > 1 for "adjacent" behavior,
+				// but user said "images formatted to go adjacent", implying groups.
+				
+				const tags = currentGroup.map((img) => {
+					const { url, alt } = img;
 					let importName = `enhanced_image_${count++}`;
 					let importPath = url;
 					if (url.startsWith('/assets/')) {
@@ -74,16 +66,29 @@ function remarkEnhancedImages() {
 						importPath = path.resolve(path.dirname(file.filename), url);
 					}
 					imports.push(`import ${importName} from '${importPath}?enhanced';`);
+					return `<MarkdownImage src={${importName}} alt="${alt || ''}" />`;
+				});
+
+				// If grouped (more than 1), use a grid.
+				if (currentGroup.length > 1) {
 					newTreeChildren.push({
 						type: 'html',
-						value: `<MarkdownImage src={${importName}} alt="${alt || ''}" />`
+						value: `<div class="grid grid-cols-2 gap-4 md:grid-cols-3 my-6 items-start">${tags.join('')}</div>`
+					});
+				} else {
+					// Single image, just render it normally (full width)
+					newTreeChildren.push({
+						type: 'html',
+						value: tags[0]
 					});
 				}
+				
 				currentGroup = [];
 			};
 
 			for (let j = 0; j < children.length; j++) {
 				const child = children[j];
+				// Check for image node
 				if (child.type === 'image') {
 					currentGroup.push(child);
 				} else if (
@@ -92,16 +97,17 @@ function remarkEnhancedImages() {
 					((j > 0 && children[j - 1].type === 'image') ||
 						(j < children.length - 1 && children[j + 1].type === 'image'))
 				) {
-					// Ignore whitespace between images
+					// Ignore whitespace/newlines between images so they group together
 				} else {
+					// Text or other content breaks the group
 					if (currentGroup.length > 0) {
 						flushGroup();
 					}
 					currentParagraphChildren.push(child);
 				}
 			}
-			flushGroup();
-			flushPara();
+			flushGroup(); // Flush any remaining group at end of paragraph
+			flushPara();  // Flush any remaining text
 		}
 		tree.children = newTreeChildren;
 
@@ -113,15 +119,13 @@ function remarkEnhancedImages() {
 			visit(tree, 'html', (node) => {
 				if (node.value.trim().startsWith('<script') && !node.value.includes('context="module"')) {
 					scriptNode = node;
-					return false; // Stop visiting
+					return false;
 				}
 			});
 
 			if (scriptNode) {
-				// Inject imports after the opening <script> tag
 				scriptNode.value = scriptNode.value.replace(/^<script.*?>/, `$& \n${importContent}`);
 			} else {
-				// Create new script node at the top
 				tree.children.unshift({
 					type: 'html',
 					value: `<script>\n${importContent}\n</script>`

@@ -1,35 +1,9 @@
 <script lang="ts">
-	import { mount, unmount } from 'svelte';
-	import CopyButton from './CopyButton.svelte';
+	import { enhanceCodeBlocks } from '$lib/actions';
 
 	let { children } = $props();
-
-	function enhanceCodeBlocks(node: HTMLElement) {
-		const components: ReturnType<typeof mount>[] = [];
-
-		const pres = node.querySelectorAll('pre');
-
-		for (const pre of pres) {
-			// Ensure formatting for positioning
-			pre.classList.add('relative', 'group');
-
-			// Mount the copy button
-			const component = mount(CopyButton, {
-				target: pre,
-				props: { text: pre.innerText }
-			});
-
-			components.push(component);
-		}
-
-		return {
-			destroy() {
-				components.forEach((c) => unmount(c));
-			}
-		};
-	}
 </script>
 
-<div use:enhanceCodeBlocks>
+<div use:enhanceCodeBlocks class="prose max-w-none dark:prose-invert prose-img:m-0 prose-figure:m-0">
 	{@render children?.()}
 </div>
