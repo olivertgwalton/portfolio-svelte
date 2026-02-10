@@ -20,8 +20,8 @@
 	}
 
 	$effect(() => {
-		updateHeadings();
-		const observer = new MutationObserver(updateHeadings);
+		requestAnimationFrame(updateHeadings);
+		const observer = new MutationObserver(() => requestAnimationFrame(updateHeadings));
 		const article = document.querySelector('.prose');
 		if (article) {
 			observer.observe(article, { childList: true, subtree: true });

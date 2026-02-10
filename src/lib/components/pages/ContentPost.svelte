@@ -131,10 +131,18 @@
 							<enhanced:img
 								src={featuredImage}
 								alt={meta.title}
+								fetchpriority="high"
+								loading="eager"
 								class="h-full w-full object-cover"
 							/>
 						{:else}
-							<img src={meta.image} alt={meta.title} class="h-full w-full object-cover" />
+							<img
+								src={meta.image}
+								alt={meta.title}
+								fetchpriority="high"
+								loading="eager"
+								class="h-full w-full object-cover"
+							/>
 						{/if}
 					</div>
 				{/if}

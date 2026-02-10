@@ -11,7 +11,6 @@
 	import type { ContentMetadata, ContentType } from '$lib/content';
 
 	import { onMount } from 'svelte';
-	import { fly } from 'svelte/transition';
 
 	let { items, type }: { items: ContentMetadata[]; type: ContentType } = $props();
 
@@ -63,27 +62,21 @@
 	>
 		<div class="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
 			<div>
-				{#if ready}
-					<h1
-						in:fly={{ y: 20, duration: 600, delay: 0 }}
-						class="font-heading text-6xl font-black tracking-tighter whitespace-pre-line text-surface-950-50 sm:text-7xl md:text-8xl"
-					>
-						{isPosts ? 'Blog.' : 'Projects.'}
-					</h1>
-				{/if}
-			</div>
-			{#if ready}
-				<p
-					in:fly={{ y: 20, duration: 600, delay: 100 }}
-					class="hidden max-w-xs text-right font-mono text-sm tracking-wide text-surface-700-300 md:block"
+				<h1
+					class="font-heading text-6xl font-black tracking-tighter whitespace-pre-line text-surface-950-50 sm:text-7xl md:text-8xl"
 				>
-					{#if isPosts}
-						Archive of thoughts, <br />deep-dives, and experiments.
-					{:else}
-						A collection of tools, <br />published work, and ad-hoc documentation.
-					{/if}
-				</p>
-			{/if}
+					{isPosts ? 'Blog.' : 'Projects.'}
+				</h1>
+			</div>
+			<p
+				class="hidden max-w-xs text-right font-mono text-sm tracking-wide text-surface-700-300 md:block"
+			>
+				{#if isPosts}
+					Archive of thoughts, <br />deep-dives, and experiments.
+				{:else}
+					A collection of tools, <br />published work, and ad-hoc documentation.
+				{/if}
+			</p>
 		</div>
 	</div>
 </section>
@@ -92,7 +85,7 @@
 	<div class="container mx-auto max-w-7xl px-6">
 		<div class="mb-16 space-y-8">
 			{#if ready}
-				<div use:reveal={{ delay: 0 }} class="relative max-w-xl">
+				<div class="relative max-w-xl">
 					<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
 						<MagnifyingGlassIcon class="size-5 text-surface-400" />
 					</div>
@@ -154,6 +147,7 @@
 								<enhanced:img
 									src={img}
 									alt={i.title}
+									sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
 									class="h-full w-full object-cover transition-transform group-hover:scale-105"
 								/>
 

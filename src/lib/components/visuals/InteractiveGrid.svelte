@@ -44,12 +44,15 @@
 		if (!canvas) return;
 
 		dpr = window.devicePixelRatio || 1;
+		const rect = canvas.getBoundingClientRect();
 		width = canvas.offsetWidth;
 		height = canvas.offsetHeight;
 
 		canvas.width = width * dpr;
 		canvas.height = height * dpr;
-		updateCanvasOffset();
+
+		canvasOffset.left = rect.left + window.scrollX;
+		canvasOffset.top = rect.top + window.scrollY;
 
 		// Update scaled constants
 		dotRadius = BASE_DOT_RADIUS * dpr;
@@ -103,14 +106,6 @@
 			dotColor = 'rgb(255, 255, 255)';
 		} else {
 			dotColor = color;
-		}
-	}
-
-	function updateCanvasOffset() {
-		if (canvas) {
-			const rect = canvas.getBoundingClientRect();
-			canvasOffset.left = rect.left + window.scrollX;
-			canvasOffset.top = rect.top + window.scrollY;
 		}
 	}
 

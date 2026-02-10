@@ -25,24 +25,18 @@
 	>
 		<div class="grid gap-6 lg:grid-cols-[1fr_1fr] lg:items-end lg:gap-32">
 			<div>
-				{#if ready}
-					<h1
-						in:fly={{ y: 20, duration: 600, delay: 0 }}
-						class="font-heading text-6xl font-black tracking-tighter text-surface-950-50 sm:text-7xl md:text-8xl"
-					>
-						Background.
-					</h1>
-				{/if}
+				<h1
+					class="font-heading text-6xl font-black tracking-tighter text-surface-950-50 sm:text-7xl md:text-8xl"
+				>
+					Background.
+				</h1>
 			</div>
 			<div class="hidden lg:block">
-				{#if ready}
-					<p
-						in:fly={{ y: 20, duration: 600, delay: 100 }}
-						class="max-w-xs text-right font-mono text-sm tracking-wide text-surface-600-400 lg:ml-auto"
-					>
-						Breaking Linux installs <br />since age 10.
-					</p>
-				{/if}
+				<p
+					class="max-w-xs text-right font-mono text-sm tracking-wide text-surface-600-400 lg:ml-auto"
+				>
+					Breaking Linux installs <br />since age 10.
+				</p>
 			</div>
 		</div>
 	</div>
