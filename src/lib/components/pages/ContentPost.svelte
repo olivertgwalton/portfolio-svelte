@@ -103,19 +103,19 @@
 									href={meta.demo}
 									target="_blank"
 									rel="external noreferrer"
-									class="flex items-center gap-2 font-bold transition-colors hover:text-primary-500 uppercase"
+									class="flex items-center gap-2 font-bold transition-colors hover:text-primary-500"
 								>
-									<GlobeIcon size={18} /> LIVE DEMO
+									<GlobeIcon size={18} /> Live Demo
 								</a>
 							{/if}
-							{#if meta.github}
+							{#if meta.source}
 								<a
-									href={meta.github}
+									href={meta.source}
 									target="_blank"
 									rel="external noreferrer"
-									class="flex items-center gap-2 font-bold transition-colors hover:text-primary-500 uppercase"
+									class="flex items-center gap-2 font-bold transition-colors hover:text-primary-500"
 								>
-									<GithubLogoIcon size={18} /> SOURCE CODE
+									<GithubLogoIcon size={18} /> Source Code
 								</a>
 							{/if}
 						{/if}

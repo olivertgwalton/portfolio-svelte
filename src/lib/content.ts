@@ -15,6 +15,7 @@ export interface ContentMetadata {
 	type?: string;
 	github?: string;
 	demo?: string;
+	link_type?: 'demo' | 'source';
 	organization?: string;
 	period?: string;
 	current?: boolean;

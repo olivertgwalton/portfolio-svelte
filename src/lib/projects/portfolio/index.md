@@ -1,10 +1,10 @@
 ---
 title: 'Portfolio'
 description: 'Hello world.'
-date: '2026-02-07'
+date: '2026-02-10'
 tags: ['svelte', 'bun', 'markdown']
 image: './cover.jpg'
-demo: 'https://github.com/olivertgwalton/portfolio-svelte'
+source: 'https://github.com/olivertgwalton/portfolio-svelte'
 ---
 
 ## Introduction
@@ -125,4 +125,4 @@ By choosing **Bun**, **Svelte 5**, and **Shiki**, I’ve built a site that is te
 
 More importantly, the barrier to writing is now zero. I can open a markdown file, drop in a component, write some maths, and push. No CMS to manage, no database to maintain. Just text and code.
 
-I hope you found this deep dive interesting. If you spot any bugs (or typos), you know where to find the repo. Thanks for reading!
+I hope you found this interesting. If you spot any bugs (or typos), you know where to find the repo. Thanks for reading!
