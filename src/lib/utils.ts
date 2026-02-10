@@ -1,10 +1,10 @@
-export const dateFormatter = new Intl.DateTimeFormat('en-US', {
+export const dateFormatter = new Intl.DateTimeFormat('en-GB', {
 	year: 'numeric',
 	month: 'long',
 	day: 'numeric'
 });
 
-export const monthYearFormatter = new Intl.DateTimeFormat('en-US', {
+export const monthYearFormatter = new Intl.DateTimeFormat('en-GB', {
 	year: 'numeric',
 	month: 'long'
 });

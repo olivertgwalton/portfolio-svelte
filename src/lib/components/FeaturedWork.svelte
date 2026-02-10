@@ -105,34 +105,33 @@
 					{/if}
 
 					<div class="flex grow flex-col p-8">
-						<div class="mb-4 flex items-center justify-between">
-							{#if isProject && item.type}
-								<span class="font-mono text-xs font-bold tracking-wider text-primary-500 uppercase">
-									{item.type}
-								</span>
-							{:else}
-								<time class="font-mono text-xs font-bold tracking-wider text-surface-500 uppercase"
-									>{dateFormatter.format(new Date(item.date))}</time
-								>
-							{/if}
-						</div>
-
 						<a
 							href={resolve('/(public)/[collection=collection]/[slug]', {
 								collection,
 								slug: item.slug
 							})}
 						>
-							<h3
-								class="mb-4 font-heading text-2xl leading-tight font-bold tracking-tight text-surface-950-50 transition-colors group-hover:text-primary-500"
+							<h2
+								class="mb-3 font-heading text-2xl leading-tight font-bold tracking-tight text-surface-950-50 transition-colors group-hover:text-primary-500"
 							>
 								{item.title}
-							</h3>
+							</h2>
 						</a>
 
-						<p class="mb-6 line-clamp-3 grow text-base leading-relaxed text-surface-600-400">
+						<p class="mb-4 line-clamp-3 grow text-base leading-relaxed text-surface-600-400">
 							{item.description}
 						</p>
+
+						<div class="mb-6 flex items-center gap-4">
+							<time class="font-mono text-xs font-bold text-surface-500 uppercase"
+								>{dateFormatter.format(new Date(item.date))}</time
+							>
+							{#if isProject && item.type}
+								<span class="font-mono text-xs font-bold tracking-wider text-primary-500 uppercase">
+									{item.type}
+								</span>
+							{/if}
+						</div>
 
 						<div class="flex items-center justify-between border-t border-surface-200-800 pt-6">
 							<div class="flex flex-wrap gap-2">

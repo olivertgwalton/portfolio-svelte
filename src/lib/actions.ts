@@ -50,44 +50,6 @@ export const reveal: Action<HTMLElement, RevealParams> = (el, params = {}) => {
 	return { destroy: () => observer.disconnect() };
 };
 
-interface TiltParams {
-	max?: number;
-	scale?: number;
-}
-
-export const tilt: Action<HTMLElement, TiltParams> = (el, params = {}) => {
-	const { max = 5, scale = 1.02 } = params;
-	let bounds: DOMRect;
-
-	const onEnter = () => {
-		bounds = el.getBoundingClientRect();
-		el.style.transition = 'transform 400ms ease-out';
-	};
-
-	const onMove = (e: MouseEvent) => {
-		if (!bounds) return;
-		const xRot = ((e.clientY - bounds.top) / bounds.height - 0.5) * max * -1;
-		const yRot = ((e.clientX - bounds.left) / bounds.width - 0.5) * max;
-		el.style.transform = `perspective(1000px) rotateX(${xRot}deg) rotateY(${yRot}deg) scale(${scale})`;
-	};
-
-	const onLeave = () => {
-		el.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
-	};
-
-	el.addEventListener('mouseenter', onEnter);
-	el.addEventListener('mousemove', onMove);
-	el.addEventListener('mouseleave', onLeave);
-
-	return {
-		destroy() {
-			el.removeEventListener('mouseenter', onEnter);
-			el.removeEventListener('mousemove', onMove);
-			el.removeEventListener('mouseleave', onLeave);
-		}
-	};
-};
-
 export const enhanceCodeBlocks: Action<HTMLElement> = (node) => {
 	const components: ReturnType<typeof mount>[] = [];
 	const pres = node.querySelectorAll('pre');

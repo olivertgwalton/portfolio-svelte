@@ -57,9 +57,9 @@
 				<div class="grid gap-12 md:grid-cols-2 lg:gap-24">
 					<!-- Email -->
 					<div class="space-y-4" in:fly={{ y: 20, duration: 600, delay: 300 }}>
-						<h3 class="font-mono text-xs font-bold tracking-widest text-surface-500 uppercase">
+						<h2 class="font-mono text-xs font-bold tracking-widest text-surface-500 uppercase">
 							Direct
-						</h3>
+						</h2>
 						<a
 							href="mailto:olivertgwalton03@gmail.com"
 							class="block font-heading text-2xl font-bold text-surface-950-50"
@@ -70,9 +70,9 @@
 
 					<!-- Socials -->
 					<div class="space-y-4 md:pl-12" in:fly={{ y: 20, duration: 600, delay: 400 }}>
-						<h3 class="font-mono text-xs font-bold tracking-widest text-surface-500 uppercase">
+						<h2 class="font-mono text-xs font-bold tracking-widest text-surface-500 uppercase">
 							Socials
-						</h3>
+						</h2>
 						<ul class="space-y-4 font-heading text-2xl font-bold text-surface-950-50">
 							<li>
 								<a

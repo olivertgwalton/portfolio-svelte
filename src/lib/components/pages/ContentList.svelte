@@ -183,23 +183,24 @@
 						{/if}
 
 						<div class="flex grow flex-col p-8">
-							<div class="mb-4 flex items-center justify-between">
-								<time class="font-mono text-xs font-bold text-surface-600-400 uppercase"
-									>{(isPosts ? dateFormatter : monthYearFormatter).format(new Date(i.date))}</time
-								>{#if !isPosts && i.type}<span
-										class="font-mono text-xs font-bold text-primary-500 uppercase">{i.type}</span
-									>{/if}
-							</div>
-
-							<h3
-								class="mb-4 font-heading text-2xl font-bold text-surface-950-50 transition-colors group-hover:text-primary-500"
+							<h2
+								class="mb-3 font-heading text-2xl font-bold text-surface-950-50 transition-colors group-hover:text-primary-500"
 							>
 								{i.title}
-							</h3>
+							</h2>
 
-							<p class="mb-6 line-clamp-3 grow text-base text-surface-700-300">
+							<p class="mb-4 line-clamp-3 grow text-base text-surface-700-300">
 								{i.description}
 							</p>
+
+							<div class="mb-6 flex items-center gap-4">
+								<time class="font-mono text-xs font-bold text-surface-600-400 uppercase"
+									>{dateFormatter.format(new Date(i.date))}</time
+								>
+								{#if !isPosts && i.type}
+									<span class="font-mono text-xs font-bold text-primary-500 uppercase">{i.type}</span>
+								{/if}
+							</div>
 
 							<div class="flex items-center justify-between border-t border-surface-200-800 pt-6">
 								<div class="flex flex-wrap gap-2">
