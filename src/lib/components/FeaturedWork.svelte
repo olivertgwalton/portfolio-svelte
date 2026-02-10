@@ -156,7 +156,8 @@
 										href={item.demo}
 										target="_blank"
 										rel="external noopener noreferrer"
-										class="text-surface-400 transition-colors hover:text-primary-500"
+										class="text-surface-500 transition-colors hover:text-primary-500"
+										aria-label="Live Demo"
 										title="Live Demo"
 									>
 										<ArrowSquareOutIcon size={20} />
@@ -167,7 +168,7 @@
 										collection,
 										slug: item.slug
 									})}
-									class="text-surface-400 transition-transform duration-300 group-hover:translate-x-1 hover:text-primary-500"
+									class="text-surface-500 transition-transform duration-300 group-hover:translate-x-1 hover:text-primary-500"
 									aria-label="View {isProject ? 'project' : 'post'}: {item.title}"
 								>
 									<ArrowRightIcon size={20} />
