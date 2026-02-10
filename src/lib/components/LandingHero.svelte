@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
-	import me from '$lib/assets/me.jpg?enhanced';
+	import me from '$lib/assets/me.jpg?enhanced&w=400;800;1200';
 	import ArrowDownIcon from 'phosphor-svelte/lib/ArrowDownIcon';
 	import InteractiveGrid from '$lib/components/visuals/InteractiveGrid.svelte';
 	import { reveal } from '$lib/actions';

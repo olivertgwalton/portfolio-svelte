@@ -7,7 +7,7 @@ const images = import.meta.glob(
 		'/src/lib/projects/**/*.{jpg,jpeg,png,webp,avif}'
 	],
 	{
-		query: { enhanced: true },
+		query: { enhanced: true, w: '400;800;1200;1600' },
 		eager: true
 	}
 );
