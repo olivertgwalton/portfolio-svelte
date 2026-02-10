@@ -25,7 +25,7 @@
 	let height = 0;
 	let dpr = 1;
 	let dotColor = 'rgb(0, 0, 0)';
-	let canvasRect = { left: 0, top: 0 };
+	let canvasOffset = { left: 0, top: 0 };
 
 	// SoA (Structure of Arrays) for performance
 	let xCoords: Float32Array;
@@ -51,7 +51,7 @@
 
 		canvas.width = width * dpr;
 		canvas.height = height * dpr;
-		updateRect();
+		updateCanvasOffset();
 
 		// Update scaled constants
 		dotRadius = BASE_DOT_RADIUS * dpr;
@@ -132,11 +132,11 @@
 		createStamp();
 	}
 
-	function updateRect() {
+	function updateCanvasOffset() {
 		if (canvas) {
 			const rect = canvas.getBoundingClientRect();
-			canvasRect.left = rect.left;
-			canvasRect.top = rect.top;
+			canvasOffset.left = rect.left + window.scrollX;
+			canvasOffset.top = rect.top + window.scrollY;
 		}
 	}
 
@@ -211,8 +211,10 @@
 			mouseX = e.clientX * dpr;
 			mouseY = e.clientY * dpr;
 		} else {
-			mouseX = (e.clientX - canvasRect.left) * dpr;
-			mouseY = (e.clientY - canvasRect.top) * dpr;
+			const currentLeft = canvasOffset.left - window.scrollX;
+			const currentTop = canvasOffset.top - window.scrollY;
+			mouseX = (e.clientX - currentLeft) * dpr;
+			mouseY = (e.clientY - currentTop) * dpr;
 		}
 	}
 
@@ -239,13 +241,11 @@
 		animationId = requestAnimationFrame(animate);
 
 		window.addEventListener('resize', handleResize);
-		window.addEventListener('scroll', updateRect, { passive: true });
 		window.addEventListener('mousemove', handleMouseMove);
 		document.documentElement.addEventListener('mouseleave', handleMouseLeave);
 
 		return () => {
 			window.removeEventListener('resize', handleResize);
-			window.removeEventListener('scroll', updateRect);
 			window.removeEventListener('mousemove', handleMouseMove);
 			document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
 			cancelAnimationFrame(animationId);
