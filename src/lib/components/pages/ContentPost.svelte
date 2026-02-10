@@ -77,7 +77,7 @@
 
 					<div
 						use:reveal={{ delay: 200, y: 15 }}
-						class="mt-8 flex flex-wrap gap-6 text-sm text-surface-700-300"
+						class="mt-8 flex flex-wrap gap-x-8 gap-y-4 text-sm text-surface-700-300"
 					>
 						<div class="flex items-center gap-2">
 							<CalendarIcon size={18} />
@@ -97,18 +97,15 @@
 								</div>
 							</div>
 						{/if}
-					</div>
-
-					{#if isProject && (meta.demo || meta.github)}
-						<div use:reveal={{ delay: 250, y: 15 }} class="mt-10 flex flex-wrap gap-4">
+						{#if isProject}
 							{#if meta.demo}
 								<a
 									href={meta.demo}
 									target="_blank"
 									rel="external noreferrer"
-									class="variant-filled-primary btn font-bold uppercase"
+									class="flex items-center gap-2 font-bold transition-colors hover:text-primary-500 uppercase"
 								>
-									<GlobeIcon size={18} class="mr-2" /> LIVE DEMO
+									<GlobeIcon size={18} /> LIVE DEMO
 								</a>
 							{/if}
 							{#if meta.github}
@@ -116,13 +113,13 @@
 									href={meta.github}
 									target="_blank"
 									rel="external noreferrer"
-									class="variant-soft btn font-bold uppercase"
+									class="flex items-center gap-2 font-bold transition-colors hover:text-primary-500 uppercase"
 								>
-									<GithubLogoIcon size={18} class="mr-2" /> SOURCE CODE
+									<GithubLogoIcon size={18} /> SOURCE CODE
 								</a>
 							{/if}
-						</div>
-					{/if}
+						{/if}
+					</div>
 				</div>
 
 				{#if meta.image}
