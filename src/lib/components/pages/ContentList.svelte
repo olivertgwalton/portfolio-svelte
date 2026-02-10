@@ -175,7 +175,7 @@
 							</div>
 						{:else}
 							<div
-								class="bg-grid-paper flex h-48 items-center justify-center opacity-30 transition-opacity group-hover:opacity-60"
+								class="flex h-48 items-center justify-center bg-grid-paper opacity-30 transition-opacity group-hover:opacity-60"
 								style="background-color: {getHSL(i.title)};"
 							>
 								<div class="from-surface-100-800 h-full w-full bg-linear-to-t to-transparent"></div>

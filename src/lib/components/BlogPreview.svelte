@@ -60,7 +60,7 @@
 						</div>
 					{:else}
 						<div
-							class="bg-grid-paper h-48 w-full opacity-30 transition-opacity group-hover:opacity-60"
+							class="h-48 w-full bg-grid-paper opacity-30 transition-opacity group-hover:opacity-60"
 							style="background-color: {getHSL(post.title)};"
 						>
 							<div class="from-surface-100-800 h-full w-full bg-linear-to-t to-transparent"></div>

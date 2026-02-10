@@ -46,6 +46,7 @@ The hero section contains an interactive particle grid which responds to mouse m
 ### Memory Locality with TypedArrays
 
 My first approach was to have an **Array of Objects (AoO)** (`{ x, y, vx, vy }[]`). The problem? Each `{ }` is a separate object spread physically apart on the memory heap. When the CPU requires to access and modify each object, it has to "jump" to each piece of data. My second approach was utilising a **Structure of Arrays (SoA)** approach using `Float32Array`.
+
 ```typescript
 let xCoords: Float32Array;
 let yCoords: Float32Array;
@@ -54,7 +55,9 @@ let originY: Float32Array;
 let vx: Float32Array;
 let vy: Float32Array;
 ```
+
 By storing coordinates and velocities in flat, contiguous memory buffers, we achieve two major wins:
+
 1. **Cache Efficiency**: The CPU can pre-fetch data much more effectively because the values are adjacent in memory.
 2. **Reduced GC Pressure**: We avoid creating and destroying thousands of small objects, which the Garbage Collector (GC) eventually has to 'clean up'. Eliminating tiny stutters in the animation.
 
@@ -74,7 +77,7 @@ Array of Objects (AoS): 20ms - timer ended
 TypedArray (SoA): 10ms - timer ended
 ```
 
-An initial thought might be that it is only a 10ms saving in processing time, and that isn't the more realistic element count. 
+An initial thought might be that it is only a 10ms saving in processing time, and that isn't the more realistic element count.
 
 - **Scripting Overhead:** Removing `getBoundingClientRect` from the `mousemove` handler reduced the "Scripting" time in the browser's performance profiler by over **90%** during interaction. We eliminated the forced reflows (layout calculations) that were previously firing on every mouse event, ensuring the main thread is free to drive the animation at a rock-solid 240 FPS (I'm limited by my monitor's refresh rate).
 

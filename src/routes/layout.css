@@ -20,26 +20,39 @@
 @import '../themes/modern.css';
 
 @layer base {
-	:root { color-scheme: light; }
-	html.dark { color-scheme: dark; }
-	:focus-visible { @apply outline-primary-500 outline-2 outline-offset-2; }
-	#svelte-announcer { @apply sr-only; }
+	:root {
+		color-scheme: light;
+	}
+	html.dark {
+		color-scheme: dark;
+	}
+	:focus-visible {
+		@apply outline-2 outline-offset-2 outline-primary-500;
+	}
+	#svelte-announcer {
+		@apply sr-only;
+	}
 }
 
 @utility bg-grid-paper {
 	background-color: light-dark(var(--color-surface-50), var(--color-surface-950));
-	background-image: radial-gradient(light-dark(var(--color-surface-200), var(--color-surface-800)) 1.5px, transparent 1.5px);
+	background-image: radial-gradient(
+		light-dark(var(--color-surface-200), var(--color-surface-800)) 1.5px,
+		transparent 1.5px
+	);
 	background-size: 40px 40px;
 }
 
 /* Shiki Dual Themes - Use light-dark() to auto-switch based on color-scheme */
-.shiki, .shiki span {
+.shiki,
+.shiki span {
 	background-color: light-dark(var(--shiki-light-bg), var(--shiki-dark-bg));
 	color: light-dark(var(--shiki-light), var(--shiki-dark));
 }
 
 /* View Transitions */
-::view-transition-old(root), ::view-transition-new(root) {
+::view-transition-old(root),
+::view-transition-new(root) {
 	animation: none;
 	mix-blend-mode: normal;
 }

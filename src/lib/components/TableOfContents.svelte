@@ -1,5 +1,8 @@
 <script lang="ts">
 	import { CaretDownIcon, ListIcon } from 'phosphor-svelte';
+	import { replaceState } from '$app/navigation';
+	import { page } from '$app/state';
+	import { SvelteURL } from 'svelte/reactivity';
 
 	let { layout = 'sidebar' }: { layout?: 'sidebar' | 'collapsible' } = $props();
 
@@ -72,7 +75,10 @@
 								e.preventDefault();
 								document.getElementById(heading.id)?.scrollIntoView({ behavior: 'smooth' });
 								activeId = heading.id;
-								history.replaceState(null, '', `#${heading.id}`);
+								const url = new SvelteURL(page.url);
+								url.hash = heading.id;
+								// eslint-disable-next-line svelte/no-navigation-without-resolve
+								replaceState(url, page.state);
 							}}
 						>
 							<!-- Active Indicator Dot -->
@@ -128,7 +134,10 @@
 										// Close the details on click
 										e.currentTarget.closest('details')?.removeAttribute('open');
 										activeId = heading.id;
-										history.replaceState(null, '', `#${heading.id}`);
+										const url = new SvelteURL(page.url);
+										url.hash = heading.id;
+										// eslint-disable-next-line svelte/no-navigation-without-resolve
+										replaceState(url, page.state);
 									}}
 								>
 									<!-- Active Indicator Dot -->
