@@ -80,7 +80,7 @@
 							<enhanced:img
 								src={img}
 								alt={item.title}
-								sizes="(min-width: 1280px) 400px, (min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
+								sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
 								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
 							/>
 						</div>
