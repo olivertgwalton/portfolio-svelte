@@ -26,7 +26,7 @@
 		<div class="grid gap-6 lg:grid-cols-[1fr_1fr] lg:items-end lg:gap-32">
 			<div>
 				<h1
-					class="font-heading text-6xl font-black tracking-tighter text-surface-950-50 sm:text-7xl md:text-8xl"
+					class="font-heading text-5xl font-black tracking-tighter text-surface-950-50 md:text-8xl"
 				>
 					Background.
 				</h1>

@@ -24,7 +24,7 @@
 		<div class="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
 			<div>
 				<h1
-					class="font-heading text-6xl font-black tracking-tighter text-surface-950-50 sm:text-7xl md:text-8xl"
+					class="font-heading text-5xl font-black tracking-tighter text-surface-950-50 md:text-8xl"
 				>
 					Say Hello.
 				</h1>
@@ -43,7 +43,7 @@
 		<div class="space-y-16">
 			{#if ready}
 				<div
-					class="max-w-3xl space-y-6 text-xl leading-relaxed text-surface-600-400"
+					class="max-w-3xl space-y-6 text-lg leading-relaxed text-surface-600-400"
 					in:fly={{ y: 20, duration: 600, delay: 200 }}
 				>
 					<p>
