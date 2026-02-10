@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhanceCodeBlocks } from '$lib/actions';
+	import 'katex/dist/katex.min.css';
 
 	let { children } = $props();
 </script>
