@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import { reveal } from '$lib/actions';
-	import { dateFormatter, monthYearFormatter, getHSL } from '$lib/utils';
+	import { dateFormatter, getHSL } from '$lib/utils';
 	import ArrowRightIcon from 'phosphor-svelte/lib/ArrowRightIcon';
 	import MagnifyingGlassIcon from 'phosphor-svelte/lib/MagnifyingGlassIcon';
 	import XIcon from 'phosphor-svelte/lib/XIcon';
@@ -198,7 +198,9 @@
 									>{dateFormatter.format(new Date(i.date))}</time
 								>
 								{#if !isPosts && i.type}
-									<span class="font-mono text-xs font-bold text-primary-500 uppercase">{i.type}</span>
+									<span class="font-mono text-xs font-bold text-primary-500 uppercase"
+										>{i.type}</span
+									>
 								{/if}
 							</div>
 
