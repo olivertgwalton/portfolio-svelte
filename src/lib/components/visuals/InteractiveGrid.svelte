@@ -3,7 +3,6 @@
 
 	// Svelte 5 Runes for element binding
 	let canvas = $state<HTMLCanvasElement>();
-	let offscreenCanvas: HTMLCanvasElement;
 
 	let { fixed = false, spacing = 40 } = $props();
 
@@ -37,7 +36,6 @@
 	let numPoints = 0;
 
 	let ctx: CanvasRenderingContext2D | null = null;
-	let offCtx: CanvasRenderingContext2D | null = null;
 	let animationId: number;
 
 	let lastSpacing: number;
@@ -86,28 +84,6 @@
 		}
 	}
 
-	function createStamp() {
-		if (typeof document === 'undefined') return;
-		if (!offscreenCanvas) {
-			offscreenCanvas = document.createElement('canvas');
-		}
-
-		const size = Math.ceil(dotRadius * 2) + 2;
-		offscreenCanvas.width = size;
-		offscreenCanvas.height = size;
-
-		offCtx = offscreenCanvas.getContext('2d');
-		if (!offCtx) return;
-
-		offCtx.clearRect(0, 0, size, size);
-		offCtx.fillStyle = dotColor;
-		offCtx.globalAlpha = 0.15;
-
-		offCtx.beginPath();
-		offCtx.arc(size / 2, size / 2, dotRadius, 0, Math.PI * 2);
-		offCtx.fill();
-	}
-
 	function updateThemeColor() {
 		if (typeof window === 'undefined') return;
 		const style = getComputedStyle(document.body);
@@ -128,8 +104,6 @@
 		} else {
 			dotColor = color;
 		}
-
-		createStamp();
 	}
 
 	function updateCanvasOffset() {
@@ -145,19 +119,20 @@
 		if (spacing !== lastSpacing) {
 			lastSpacing = spacing;
 			initGrid();
-			createStamp();
 		}
 
-		if (!ctx || !offscreenCanvas || numPoints === 0) {
+		if (!ctx || numPoints === 0) {
 			animationId = requestAnimationFrame(animate);
 			return;
 		}
 
 		ctx.clearRect(0, 0, width * dpr, height * dpr);
 
-		const stampHalfSize = offscreenCanvas.width / 2;
-		const stampSize = offscreenCanvas.width;
 		const scaledMouseRadius = BASE_MOUSE_RADIUS * dpr;
+
+		ctx.globalAlpha = 0.15;
+		ctx.fillStyle = dotColor;
+		ctx.beginPath();
 
 		for (let i = 0; i < numPoints; i++) {
 			// Physics: Already in pixel space
@@ -167,12 +142,12 @@
 
 			if (distSq < mouseRadiusSq) {
 				const dist = Math.sqrt(distSq);
-				const angle = Math.atan2(dy, dx);
+				const invDist = 1 / dist;
 				const force = (scaledMouseRadius - dist) / scaledMouseRadius;
 				const push = -force * PUSH_FORCE * dpr;
 
-				vx[i] += Math.cos(angle) * push;
-				vy[i] += Math.sin(angle) * push;
+				vx[i] += dx * invDist * push;
+				vy[i] += dy * invDist * push;
 			}
 
 			const ex = originX[i] - xCoords[i];
@@ -187,23 +162,18 @@
 			xCoords[i] += vx[i];
 			yCoords[i] += vy[i];
 
-			// Render: Stamp already in pixel space
-			ctx.drawImage(
-				offscreenCanvas,
-				xCoords[i] - stampHalfSize,
-				yCoords[i] - stampHalfSize,
-				stampSize,
-				stampSize
-			);
+			// Render: Batching into a single path
+			ctx.moveTo(xCoords[i] + dotRadius, yCoords[i]);
+			ctx.arc(xCoords[i], yCoords[i], dotRadius, 0, Math.PI * 2);
 		}
 
+		ctx.fill();
 		animationId = requestAnimationFrame(animate);
 	}
 
 	function handleResize() {
 		initGrid();
 		updateThemeColor();
-		createStamp();
 	}
 
 	function handleMouseMove(e: MouseEvent) {
@@ -230,7 +200,6 @@
 		updateThemeColor();
 		lastSpacing = spacing;
 		initGrid();
-		createStamp();
 
 		const observer = new MutationObserver(updateThemeColor);
 		observer.observe(document.documentElement, {
