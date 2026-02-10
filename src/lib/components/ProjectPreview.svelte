@@ -48,6 +48,7 @@
 							<enhanced:img
 								src={img}
 								alt={project.title}
+								sizes="(min-width: 1280px) 400px, (min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
 								class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
 							/>
 						</div>
@@ -95,6 +96,7 @@
 							</div>
 							<div
 								class="text-surface-400 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-primary-500"
+								aria-label="View project: {project.title}"
 							>
 								<ArrowRightIcon size={20} />
 							</div>

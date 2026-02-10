@@ -75,6 +75,9 @@
 						<enhanced:img
 							src={me}
 							alt="Oliver Walton"
+							sizes="(min-width: 1024px) 530px, 1px"
+							fetchpriority="high"
+							loading="eager"
 							class="h-full w-full object-cover transition-all duration-700"
 						/>
 
