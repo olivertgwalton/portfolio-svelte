@@ -153,7 +153,7 @@
 							<ul class="mb-4 space-y-2 text-sm leading-relaxed text-surface-600-400">
 								{#each item.bullets as bullet (bullet)}
 									<li class="flex items-start gap-2">
-										<span class="mt-1.5 size-1 shrink-0 rounded-full bg-surface-400"></span>
+										<span class="mt-2.5 size-1 shrink-0 rounded-full bg-surface-400"></span>
 										<span>{bullet}</span>
 									</li>
 								{/each}
