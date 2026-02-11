@@ -1,99 +1,46 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import type * as WasmGrid from '../../wasm/rust_grid.js';
 
 	// Svelte 5 Runes for element binding
 	let canvas = $state<HTMLCanvasElement>();
 
-	let { fixed = false, spacing = 40 } = $props();
+	let { fixed = false, spacing = 40 } = $props<{
+		fixed?: boolean;
+		spacing?: number;
+	}>();
 
-	// Physics Constants (Base values in CSS pixels, will be scaled by DPR)
+	// Config
 	const BASE_DOT_RADIUS = 1.5;
-	const BASE_MOUSE_RADIUS = 250;
-	const PUSH_FORCE = 0.7;
-	const SPRING_STIFFNESS = 0.02;
-	const FRICTION = 0.85;
 
-	// Calculated Constants (Scaled by DPR)
-	let dotRadius = 0;
-	let mouseRadiusSq = 0;
-
-	// State - Standard variables for high-frequency updates/internal state
+	// State
 	let mouseX = -1000;
 	let mouseY = -1000;
 	let width = 0;
 	let height = 0;
 	let dpr = 1;
-	let dotColor = 'rgb(0, 0, 0)';
-	let canvasOffset = { left: 0, top: 0 };
+	let dotColor = $state('rgb(0, 0, 0)');
+	let isPaused = $state(false);
 
-	// SoA (Structure of Arrays) for performance
-	let xCoords: Float32Array;
-	let yCoords: Float32Array;
-	let originX: Float32Array;
-	let originY: Float32Array;
-	let vx: Float32Array;
-	let vy: Float32Array;
-	let numPoints = 0;
+	// Buffers
+	let posX: Float32Array; // Rust View X
+	let posY: Float32Array; // Rust View Y
 
+	// Internal
+	let numPoints = $state(0);
 	let ctx: CanvasRenderingContext2D | null = null;
 	let animationId: number;
 
-	let lastSpacing: number;
-
-	function initGrid() {
-		if (!canvas) return;
-
-		dpr = window.devicePixelRatio || 1;
-		const rect = canvas.getBoundingClientRect();
-		width = canvas.offsetWidth;
-		height = canvas.offsetHeight;
-
-		canvas.width = width * dpr;
-		canvas.height = height * dpr;
-
-		canvasOffset.left = rect.left + window.scrollX;
-		canvasOffset.top = rect.top + window.scrollY;
-
-		// Update scaled constants
-		dotRadius = BASE_DOT_RADIUS * dpr;
-		const scaledMouseRadius = BASE_MOUSE_RADIUS * dpr;
-		mouseRadiusSq = scaledMouseRadius * scaledMouseRadius;
-
-		const cols = Math.ceil(width / spacing) + 2;
-		const rows = Math.ceil(height / spacing) + 2;
-		numPoints = cols * rows;
-
-		// Initialize TypedArrays
-		xCoords = new Float32Array(numPoints);
-		yCoords = new Float32Array(numPoints);
-		originX = new Float32Array(numPoints);
-		originY = new Float32Array(numPoints);
-		vx = new Float32Array(numPoints);
-		vy = new Float32Array(numPoints);
-
-		let index = 0;
-		for (let i = 0; i < cols; i++) {
-			for (let j = 0; j < rows; j++) {
-				const x = (i - 1) * spacing * dpr;
-				const y = (j - 1) * spacing * dpr;
-				xCoords[index] = x;
-				yCoords[index] = y;
-				originX[index] = x;
-				originY[index] = y;
-				vx[index] = 0;
-				vy[index] = 0;
-				index++;
-			}
-		}
-	}
+	// WASM
+	let wasmGlue: typeof WasmGrid;
+	let wasmMemory: WebAssembly.Memory;
+	let engine: WasmGrid.GridEngine | undefined;
 
 	function updateThemeColor() {
 		if (typeof window === 'undefined') return;
 		const style = getComputedStyle(document.body);
 		let color = style.color || 'rgb(0, 0, 0)';
 
-		// Convert any rgba/hsla color to its opaque version (rgb/hsl)
-		// This handles both comma-separated "(r, g, b, a)" and space/slash "(r g b / a)" syntax
 		if (color.includes('rgba') || color.includes('hsla')) {
 			color = color
 				.replace(/rgba?\(/, 'rgb(')
@@ -101,7 +48,6 @@
 				.replace(/[,/]\s*[\d.]+\)$/, ')');
 		}
 
-		// Visibility Fix: If theme color is black (on dark bg), force white.
 		if (color.includes('0, 0, 0') || color === 'black' || color === 'rgb(0, 0, 0)') {
 			dotColor = 'rgb(255, 255, 255)';
 		} else {
@@ -109,93 +55,123 @@
 		}
 	}
 
-	function animate() {
-		// Cleanest Svelte 5 approach: Handle prop changes in the loop
-		if (spacing !== lastSpacing) {
-			lastSpacing = spacing;
-			initGrid();
-		}
+	async function initWasm() {
+		try {
+			if (!wasmGlue) {
+				// With target: web, we import the default as an initializer
+				// and the wasm file as a URL.
+				const wasmPkg = await import('../../wasm/rust_grid.js');
 
-		if (!ctx || numPoints === 0) {
-			animationId = requestAnimationFrame(animate);
-			return;
-		}
+				// Initialize with path to static asset
 
-		ctx.clearRect(0, 0, width * dpr, height * dpr);
+				const wasmExports = await wasmPkg.default('/wasm/rust_grid_bg.wasm');
 
-		const scaledMouseRadius = BASE_MOUSE_RADIUS * dpr;
-
-		ctx.globalAlpha = 0.15;
-		ctx.fillStyle = dotColor;
-		ctx.beginPath();
-
-		for (let i = 0; i < numPoints; i++) {
-			// Physics: Already in pixel space
-			const dx = mouseX - xCoords[i];
-			const dy = mouseY - yCoords[i];
-			const distSq = dx * dx + dy * dy;
-
-			if (distSq < mouseRadiusSq) {
-				const dist = Math.sqrt(distSq);
-				const invDist = 1 / dist;
-				const force = (scaledMouseRadius - dist) / scaledMouseRadius;
-				const push = -force * PUSH_FORCE * dpr;
-
-				vx[i] += dx * invDist * push;
-				vy[i] += dy * invDist * push;
+				wasmGlue = wasmPkg;
+				wasmMemory = wasmExports.memory;
 			}
+		} catch {
+			console.error('WASM Init Failed');
+		}
+	}
+	async function initData() {
+		if (!canvas) return;
 
-			const ex = originX[i] - xCoords[i];
-			const ey = originY[i] - yCoords[i];
+		dpr = window.devicePixelRatio || 1;
+		const rect = canvas.getBoundingClientRect();
+		width = rect.width;
+		height = rect.height;
 
-			vx[i] += ex * SPRING_STIFFNESS;
-			vy[i] += ey * SPRING_STIFFNESS;
+		// Ensure integer dimensions for pixel-perfect rendering
+		const displayWidth = Math.ceil(width * dpr);
+		const displayHeight = Math.ceil(height * dpr);
 
-			vx[i] *= FRICTION;
-			vy[i] *= FRICTION;
+		canvas.width = displayWidth;
+		canvas.height = displayHeight;
 
-			xCoords[i] += vx[i];
-			yCoords[i] += vy[i];
+		// Work in physical pixels
+		if (ctx) ctx.setTransform(1, 0, 0, 1, 0, 0);
 
-			// Render: Batching into a single path
-			ctx.moveTo(xCoords[i] + dotRadius, yCoords[i]);
-			ctx.arc(xCoords[i], yCoords[i], dotRadius, 0, Math.PI * 2);
+		await initGrid();
+	}
+
+	async function initGrid() {
+		await initWasm();
+		if (!wasmGlue || !wasmMemory) return;
+
+		const cols = Math.ceil(width / spacing) + 2;
+		const rows = Math.ceil(height / spacing) + 2;
+		numPoints = cols * rows;
+
+		if (engine) {
+			try {
+				engine.free();
+			} catch {
+				/* ignore */
+			}
+			engine = undefined;
 		}
 
-		ctx.fill();
+		engine = new wasmGlue.GridEngine(numPoints);
+		engine.init(width, height, spacing, dpr);
+
+		posX = new Float32Array(wasmMemory.buffer, engine.pos_x_ptr(), numPoints);
+		posY = new Float32Array(wasmMemory.buffer, engine.pos_y_ptr(), numPoints);
+	}
+
+	function togglePause() {
+		isPaused = !isPaused;
+	}
+
+	function animate() {
 		animationId = requestAnimationFrame(animate);
+
+		if (!ctx || !canvas) return;
+
+		// Ensure identity transform for physical pixel drawing
+		ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		renderGrid();
 	}
 
-	function handleResize() {
-		initGrid();
-		updateThemeColor();
-	}
+	function renderGrid() {
+		if (!engine || !posX || !posY) return;
 
-	function handleMouseMove(e: MouseEvent) {
-		if (fixed) {
-			mouseX = e.clientX * dpr;
-			mouseY = e.clientY * dpr;
-		} else {
-			const currentLeft = canvasOffset.left - window.scrollX;
-			const currentTop = canvasOffset.top - window.scrollY;
-			mouseX = (e.clientX - currentLeft) * dpr;
-			mouseY = (e.clientY - currentTop) * dpr;
+		if (!isPaused) {
+			engine.update(mouseX, mouseY, dpr, 0.02, 0.85); // Original JS physics
 		}
+
+		ctx!.fillStyle = dotColor;
+		ctx!.globalAlpha = 0.15;
+		ctx!.beginPath();
+		const dotRadius = BASE_DOT_RADIUS * dpr;
+		for (let i = 0; i < numPoints; i++) {
+			ctx!.moveTo(posX[i] + dotRadius, posY[i]);
+			ctx!.arc(posX[i], posY[i], dotRadius, 0, Math.PI * 2);
+		}
+		ctx!.fill();
 	}
 
-	function handleMouseLeave() {
-		mouseX = -1000 * dpr;
-		mouseY = -1000 * dpr;
+	// Interaction
+	function handleMouseMove(e: MouseEvent) {
+		// Track mouse globally for background interaction
+		const rect = canvas?.getBoundingClientRect();
+		if (!rect) return;
+		mouseX = (e.clientX - rect.left) * dpr;
+		mouseY = (e.clientY - rect.top) * dpr;
 	}
 
 	onMount(() => {
 		if (!canvas) return;
 		ctx = canvas.getContext('2d', { alpha: true });
 
+		initData();
 		updateThemeColor();
-		lastSpacing = spacing;
-		initGrid();
 
+		window.addEventListener('resize', () => {
+			initData();
+			updateThemeColor();
+		});
 		const observer = new MutationObserver(updateThemeColor);
 		observer.observe(document.documentElement, {
 			attributes: true,
@@ -204,22 +180,43 @@
 
 		animationId = requestAnimationFrame(animate);
 
-		window.addEventListener('resize', handleResize);
-		window.addEventListener('mousemove', handleMouseMove);
-		document.documentElement.addEventListener('mouseleave', handleMouseLeave);
-
 		return () => {
-			window.removeEventListener('resize', handleResize);
-			window.removeEventListener('mousemove', handleMouseMove);
-			document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
 			cancelAnimationFrame(animationId);
 			observer.disconnect();
 		};
 	});
 </script>
 
-<canvas
-	bind:this={canvas}
-	class="pointer-events-none inset-0 z-0 h-full w-full {fixed ? 'fixed' : 'absolute'}"
-	aria-hidden="true"
-></canvas>
+<svelte:window onmousemove={handleMouseMove} />
+
+<div class="contents">
+	<canvas
+		bind:this={canvas}
+		class="pointer-events-none inset-0 z-0 h-full w-full {fixed ? 'fixed' : 'absolute'}"
+	></canvas>
+
+	<!-- Pause Button -->
+	<button
+		onclick={togglePause}
+		class="pointer-events-auto fixed right-4 bottom-4 z-50 cursor-pointer rounded-full border border-surface-700 bg-surface-900/50 p-2 text-surface-400 backdrop-blur transition-all hover:bg-surface-800 hover:text-white"
+		aria-label={isPaused ? 'Play Animation' : 'Pause Animation'}
+	>
+		{#if isPaused}
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="24"
+				height="24"
+				viewBox="0 0 24 24"
+				fill="currentColor"><path d="M8 5v14l11-7z" /></svg
+			>
+		{:else}
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				width="24"
+				height="24"
+				viewBox="0 0 24 24"
+				fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg
+			>
+		{/if}
+	</button>
+</div>
