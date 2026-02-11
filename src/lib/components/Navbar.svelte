@@ -88,8 +88,9 @@
 										{#snippet element(attributes)}
 											<a
 												{...attributes as import('svelte/elements').HTMLAnchorAttributes}
-												href={asset('/CV.pdf')}
+												href={asset('/oliver-walton-cv.pdf')}
 												class="btn block w-full preset-outlined-surface-200-800 btn-sm py-2 text-center text-xs"
+												target="_blank"
 											>
 												Download CV
 											</a>
@@ -103,7 +104,11 @@
 
 				<!-- CTA Button -->
 				<div class="hidden md:block">
-					<a href={asset('/CV.pdf')} class="btn preset-filled-primary-500 btn-sm px-5 py-2 text-xs">
+					<a
+						href={asset('/oliver-walton-cv.pdf')}
+						class="btn preset-filled-primary-500 btn-sm px-5 py-2 text-xs"
+						target="_blank"
+					>
 						CV
 					</a>
 				</div>
