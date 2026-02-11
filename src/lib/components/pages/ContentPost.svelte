@@ -154,13 +154,11 @@
 		<div class="grid gap-16 lg:grid-cols-[1fr_240px]">
 			<div
 				use:reveal={{ delay: 350, y: 20 }}
-				class="prose prose-sm w-full max-w-none sm:prose-base md:prose-lg dark:prose-invert prose-headings:font-heading prose-headings:font-black prose-headings:text-surface-950-50 prose-p:text-surface-800-200 prose-a:text-primary-500 prose-strong:text-surface-950-50 prose-code:font-mono prose-code:text-primary-700 dark:prose-code:text-primary-400 prose-li:text-surface-800-200"
+				class="prose prose-sm w-full max-w-none sm:prose-base md:prose-lg dark:prose-invert prose-headings:font-heading prose-headings:font-black prose-headings:text-surface-950-50 prose-p:text-surface-800-200 prose-a:text-primary-600 dark:prose-a:text-primary-400 prose-strong:text-surface-950-50 prose-code:font-mono prose-code:text-primary-700 dark:prose-code:text-primary-400 prose-li:text-surface-800-200"
 			>
-				{#if !isProject}
-					<div use:reveal={{ delay: 400, y: 15 }}>
-						<TableOfContents layout="collapsible" />
-					</div>
-				{/if}
+				<div use:reveal={{ delay: 400, y: 15 }}>
+					<TableOfContents layout="collapsible" />
+				</div>
 				{#if ContentComponent}
 					<ContentComponent />
 				{:else}
