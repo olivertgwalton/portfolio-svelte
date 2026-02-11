@@ -4,6 +4,7 @@
 	import { reveal } from '$lib/actions';
 	import MetaTags from '$lib/components/MetaTags.svelte';
 	import TableOfContents from '$lib/components/TableOfContents.svelte';
+	import ScrollProgress from '$lib/components/ScrollProgress.svelte';
 	import type { Component } from 'svelte';
 	import {
 		ArrowLeftIcon,
@@ -41,6 +42,8 @@
 	description={meta.description}
 	type={isProject ? 'website' : 'article'}
 />
+
+<ScrollProgress />
 
 <article class="bg-surface-50-950 pb-32">
 	<header class="border-b border-surface-200-800/80 pt-32 pb-16">
