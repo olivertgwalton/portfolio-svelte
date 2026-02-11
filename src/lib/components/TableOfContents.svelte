@@ -145,27 +145,26 @@
                                     {activeId === heading.id
 											? 'translate-x-1 font-medium text-primary-500'
 											: 'text-surface-500 hover:translate-x-1 hover:text-surface-900 dark:hover:text-surface-100'}"
-																			onclick={(e) => {
-																				e.preventDefault();
-																				// Close the details first to settle layout
-																				e.currentTarget.closest('details')?.removeAttribute('open');
-										
-																				// Wait for layout update then scroll
-																				setTimeout(() => {
-																					isManualScroll = true;
-																					window.addEventListener('scroll', onScrollHandler, { passive: true });
-										
-																					const el = document.getElementById(heading.id);
-																					if (el) el.scrollIntoView({ behavior: 'smooth' });
-										
-																					activeId = heading.id;
-																					const url = new SvelteURL(page.url);
-																					url.hash = heading.id;
-																					// eslint-disable-next-line svelte/no-navigation-without-resolve
-																					replaceState(url, page.state);
-																				}, 10);
-																			}}
-										
+										onclick={(e) => {
+											e.preventDefault();
+											// Close the details first to settle layout
+											e.currentTarget.closest('details')?.removeAttribute('open');
+
+											// Wait for layout update then scroll
+											setTimeout(() => {
+												isManualScroll = true;
+												window.addEventListener('scroll', onScrollHandler, { passive: true });
+
+												const el = document.getElementById(heading.id);
+												if (el) el.scrollIntoView({ behavior: 'smooth' });
+
+												activeId = heading.id;
+												const url = new SvelteURL(page.url);
+												url.hash = heading.id;
+												// eslint-disable-next-line svelte/no-navigation-without-resolve
+												replaceState(url, page.state);
+											}, 10);
+										}}
 									>
 										<!-- Active Indicator Dot -->
 										{#if activeId === heading.id}

@@ -52,33 +52,27 @@
 				<div class="max-w-3xl">
 					{#if meta.type}
 						<span
-							use:reveal={{ delay: 100 }}
 							class="mb-4 block font-mono text-sm font-bold tracking-widest text-primary-500 uppercase"
 						>
 							{meta.type}
 						</span>
 					{:else if !isProject}
 						<span
-							use:reveal={{ delay: 100 }}
 							class="mb-4 block font-mono text-sm font-bold tracking-widest text-primary-500 uppercase"
 						>
 							Blog Post
 						</span>
 					{/if}
 					<h1
-						use:reveal={{ delay: 150 }}
 						class="font-heading text-5xl font-black tracking-tighter text-surface-950-50 md:text-7xl"
 					>
 						{meta.title}
 					</h1>
-					<p use:reveal={{ delay: 200 }} class="mt-6 text-xl leading-relaxed text-surface-800-200">
+					<p class="mt-6 text-xl leading-relaxed text-surface-800-200">
 						{meta.description}
 					</p>
 
-					<div
-						use:reveal={{ delay: 200, y: 15 }}
-						class="mt-8 flex flex-wrap gap-x-8 gap-y-4 text-sm text-surface-700-300"
-					>
+					<div class="mt-8 flex flex-wrap gap-x-8 gap-y-4 text-sm text-surface-700-300">
 						<div class="flex items-center gap-2">
 							<CalendarIcon size={18} />
 							<span class="font-bold">{dateFormatter.format(new Date(meta.date))}</span>
@@ -124,7 +118,6 @@
 
 				{#if meta.image}
 					<div
-						use:reveal={{ delay: 300, y: 20 }}
 						class="aspect-video w-full max-w-xl overflow-hidden rounded-3xl border border-surface-200-800 shadow-2xl"
 					>
 						{#if featuredImage}
