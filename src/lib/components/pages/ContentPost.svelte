@@ -146,10 +146,9 @@
 	<div class="container mx-auto max-w-7xl px-4 pt-20 md:px-6">
 		<div class="grid gap-16 lg:grid-cols-[1fr_240px]">
 			<div
-				use:reveal={{ delay: 350, y: 20 }}
 				class="prose prose-sm w-full max-w-none sm:prose-base md:prose-lg dark:prose-invert prose-headings:font-heading prose-headings:font-black prose-headings:text-surface-950-50 prose-p:text-surface-800-200 prose-a:text-primary-600 dark:prose-a:text-primary-400 prose-strong:text-surface-950-50 prose-code:font-mono prose-code:text-primary-700 dark:prose-code:text-primary-400 prose-li:text-surface-800-200"
 			>
-				<div use:reveal={{ delay: 400, y: 15 }}>
+				<div>
 					<TableOfContents layout="collapsible" />
 				</div>
 				{#if ContentComponent}
@@ -159,7 +158,7 @@
 				{/if}
 			</div>
 			<aside class="hidden lg:block">
-				<div use:reveal={{ delay: 450, y: 15 }} class="sticky top-8">
+				<div class="sticky top-8">
 					<TableOfContents />
 				</div>
 			</aside>
