@@ -34,6 +34,15 @@
 	#svelte-announcer {
 		@apply sr-only;
 	}
+
+	/* Code Block Language Badge */
+	pre[data-language]::before {
+		content: attr(data-language);
+		@apply pointer-events-none absolute right-3 bottom-2 font-mono text-[10px] font-bold tracking-widest text-surface-600-400 uppercase opacity-60 transition-opacity;
+	}
+	pre[data-language]:hover::before {
+		@apply opacity-100;
+	}
 }
 
 @utility bg-grid-paper {

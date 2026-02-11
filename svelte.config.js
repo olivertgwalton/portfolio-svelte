@@ -158,7 +158,8 @@ const mdsvexOptions = {
 				},
 				defaultColor: false
 			});
-			return `{@html \`${escapeSvelte(html)}\`}`;
+			const withLang = html.replace('<pre ', `<pre data-language="${lang}" `);
+			return `{@html \`${escapeSvelte(withLang)}\`}`;
 		}
 	},
 	remarkPlugins: [remarkEnhancedImages, remarkReadTime, remarkMath],
