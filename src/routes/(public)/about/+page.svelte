@@ -33,7 +33,7 @@
 			</div>
 			<div class="hidden lg:block">
 				<p
-					class="max-w-xs text-right font-mono text-sm tracking-wide text-surface-600-400 lg:ml-auto"
+					class="max-w-xs text-right font-mono text-sm tracking-wide text-surface-800-200 lg:ml-auto"
 				>
 					Breaking Linux installs <br />since age 10.
 				</p>
@@ -46,7 +46,7 @@
 	{#if ready}
 		<div class="container mx-auto grid max-w-7xl gap-16 px-6 lg:grid-cols-[1fr_1fr] lg:gap-32">
 			<!-- Left Column: The Narrative -->
-			<div class="space-y-12 text-lg leading-relaxed text-surface-600-400">
+			<div class="space-y-12 text-lg leading-relaxed text-surface-800-200">
 				<div in:fly={{ y: 20, duration: 600, delay: 200 }}>
 					<h2 class="mb-6 font-heading text-3xl font-bold text-surface-950-50">
 						Systematic Curiosity
@@ -87,7 +87,9 @@
 			<!-- Right Column: Stats / Highlights -->
 			<div class="space-y-16" in:fly={{ y: 20, duration: 600, delay: 400 }}>
 				<div class="border-t border-surface-200-800 pt-8">
-					<div class="mb-2 font-mono text-xs font-bold tracking-widest text-surface-500 uppercase">
+					<div
+						class="mb-2 font-mono text-xs font-bold tracking-widest text-surface-800-200 uppercase"
+					>
 						Location
 					</div>
 					<div class="font-heading text-4xl font-bold text-surface-950-50">
@@ -96,14 +98,18 @@
 				</div>
 
 				<div class="border-t border-surface-200-800 pt-8">
-					<div class="mb-2 font-mono text-xs font-bold tracking-widest text-surface-500 uppercase">
+					<div
+						class="mb-2 font-mono text-xs font-bold tracking-widest text-surface-800-200 uppercase"
+					>
 						Focus
 					</div>
 					<div class="font-heading text-4xl font-bold text-surface-950-50">Systems & Frontend</div>
 				</div>
 
 				<div class="border-t border-surface-200-800 pt-8">
-					<div class="mb-2 font-mono text-xs font-bold tracking-widest text-surface-500 uppercase">
+					<div
+						class="mb-2 font-mono text-xs font-bold tracking-widest text-surface-800-200 uppercase"
+					>
 						Age
 					</div>
 					<div class="font-heading text-4xl font-bold text-surface-950-50">22 Years Old</div>

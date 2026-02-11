@@ -43,6 +43,10 @@
 	pre[data-language]:hover::before {
 		@apply opacity-100;
 	}
+
+	::selection {
+		@apply bg-primary-500/30 text-surface-950-50;
+	}
 }
 
 @utility bg-grid-paper {

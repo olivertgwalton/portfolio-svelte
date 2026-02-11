@@ -94,7 +94,7 @@
 			<div class="hidden md:block">
 				<p
 					use:reveal={{ delay: 100 }}
-					class="hidden max-w-xs text-right text-sm font-bold tracking-wide text-surface-600-400 md:block"
+					class="hidden max-w-xs text-right text-sm font-bold tracking-wide text-surface-800-200 md:block"
 				>
 					Professional journey, <br />education, and projects.
 				</p>
@@ -148,7 +148,7 @@
 							</div>
 
 							<h3 class="mb-1 font-heading text-xl font-bold text-surface-950-50">{item.title}</h3>
-							<p class="mb-4 text-sm font-semibold text-surface-500">{item.organization}</p>
+							<p class="mb-4 text-sm font-semibold text-surface-600-400">{item.organization}</p>
 
 							<ul class="mb-4 space-y-2 text-sm leading-relaxed text-surface-600-400">
 								{#each item.bullets as bullet (bullet)}
@@ -162,7 +162,7 @@
 							<div class="flex flex-wrap gap-2">
 								{#each item.skills as skill (skill)}
 									<span
-										class="rounded-full border border-surface-200-800 px-2.5 py-1 text-[10px] font-bold tracking-wide text-surface-500 uppercase"
+										class="rounded-full border border-surface-200-800 px-2.5 py-1 text-[10px] font-bold tracking-wide text-surface-600-400 uppercase"
 									>
 										{skill}
 									</span>

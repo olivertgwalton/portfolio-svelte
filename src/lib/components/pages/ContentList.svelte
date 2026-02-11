@@ -69,7 +69,7 @@
 				</h1>
 			</div>
 			<p
-				class="hidden max-w-xs text-right font-mono text-sm tracking-wide text-surface-700-300 md:block"
+				class="hidden max-w-xs text-right font-mono text-sm tracking-wide text-surface-800-200 md:block"
 			>
 				{#if isPosts}
 					Archive of thoughts, <br />deep-dives, and experiments.
@@ -93,7 +93,7 @@
 						type="text"
 						bind:value={query}
 						placeholder="Search {isPosts ? 'articles' : 'projects'}..."
-						class="bg-surface-100-800 input w-full rounded-xl border-surface-200-800 py-3 pl-12 font-medium"
+						class="bg-surface-100-800 input w-full rounded-xl border-surface-200-800 py-3 pl-12 font-medium text-surface-950-50 placeholder:text-surface-800-200"
 					/>
 					{#if query}<button
 							onclick={() => (query = '')}
@@ -189,7 +189,7 @@
 								{i.title}
 							</h2>
 
-							<p class="mb-4 line-clamp-3 grow text-base text-surface-700-300">
+							<p class="mb-4 line-clamp-3 grow text-base text-surface-800-200">
 								{i.description}
 							</p>
 

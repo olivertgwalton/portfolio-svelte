@@ -83,7 +83,7 @@
 						>
 							{project.title}
 						</h3>
-						<p class="mb-6 line-clamp-3 grow text-base leading-relaxed text-surface-600-400">
+						<p class="mb-6 line-clamp-3 grow text-base leading-relaxed text-surface-800-200">
 							{project.description}
 						</p>
 						<div class="flex items-center justify-between border-t border-surface-200-800 pt-6">

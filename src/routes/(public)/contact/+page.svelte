@@ -30,7 +30,7 @@
 				</h1>
 			</div>
 			<p
-				class="hidden max-w-xs text-right font-mono text-sm tracking-wide text-surface-600-400 md:block"
+				class="hidden max-w-xs text-right font-mono text-sm tracking-wide text-surface-800-200 md:block"
 			>
 				Open for new projects, <br />and technical discussions.
 			</p>
@@ -43,7 +43,7 @@
 		<div class="space-y-16">
 			{#if ready}
 				<div
-					class="max-w-3xl space-y-6 text-lg leading-relaxed text-surface-600-400"
+					class="max-w-3xl space-y-6 text-lg leading-relaxed text-surface-800-200"
 					in:fly={{ y: 20, duration: 600, delay: 200 }}
 				>
 					<p>
@@ -70,7 +70,7 @@
 
 					<!-- Socials -->
 					<div class="space-y-4 md:pl-12" in:fly={{ y: 20, duration: 600, delay: 400 }}>
-						<h2 class="font-mono text-xs font-bold tracking-widest text-surface-500 uppercase">
+						<h2 class="font-mono text-xs font-bold tracking-widest text-surface-800-200 uppercase">
 							Socials
 						</h2>
 						<ul class="space-y-4 font-heading text-2xl font-bold text-surface-950-50">

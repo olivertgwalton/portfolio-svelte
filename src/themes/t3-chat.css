@@ -6,16 +6,16 @@
 	/* 
        Surface 50 
        Light Mode: Background (#faf5fa)
-       Dark Mode: Foreground (#d2c4de) - Used for text in dark mode via pairing
+       Dark Mode: Foreground (#eeddee) - Light Lavender
     */
-	--color-surface-50: light-dark(#faf5fa, #d2c4de);
+	--color-surface-50: light-dark(#faf5fa, #eeddee);
 
 	/* 
        Surface 200
        Light: Border (#efbdeb)
-       Dark: Muted Text (#c2b6cf)
+       Dark: Muted Text (#cbb6d9) - Muted Lavender
     */
-	--color-surface-200: light-dark(#efbdeb, #c2b6cf);
+	--color-surface-200: light-dark(#efbdeb, #cbb6d9);
 
 	/* 
        Surface 800
@@ -41,14 +41,14 @@
 	/* Intermediate Surfaces */
 	--color-surface-100: light-dark(#f3e4f6, #181117); /* Sidebar */
 	--color-surface-300: light-dark(#e7c1dc, #3e343c); /* Input */
-	--color-surface-400: light-dark(#c2b6cf, #834588);
+	--color-surface-400: light-dark(#c2b6cf, #d1d5db);
 	--color-surface-500: light-dark(#f6e5f3, #28222d); /* Muted BG */
-	--color-surface-600: light-dark(#834588, #c2b6cf); /* Muted FG */
+	--color-surface-600: light-dark(#834588, #cbb6d9); /* Muted FG */
 	--color-surface-700: light-dark(#77347c, #d4c7e1);
 
 	/* Primary */
-	--color-primary-500: light-dark(#a84370, #a3004c);
-	--color-primary-contrast-500: light-dark(#ffffff, #efc0d8);
+	--color-primary-500: light-dark(#a84370, #d56a98);
+	--color-primary-contrast-500: light-dark(#ffffff, #221d27);
 
 	/* Secondary */
 	--color-secondary-500: light-dark(#f1c4e6, #362d3d);

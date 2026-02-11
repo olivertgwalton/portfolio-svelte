@@ -18,6 +18,7 @@
 </script>
 
 <nav
+	style:view-transition-name="navbar"
 	class="sticky top-0 z-50 w-full border-b border-surface-200-800/80 bg-surface-50-950/90 backdrop-blur-md transition-all duration-300"
 >
 	<div class="container mx-auto flex max-w-7xl items-center justify-between px-6 pt-3 pb-4">
@@ -27,7 +28,7 @@
 			href={resolve('/')}
 			class="font-heading text-2xl font-bold tracking-tighter text-surface-950-50"
 		>
-			Oliver<span class="text-surface-600-400">.</span>
+			Oliver<span class="text-surface-800-200">.</span>
 		</a>
 
 		<!-- Desktop Links -->
@@ -85,7 +86,7 @@
 													href={resolve(link.href)}
 													class="block w-full rounded-lg px-4 py-3 text-sm font-bold {isActive
 														? 'bg-surface-200-800 text-surface-950-50'
-														: 'text-surface-600-400 hover:bg-surface-100-900'}"
+														: 'text-surface-800-200 hover:bg-surface-100-900'}"
 												>
 													{link.label}
 												</a>

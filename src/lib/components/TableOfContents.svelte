@@ -69,7 +69,9 @@
 		<nav
 			class="no-scrollbar sticky top-32 hidden max-h-[calc(100vh-8rem)] overflow-y-auto lg:block"
 		>
-			<h2 class="mb-6 text-xs font-bold tracking-[0.2em] text-surface-500 uppercase">Contents</h2>
+			<h2 class="text-surface-600-200 mb-6 text-xs font-bold tracking-[0.2em] uppercase">
+				Contents
+			</h2>
 			<div class="relative">
 				<!-- Decorative timeline line -->
 				<div class="absolute top-0 bottom-0 left-0 w-px bg-surface-200 dark:bg-surface-800"></div>
@@ -81,7 +83,7 @@
 								class="group flex items-start py-0.5 pl-4 transition-all duration-300 ease-out
                         {activeId === heading.id
 									? 'translate-x-1 font-medium text-primary-500'
-									: 'text-surface-500 hover:translate-x-1 hover:text-surface-900 dark:hover:text-surface-100'}"
+									: 'text-surface-600-200 hover:translate-x-1 hover:text-surface-900 dark:hover:text-surface-100'}"
 								onclick={(e) => {
 									e.preventDefault();
 									isManualScroll = true;
@@ -144,7 +146,7 @@
 										class="group flex items-start py-0.5 pl-4 transition-all duration-300 ease-out
                                     {activeId === heading.id
 											? 'translate-x-1 font-medium text-primary-500'
-											: 'text-surface-500 hover:translate-x-1 hover:text-surface-900 dark:hover:text-surface-100'}"
+											: 'text-surface-800-200 hover:translate-x-1 hover:text-surface-900 dark:hover:text-surface-100'}"
 										onclick={(e) => {
 											e.preventDefault();
 											// Close the details first to settle layout

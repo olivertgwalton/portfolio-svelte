@@ -54,7 +54,7 @@
 				href={resolve('/(public)/[collection=collection]', {
 					collection: isProject ? 'projects' : 'blog'
 				})}
-				class="mb-8 inline-flex items-center gap-2 text-sm font-bold text-surface-500 hover:text-primary-500"
+				class="mb-8 inline-flex items-center gap-2 text-sm font-bold text-surface-600-400 hover:text-primary-500"
 			>
 				<ArrowLeftIcon size={16} /> BACK TO {isProject ? 'PROJECTS' : 'BLOG'}
 			</a>
@@ -83,7 +83,7 @@
 						{meta.description}
 					</p>
 
-					<div class="mt-8 flex flex-wrap gap-x-8 gap-y-4 text-sm text-surface-700-300">
+					<div class="mt-8 flex flex-wrap gap-x-8 gap-y-4 text-sm text-surface-600-400">
 						<div class="flex items-center gap-2">
 							<CalendarIcon size={18} />
 							<span class="font-bold">{dateFormatter.format(new Date(meta.date))}</span>

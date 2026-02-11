@@ -47,7 +47,7 @@
 				<div use:reveal={{ delay: 300 }}>
 					<a
 						href={resolve('/about')}
-						class="inline-flex items-center gap-3 border-b-2 border-surface-950-50 pb-1 text-lg font-bold text-surface-950-50 hover:border-surface-600-400 hover:text-surface-600-400"
+						class="inline-flex items-center gap-3 border-b-2 border-surface-950-50 pb-1 text-lg font-bold text-surface-950-50 hover:border-surface-800-200 hover:text-surface-800-200"
 					>
 						Read full bio <ArrowRightIcon size={16} weight="bold" />
 					</a>
@@ -63,7 +63,7 @@
 					>
 						Connect.
 					</h3>
-					<ul class="space-y-4 text-lg font-medium text-surface-600-400">
+					<ul class="space-y-4 text-lg font-medium text-surface-800-200">
 						<li use:reveal={{ delay: 450 }}>
 							<a
 								href="https://github.com/olivertgwalton"
@@ -109,7 +109,7 @@
 
 				<div use:reveal={{ delay: 700 }} class="flex flex-col gap-2 md:items-end">
 					<div class="font-heading text-2xl font-bold text-surface-950-50">Oliver.</div>
-					<div class="text-sm font-medium text-surface-600-400">
+					<div class="text-sm font-medium text-surface-800-200">
 						&copy; {new Date().getFullYear()} Oliver Walton. All rights reserved.
 					</div>
 				</div>

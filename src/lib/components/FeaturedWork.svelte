@@ -55,7 +55,7 @@
 					href={resolve('/(public)/[collection=collection]', {
 						collection: activeTab === 'projects' ? 'projects' : 'blog'
 					})}
-					class="shrink-0 text-[10px] font-black tracking-widest text-surface-500 uppercase transition-colors hover:text-primary-500"
+					class="shrink-0 text-[10px] font-black tracking-widest text-surface-600-400 uppercase transition-colors hover:text-primary-500"
 				>
 					View All {activeTab === 'projects' ? 'Projects' : 'Posts'}
 				</a>
@@ -123,9 +123,10 @@
 						</p>
 
 						<div class="mb-6 flex items-center gap-4">
-							<time class="font-mono text-xs font-bold text-surface-500 uppercase"
+							<time class="font-mono text-xs font-bold text-surface-600-400 uppercase"
 								>{dateFormatter.format(new Date(item.date))}</time
 							>
+
 							{#if isProject && item.type}
 								<span class="font-mono text-xs font-bold tracking-wider text-primary-500 uppercase">
 									{item.type}

@@ -69,7 +69,7 @@
 
 					<div class="flex grow flex-col p-8">
 						<time
-							class="mb-4 block font-mono text-xs font-bold tracking-wider text-surface-500 uppercase"
+							class="mb-4 block font-mono text-xs font-bold tracking-wider text-surface-600-400 uppercase"
 							>{dateFormatter.format(new Date(post.date))}</time
 						>
 						<h3
