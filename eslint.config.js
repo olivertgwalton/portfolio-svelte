@@ -12,7 +12,13 @@ const gitignorePath = path.resolve(import.meta.dirname, '.gitignore');
 
 export default defineConfig(
 	includeIgnoreFile(gitignorePath),
+
+	{
+		ignores: ['src/lib/wasm/', 'static/wasm/', 'rust-grid/']
+	},
+
 	js.configs.recommended,
+
 	...ts.configs.recommended,
 	...svelte.configs.recommended,
 	prettier,

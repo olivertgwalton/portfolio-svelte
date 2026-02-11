@@ -11,7 +11,8 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"build:wasm": "mkdir -p static/wasm && cd rust-grid && RUSTFLAGS='-C target-feature=+simd128' wasm-pack build --target web --out-dir ../src/lib/wasm && mv ../src/lib/wasm/rust_grid_bg.wasm ../static/wasm/"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^2.0.2",
@@ -47,7 +48,9 @@
 		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.54.0",
 		"unist-util-visit": "^5.1.0",
-		"vite": "^7.3.1"
+		"vite": "^7.3.1",
+		"vite-plugin-top-level-await": "^1.6.0",
+		"vite-plugin-wasm": "^3.5.0"
 	},
 	"dependencies": {
 		"@fontsource-variable/jetbrains-mono": "^5.2.8",
