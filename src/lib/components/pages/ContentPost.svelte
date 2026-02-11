@@ -5,6 +5,7 @@
 	import MetaTags from '$lib/components/MetaTags.svelte';
 	import TableOfContents from '$lib/components/TableOfContents.svelte';
 	import ScrollProgress from '$lib/components/ScrollProgress.svelte';
+	import ShareWidget from '$lib/components/ShareWidget.svelte';
 	import type { Component } from 'svelte';
 	import {
 		ArrowLeftIcon,
@@ -169,6 +170,7 @@
 				</div>
 				{#if ContentComponent}
 					<ContentComponent />
+					<ShareWidget title={meta.title} />
 				{:else}
 					<p class="animate-pulse font-bold text-surface-400">Loading...</p>
 				{/if}
