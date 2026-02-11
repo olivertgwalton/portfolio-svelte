@@ -22,6 +22,7 @@ export interface ContentMetadata {
 	current?: boolean;
 	highlights?: string[];
 	skills?: string[];
+	readTime?: string;
 }
 
 export type ContentType = 'posts' | 'projects' | 'experience' | 'education';

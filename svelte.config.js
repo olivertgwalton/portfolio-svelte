@@ -5,11 +5,24 @@ import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import path from 'node:path';
 import { visit } from 'unist-util-visit';
+import getReadingTime from 'reading-time';
+import { toString } from 'mdast-util-to-string';
 
 const highlighter = await createHighlighter({
 	themes: ['github-light', 'github-dark'],
 	langs: ['typescript', 'javascript', 'svelte', 'bash', 'css', 'html', 'json', 'markdown', 'python']
 });
+
+function remarkReadTime() {
+	return function (tree, file) {
+		const text = toString(tree);
+		const readingTime = getReadingTime(text);
+		file.data.fm = {
+			...file.data.fm,
+			readTime: Math.ceil(readingTime.minutes) + ' min read'
+		};
+	};
+}
 
 /**
  * Remark plugin to transform local images to use enhanced:img
@@ -148,7 +161,7 @@ const mdsvexOptions = {
 			return `{@html \`${escapeSvelte(html)}\`}`;
 		}
 	},
-	remarkPlugins: [remarkEnhancedImages, remarkMath],
+	remarkPlugins: [remarkEnhancedImages, remarkReadTime, remarkMath],
 	rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings, rehypeKatex],
 	layout: {
 		_: path.resolve(import.meta.dirname, './src/lib/components/markdown/MarkdownLayout.svelte')

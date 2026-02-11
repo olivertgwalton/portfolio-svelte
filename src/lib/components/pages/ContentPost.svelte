@@ -5,7 +5,14 @@
 	import MetaTags from '$lib/components/MetaTags.svelte';
 	import TableOfContents from '$lib/components/TableOfContents.svelte';
 	import type { Component } from 'svelte';
-	import { ArrowLeftIcon, GithubLogoIcon, GlobeIcon, CalendarIcon, TagIcon } from 'phosphor-svelte';
+	import {
+		ArrowLeftIcon,
+		GithubLogoIcon,
+		GlobeIcon,
+		CalendarIcon,
+		TagIcon,
+		ClockIcon
+	} from 'phosphor-svelte';
 	import type { ContentMetadata, ContentType } from '$lib/content';
 
 	import { getEnhancedImage } from '$lib/images';
@@ -77,6 +84,12 @@
 							<CalendarIcon size={18} />
 							<span class="font-bold">{dateFormatter.format(new Date(meta.date))}</span>
 						</div>
+						{#if meta.readTime}
+							<div class="flex items-center gap-2">
+								<ClockIcon size={18} />
+								<span class="font-bold">{meta.readTime}</span>
+							</div>
+						{/if}
 						{#if isProject && meta.tech}
 							<div class="flex items-center gap-2">
 								<TagIcon size={18} />
