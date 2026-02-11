@@ -7,6 +7,7 @@
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 	import MetaTags from '$lib/components/MetaTags.svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
+	import BackToTop from '$lib/components/BackToTop.svelte';
 
 	injectAnalytics();
 	injectSpeedInsights();
@@ -24,4 +25,5 @@
 	<main class="grow">
 		{@render children()}
 	</main>
+	<BackToTop />
 </div>
