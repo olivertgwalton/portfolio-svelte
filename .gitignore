@@ -31,3 +31,8 @@ vite.config.ts.timestamp-*
 .gemini
 .vscode
 static/uploads/
+
+# Rust
+rust-grid/target/
+rust-grid/pkg/
+
