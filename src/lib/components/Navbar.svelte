@@ -56,6 +56,15 @@
 				<!-- Theme Toggle -->
 				<ThemeSwitcher {theme} {mode} />
 
+				<!-- CTA Button -->
+				<a
+					href={asset('/oliver-walton-cv.pdf')}
+					class="btn preset-filled-primary-500 btn-sm px-5 py-2 text-xs"
+					target="_blank"
+				>
+					CV
+				</a>
+
 				<!-- Mobile Menu Button -->
 				<div class="md:hidden">
 					<Menu>
@@ -83,34 +92,10 @@
 											{/snippet}
 										</Menu.Item>
 									{/each}
-									<Menu.Separator class="my-2 h-px bg-surface-200-800" />
-									<Menu.Item value="cv">
-										{#snippet element(attributes)}
-											<a
-												{...attributes as import('svelte/elements').HTMLAnchorAttributes}
-												href={asset('/oliver-walton-cv.pdf')}
-												class="btn block w-full preset-outlined-surface-200-800 btn-sm py-2 text-center text-xs"
-												target="_blank"
-											>
-												Download CV
-											</a>
-										{/snippet}
-									</Menu.Item>
 								</Menu.Content>
 							</Menu.Positioner>
 						</Portal>
 					</Menu>
-				</div>
-
-				<!-- CTA Button -->
-				<div class="hidden md:block">
-					<a
-						href={asset('/oliver-walton-cv.pdf')}
-						class="btn preset-filled-primary-500 btn-sm px-5 py-2 text-xs"
-						target="_blank"
-					>
-						CV
-					</a>
 				</div>
 			</div>
 		</div>
