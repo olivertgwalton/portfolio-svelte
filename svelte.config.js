@@ -180,7 +180,7 @@ const config = {
 			mode: 'auto',
 			directives: {
 				'default-src': ['self'],
-				'script-src': ['self', 'blob:', 'https://va.vercel-scripts.com'],
+				'script-src': ['self', 'blob:', "'wasm-unsafe-eval'", 'https://va.vercel-scripts.com'],
 				'worker-src': ['self', 'blob:'],
 				'style-src': ['self', 'unsafe-inline'],
 				'style-src-attr': ['self', 'unsafe-inline'],
