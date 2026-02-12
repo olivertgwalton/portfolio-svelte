@@ -84,7 +84,9 @@ export function getRelatedContent(
 	return all
 		.filter((item) => item.slug !== slug)
 		.map((item) => {
-			const itemTags = (item.tags ?? item.tech ?? []).map((t) => t.toLowerCase());
+			const itemTags = (item.tags?.length ? item.tags : (item.tech ?? [])).map((t) =>
+				t.toLowerCase()
+			);
 			const overlap = itemTags.filter((t) => tagSet.has(t)).length;
 			return { item, overlap };
 		})

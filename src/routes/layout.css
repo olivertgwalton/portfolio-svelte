@@ -64,6 +64,7 @@
 }
 .code-block-wrapper pre {
 	@apply m-0 rounded-t-none border-0;
+
 	padding-top: 0;
 }
 .code-block-lang {

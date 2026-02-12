@@ -65,7 +65,15 @@ export const enhanceCodeBlocks: Action<HTMLElement> = (node) => {
 			pre.parentElement?.insertBefore(wrapper, pre);
 			const header = document.createElement('div');
 			header.className = 'code-block-header';
-			header.innerHTML = `<span>${title}</span>${lang ? `<span class="code-block-lang">${lang}</span>` : ''}`;
+			const titleSpan = document.createElement('span');
+			titleSpan.textContent = title;
+			header.appendChild(titleSpan);
+			if (lang) {
+				const langSpan = document.createElement('span');
+				langSpan.className = 'code-block-lang';
+				langSpan.textContent = lang;
+				header.appendChild(langSpan);
+			}
 			wrapper.appendChild(header);
 			wrapper.appendChild(pre);
 		}

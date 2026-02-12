@@ -161,6 +161,12 @@ const mdsvexOptions = {
 	extensions: ['.md'],
 	highlight: {
 		highlighter: async (code, lang = 'text', meta = '') => {
+			const escapeAttr = (s) =>
+				s
+					.replace(/&/g, '&amp;')
+					.replace(/"/g, '&quot;')
+					.replace(/</g, '&lt;')
+					.replace(/>/g, '&gt;');
 			const html = highlighter.codeToHtml(code, {
 				lang,
 				themes: {
@@ -170,7 +176,7 @@ const mdsvexOptions = {
 				defaultColor: false
 			});
 			const titleMatch = meta?.match(/title="([^"]+)"/);
-			const titleAttr = titleMatch ? ` data-title="${titleMatch[1]}"` : '';
+			const titleAttr = titleMatch ? ` data-title="${escapeAttr(titleMatch[1])}"` : '';
 			const withLang = html.replace('<pre ', `<pre data-language="${lang}"${titleAttr} `);
 			return `{@html \`${escapeSvelte(withLang)}\`}`;
 		}
