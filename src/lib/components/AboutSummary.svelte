@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import ArrowRightIcon from 'phosphor-svelte/lib/ArrowRightIcon';
-	import ArrowUpRightIcon from 'phosphor-svelte/lib/ArrowUpRightIcon';
 	import { reveal } from '$lib/actions';
+	import { socialLinks } from '$lib/site.config';
 </script>
 
 <section class="border-t border-surface-200-800/80 bg-surface-50-950 py-32">
@@ -64,46 +64,19 @@
 						Connect.
 					</h3>
 					<ul class="space-y-4 text-lg font-medium text-surface-800-200">
-						<li use:reveal={{ delay: 450 }}>
-							<a
-								href="https://github.com/olivertgwalton"
-								target="_blank"
-								rel="noopener noreferrer"
-								class="flex items-center gap-2 transition-colors hover:text-surface-950-50 md:justify-end"
-							>
-								Github <ArrowUpRightIcon size={16} class="opacity-50" />
-							</a>
-						</li>
-						<li use:reveal={{ delay: 500 }}>
-							<a
-								href="https://www.linkedin.com/in/oliver-walton03/"
-								target="_blank"
-								rel="noopener noreferrer"
-								class="flex items-center gap-2 transition-colors hover:text-surface-950-50 md:justify-end"
-							>
-								LinkedIn <ArrowUpRightIcon size={16} class="opacity-50" />
-							</a>
-						</li>
-						<li use:reveal={{ delay: 550 }}>
-							<a
-								href="https://t.me/oliverwalton03"
-								target="_blank"
-								rel="noopener noreferrer"
-								class="flex items-center gap-2 transition-colors hover:text-surface-950-50 md:justify-end"
-							>
-								Telegram <ArrowUpRightIcon size={16} class="opacity-50" />
-							</a>
-						</li>
-						<li use:reveal={{ delay: 600 }}>
-							<a
-								href="https://instagram.com/olivertgwalton03"
-								target="_blank"
-								rel="noopener noreferrer"
-								class="flex items-center gap-2 transition-colors hover:text-surface-950-50 md:justify-end"
-							>
-								Instagram <ArrowUpRightIcon size={16} class="opacity-50" />
-							</a>
-						</li>
+						{#each socialLinks as { label, href, icon: Icon }, i (label)}
+							<li use:reveal={{ delay: 450 + i * 50 }}>
+								<a
+									{href}
+									target="_blank"
+									rel="external noopener noreferrer"
+									class="flex items-center gap-2 transition-colors hover:text-surface-950-50 md:justify-end"
+								>
+									<Icon size={18} class="shrink-0 text-surface-600-400" />
+									{label}
+								</a>
+							</li>
+						{/each}
 					</ul>
 				</div>
 

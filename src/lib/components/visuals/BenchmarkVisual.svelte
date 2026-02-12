@@ -43,19 +43,6 @@
 	let metricsFrames = 0;
 	let frameTimeAccum = 0;
 
-	function updateThemeColor() {
-		if (typeof window === 'undefined') return;
-		const style = getComputedStyle(document.body);
-		let color = style.color || 'rgb(0, 0, 0)';
-
-		if (color.includes('rgba') || color.includes('hsla')) {
-			color = color
-				.replace(/rgba?\(/, 'rgb(')
-				.replace(/hsla?\(/, 'hsl(')
-				.replace(/[,/]\s*[\d.]+\)$/, ')');
-		}
-	}
-
 	async function initWasm() {
 		try {
 			if (!wasmGlue) {
@@ -66,8 +53,7 @@
 				wasmMemory = wasmExports.memory;
 			}
 		} catch (e) {
-			console.log(e);
-			console.error('WASM Init Failed');
+			console.error('WASM Init Failed', e);
 		}
 	}
 
@@ -108,8 +94,8 @@
 		if (engine) {
 			try {
 				engine.free();
-			} catch (e) {
-				console.log(e);
+			} catch {
+				/* WASM object already freed */
 			}
 			engine = undefined;
 		}
@@ -266,24 +252,15 @@
 		ctx = canvas.getContext('2d', { alpha: true });
 
 		initData();
-		updateThemeColor();
 
-		window.addEventListener('resize', () => {
-			initData();
-			updateThemeColor();
-		});
-		const observer = new MutationObserver(updateThemeColor);
-		observer.observe(document.documentElement, {
-			attributes: true,
-			attributeFilter: ['class', 'data-theme']
-		});
+		window.addEventListener('resize', initData);
 
 		metricsStart = performance.now();
 		animationId = requestAnimationFrame(animate);
 
 		return () => {
 			cancelAnimationFrame(animationId);
-			observer.disconnect();
+			window.removeEventListener('resize', initData);
 		};
 	});
 </script>

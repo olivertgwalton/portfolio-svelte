@@ -1,14 +1,7 @@
 <script lang="ts">
-	import ArrowUpRightIcon from 'phosphor-svelte/lib/ArrowUpRightIcon';
 	import InteractiveGrid from '$lib/components/visuals/InteractiveGrid.svelte';
 	import { fly } from 'svelte/transition';
-	import { onMount } from 'svelte';
-
-	let ready = $state(false);
-
-	onMount(() => {
-		ready = true;
-	});
+	import { socialLinks } from '$lib/site.config';
 </script>
 
 <svelte:head>
@@ -41,13 +34,12 @@
 <section class="min-h-screen bg-surface-50-950 py-24">
 	<div class="container mx-auto max-w-7xl px-6">
 		<div class="space-y-16">
-			{#if ready}
 				<div
 					class="max-w-3xl space-y-6 text-lg leading-relaxed text-surface-800-200"
 					in:fly={{ y: 20, duration: 600, delay: 200 }}
 				>
 					<p>
-						I’m always open to discussing new projects, technical challenges, or simply chatting
+						I'm always open to discussing new projects, technical challenges, or simply chatting
 						about Formula 1 and systems architecture.
 					</p>
 
@@ -74,50 +66,22 @@
 							Socials
 						</h2>
 						<ul class="space-y-4 font-heading text-2xl font-bold text-surface-950-50">
-							<li>
-								<a
-									href="https://github.com/olivertgwalton"
-									target="_blank"
-									rel="noopener noreferrer"
-									class="flex items-center gap-2 transition-colors hover:text-surface-600-400"
-								>
-									Github <ArrowUpRightIcon size={20} weight="bold" class="text-surface-500" />
-								</a>
-							</li>
-							<li>
-								<a
-									href="https://www.linkedin.com/in/oliver-walton03/"
-									target="_blank"
-									rel="noopener noreferrer"
-									class="flex items-center gap-2 transition-colors hover:text-surface-600-400"
-								>
-									LinkedIn <ArrowUpRightIcon size={20} weight="bold" class="text-surface-50" />
-								</a>
-							</li>
-							<li>
-								<a
-									href="https://t.me/oliverwalton03"
-									target="_blank"
-									rel="noopener noreferrer"
-									class="flex items-center gap-2 transition-colors hover:text-surface-600-400"
-								>
-									Telegram <ArrowUpRightIcon size={20} weight="bold" class="text-surface-500" />
-								</a>
-							</li>
-							<li>
-								<a
-									href="https://instagram.com/olivertgwalton03"
-									target="_blank"
-									rel="noopener noreferrer"
-									class="flex items-center gap-2 transition-colors hover:text-surface-600-400"
-								>
-									Instagram <ArrowUpRightIcon size={20} weight="bold" class="text-surface-500" />
-								</a>
-							</li>
+							{#each socialLinks as { label, href, icon: Icon } (label)}
+								<li>
+									<a
+										{href}
+										target="_blank"
+										rel="external noopener noreferrer"
+										class="flex items-center gap-3 transition-colors hover:text-surface-600-400"
+									>
+										<Icon size={24} weight="bold" class="shrink-0 text-surface-600-400" />
+										{label}
+									</a>
+								</li>
+							{/each}
 						</ul>
 					</div>
 				</div>
-			{/if}
 		</div>
 	</div>
 </section>
