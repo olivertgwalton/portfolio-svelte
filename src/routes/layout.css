@@ -58,6 +58,21 @@
 	background-size: 40px 40px;
 }
 
+/* Code Block Filename Header */
+.code-block-wrapper .code-block-header {
+	@apply flex items-center justify-between rounded-t-lg bg-surface-100-900 px-4 py-2 font-mono text-xs font-bold text-surface-600-400;
+}
+.code-block-wrapper pre {
+	@apply m-0 rounded-t-none border-0;
+	padding-top: 0;
+}
+.code-block-lang {
+	@apply text-[10px] tracking-widest uppercase opacity-60;
+}
+.code-block-wrapper pre[data-language]::before {
+	display: none;
+}
+
 /* Shiki Dual Themes - Use light-dark() to auto-switch based on color-scheme */
 .shiki,
 .shiki span {
