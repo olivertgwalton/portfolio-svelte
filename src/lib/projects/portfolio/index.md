@@ -51,7 +51,7 @@ The hero section contains an interactive particle grid which responds to mouse m
 
 In my first attempt I had overlooked the calculation of mouse position being relative to the canvas requiring calling `getBoundingClientRect()` on every `mousemove` event. This is an expensive operation because it forces the browser to recalculate the page layout; effectively worse than standard React virtualDOM. I optimised this by **caching the canvas boundaries** and only updating them when the user scrolls or resizes the window, ensuring the animation loop remains lean and focused strictly on the physics maths.
 
-```typescript
+```typescript title="InteractiveGrid.svelte"
 function handleMouseMove(e: MouseEvent) {
   const rect = canvas?.getBoundingClientRect();
   if (!rect) return;
@@ -69,7 +69,7 @@ An initial optimisation was to use **Structure of Arrays (SoA)** - a low level p
 - **Time Complexity:** While both **Array of Objects (AoO)** and **Structure of Arrays (SoA)** approaches are technically $O(n)$, the SoA approach significantly reduces the constant factor by improving cache locality.
 - **Memory Footprint:** Switching to TypedArrays reduced the memory usage for the grid data by approximately **60%**. I no longer store object headers, pointers, and property keys for 2,000+ points - just raw, contiguous binary data. The Rust engine takes this further with a pure SoA layout, each field is a contiguous `Vec<f32>`:
 
-```rust
+```rust title="rust-grid/src/lib.rs"
 #[wasm_bindgen]
 pub struct GridEngine {
     pos_x: Vec<f32>,      // All X positions, contiguous
@@ -109,13 +109,13 @@ By offloading the physics calculations to Rust, I achieve several critical wins:
 
 The zero-copy bridge between Rust and JavaScript looks like this:
 
-```typescript
+```typescript title="InteractiveGrid.svelte"
 // JS creates typed array views directly on WASM memory — no copying
 posX = new Float32Array(wasmMemory.buffer, engine.pos_x_ptr(), numPoints);
 posY = new Float32Array(wasmMemory.buffer, engine.pos_y_ptr(), numPoints);
 ```
 
-```rust
+```rust title="rust-grid/src/lib.rs"
 // Expose raw pointers to its contiguous Vec memory
 pub fn pos_x_ptr(&self) -> *const f32 { self.pos_x.as_ptr() }
 pub fn pos_y_ptr(&self) -> *const f32 { self.pos_y.as_ptr() }
@@ -150,7 +150,7 @@ In **React**, when state changes, the entire component (and potentially its chil
 
 Here's how they work together in the theme switcher:
 
-```svelte
+```svelte title="ThemeSwitcher.svelte"
 <script lang="ts">
   let currentTheme = $state('modern');
   let currentMode = $state('system');
@@ -173,7 +173,7 @@ Here's how they work together in the theme switcher:
 
 And `$derived` in the benchmark, where FPS is automatically computed from the measured frame time:
 
-```typescript
+```typescript title="BenchmarkVisual.svelte"
 let frameTime = $state(0);
 let fps = $derived(frameTime > 0 ? 1000 / frameTime : 0);
 ```
@@ -203,7 +203,7 @@ Enter [**Shiki**](https://shiki.style/). Shiki uses the same syntax highlighter 
 
 Shiki runs at **build time**. When I deploy this site, Shiki runs on the server, figures out all the colours and tokens, and bakes them into the final HTML as static CSS classes. By the time this page reaches your phone or laptop, there is **zero** JavaScript running to highlight code. No layout shift. No "flash of unstyled content". Just raw, accessible HTML that looks native to the website instantly.
 
-```javascript
+```javascript title="svelte.config.js"
 const highlighter = await createHighlighter({
   themes: ['github-light', 'github-dark'],
   langs: ['typescript', 'javascript', 'svelte', 'bash', 'css', 'html', 'json', 'markdown', 'python']
@@ -234,7 +234,7 @@ I've implemented a theming engine that respects your system preference by defaul
 
 The theme toggle uses the **View Transitions API** to create a circular reveal animation from the click point:
 
-```typescript
+```typescript title="ThemeSwitcher.svelte"
 async function performTransition(action: () => void, event?: MouseEvent) {
   if (!document.startViewTransition || !event) { action(); return; }
 
@@ -267,7 +267,7 @@ async function performTransition(action: () => void, event?: MouseEvent) {
 
 You might have noticed the "X min read" at the top of posts. That isn't being written manually; during the build process, I use a `remark` plugin to parse the markdown content, estimate the reading time based on word count, images and any other relevant elements, and inject it into the post's metadata. It's a small convenience that respects the reader's time.
 
-```javascript
+```javascript title="svelte.config.js"
 function remarkReadTime() {
   return function (tree, file) {
     const text = toString(tree);
