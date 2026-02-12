@@ -83,7 +83,7 @@
 								class="group flex items-start py-0.5 pl-4 transition-all duration-300 ease-out
                         {activeId === heading.id
 									? 'translate-x-1 font-medium text-primary-500'
-									: 'text-surface-600-200 hover:translate-x-1 hover:text-surface-900 dark:hover:text-surface-100'}"
+									: 'text-surface-600-200 hover:translate-x-1 hover:text-surface-950-50'}"
 								onclick={(e) => {
 									e.preventDefault();
 									isManualScroll = true;
@@ -146,7 +146,7 @@
 										class="group flex items-start py-0.5 pl-4 transition-all duration-300 ease-out
                                     {activeId === heading.id
 											? 'translate-x-1 font-medium text-primary-500'
-											: 'text-surface-800-200 hover:translate-x-1 hover:text-surface-900 dark:hover:text-surface-100'}"
+											: 'text-surface-800-200 hover:translate-x-1 hover:text-surface-950-50'}"
 										onclick={(e) => {
 											e.preventDefault();
 											// Close the details first to settle layout
