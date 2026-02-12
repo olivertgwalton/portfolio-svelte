@@ -38,8 +38,10 @@
 
 	// Metrics
 	let frameTime = $state(0);
-	let fps = $state(0);
-	let lastFrameTime = 0;
+	let fps = $derived(frameTime > 0 ? 1000 / frameTime : 0);
+	let metricsStart = 0;
+	let metricsFrames = 0;
+	let frameTimeAccum = 0;
 
 	function updateThemeColor() {
 		if (typeof window === 'undefined') return;
@@ -162,13 +164,22 @@
 		if (!ctx || !canvas) return;
 		ctx.setTransform(1, 0, 0, 1, 0, 0);
 
-		// FPS calc
-		const now = performance.now();
-		const delta = now - lastFrameTime;
-		lastFrameTime = now;
-		fps = fps * 0.9 + (1000 / delta) * 0.1;
-
+		const workStart = performance.now();
 		renderComparison();
+		const workTime = performance.now() - workStart;
+
+		if (!isPaused) {
+			// Update metrics every 500ms
+			frameTimeAccum += workTime;
+			metricsFrames++;
+			const elapsed = performance.now() - metricsStart;
+			if (elapsed >= 500) {
+				frameTime = frameTimeAccum / metricsFrames;
+				metricsStart = performance.now();
+				metricsFrames = 0;
+				frameTimeAccum = 0;
+			}
+		}
 	}
 
 	function renderComparison() {
@@ -182,11 +193,9 @@
 		const h = canvas.height;
 
 		if (isRust) {
-			const start = performance.now();
 			engine.update(time, w, h);
 
 			const renderPtr = engine.render();
-			frameTime = performance.now() - start;
 
 			const pixelBytes = w * h * 4;
 
@@ -230,8 +239,16 @@
 		}
 	}
 
+	function resetMetrics() {
+		metricsStart = performance.now();
+		metricsFrames = 0;
+		frameTimeAccum = 0;
+		frameTime = 0;
+	}
+
 	function updateEngine(eng: 'rust' | 'js') {
 		activeEngine = eng;
+		resetMetrics();
 	}
 
 	function handleCountChange(e: Event) {
@@ -261,6 +278,7 @@
 			attributeFilter: ['class', 'data-theme']
 		});
 
+		metricsStart = performance.now();
 		animationId = requestAnimationFrame(animate);
 
 		return () => {
@@ -306,7 +324,7 @@
 			<span
 				class="text-4xl font-bold {activeEngine === 'rust' ? 'text-green-500' : 'text-red-500'}"
 			>
-				{frameTime > 0 ? Math.round(1000 / frameTime) : 0}
+				{Math.round(fps)}
 			</span>
 			<span class="text-sm font-bold text-surface-400">FPS</span>
 		</div>

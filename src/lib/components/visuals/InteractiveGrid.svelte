@@ -20,8 +20,6 @@
 	let height = 0;
 	let dpr = 1;
 	let dotColor = $state('rgb(0, 0, 0)');
-	let isPaused = $state(false);
-
 	// Buffers
 	let posX: Float32Array; // Rust View X
 	let posY: Float32Array; // Rust View Y
@@ -118,10 +116,6 @@
 		posY = new Float32Array(wasmMemory.buffer, engine.pos_y_ptr(), numPoints);
 	}
 
-	function togglePause() {
-		isPaused = !isPaused;
-	}
-
 	function animate() {
 		animationId = requestAnimationFrame(animate);
 
@@ -137,9 +131,7 @@
 	function renderGrid() {
 		if (!engine || !posX || !posY) return;
 
-		if (!isPaused) {
-			engine.update(mouseX, mouseY, dpr, 0.02, 0.85); // Original JS physics
-		}
+		engine.update(mouseX, mouseY, dpr, 0.02, 0.85);
 
 		ctx!.fillStyle = dotColor;
 		ctx!.globalAlpha = 0.15;
@@ -194,29 +186,4 @@
 		bind:this={canvas}
 		class="pointer-events-none inset-0 z-0 h-full w-full {fixed ? 'fixed' : 'absolute'}"
 	></canvas>
-
-	<!-- Pause Button -->
-	<button
-		onclick={togglePause}
-		class="pointer-events-auto fixed right-4 bottom-4 z-50 cursor-pointer rounded-full border border-surface-700 bg-surface-900/50 p-2 text-surface-400 backdrop-blur transition-all hover:bg-surface-800 hover:text-white"
-		aria-label={isPaused ? 'Play Animation' : 'Pause Animation'}
-	>
-		{#if isPaused}
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				width="24"
-				height="24"
-				viewBox="0 0 24 24"
-				fill="currentColor"><path d="M8 5v14l11-7z" /></svg
-			>
-		{:else}
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				width="24"
-				height="24"
-				viewBox="0 0 24 24"
-				fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg
-			>
-		{/if}
-	</button>
 </div>
