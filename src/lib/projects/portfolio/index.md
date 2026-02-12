@@ -44,20 +44,40 @@ This architectural difference is like upgrading from a waiter who runs to the ki
 
 ## InteractiveGrid
 
-The hero section contains an interactive particle grid which responds to mouse movements; running a calculation to mimic physics of pushing away from the cursor. This caused quite a paradox between the performance-oriented development, and having a constantly updating script on every 16ms frame "budget". This led me to see how far I could optimise the standard Canvas 2D API, without falling into the trap of WebAssembly using **cough** rust **cough**. I won't even begin to mention [**WebGL**](https://wikis.khronos.org/webgl/Main_Page), or worse, [**WebGPU**](https://www.w3.org/TR/webgpu/). Though if you are interested here is an AI-made attempt at WebGL:
+The hero section contains an interactive particle grid which responds to mouse movements; running a calculation to mimic physics of pushing away from the cursor. This caused quite a paradox between the performance-oriented development, and having a constantly updating script on every 16ms frame "budget". This led me to see how far I could optimise the standard Canvas 2D API, but if I fall into the trap of WebAssembly using **cough** rust **cough**, that wouldn't be the end of the world. I won't even begin to mention [**WebGL**](https://wikis.khronos.org/webgl/Main_Page), or worse, [**WebGPU**](https://www.w3.org/TR/webgpu/). Though if you are interested here is an AI-made attempt at WebGL:
 ![canvas-95000](./canvas-95000.jpg)![webgl-95000](./webgl-95000.jpg)![webgl-high](./webgl-high.jpg)
 
-### The WebAssembly Leap
+### Layout Thrashing
+
+In my first attempt I had overlooked the calculation of mouse position being relative to the canvas requiring calling `getBoundingClientRect()` on every `mousemove` event. This is an expensive operation because it forces the browser to recalculate the page layout; effectively worse than standard React virtualDOM. I optimised this by **caching the canvas boundaries** and only updating them when the user scrolls or resizes the window, ensuring the animation loop remains lean and focused strictly on the physics maths.
+
+- **Scripting Overhead:** Removing `getBoundingClientRect` from the `mousemove` handler reduced the "Scripting" time in the browser's performance profiler by over **90%** during interaction. I eliminated the forced reflows (layout calculations) that were previously firing on every mouse event, ensuring the main thread is free to drive the animation at a rock-solid 240 FPS (I'm limited by my monitor's refresh rate).
+
+### Performance Impact
+
+An initial optimisation was to use **Structure of Arrays (SoA)** - a low level performance optimisation that factors in how the underlying CPU architecture is designed. This approach allows for **Single Instruction, Multiple Data (SIMD)** operations, which can significantly improve performance by executing multiple operations in parallel - the same approach made by Zig, mentioned earlier.
+
+- **Time Complexity:** While both **Array of Objects (AoO)** and **Structure of Arrays (SoA)** approaches are technically $O(n)$, the SoA approach significantly reduces the constant factor by improving cache locality.
+- **Memory Footprint:** Switching to TypedArrays reduced the memory usage for the grid data by approximately **60%**. I no longer store object headers, pointers, and property keys for 2,000+ points - just raw, contiguous binary data. Below is the processing time for **20000** points:
+
+```text
+Array of Objects (AoO): 20ms - timer ended
+TypedArray (SoA): 10ms - timer ended
+```
+
+An initial thought might be that it is only a 10ms saving in processing time, and that isn't even the realistic element count; that is only the beginning of the performance gains.
+
+### The WebAssembly Saviour
 
 While the **Structure of Arrays (SoA)** approach with `Float32Array` was a massive improvement over standard objects, I wanted to see if I could push the performance envelope even further. This led me to integrate **Rust** via **WebAssembly (WASM)**.
 
 <BenchmarkVisual />
 
-It wasn't all smooth sailing, though. Integrating Rust into a modern Vite pipeline felt like fighting two different build systems simultaneously. `wasm-pack` generates a mountain of glue code that TypeScript absolutely hated; implicit `any` types everywhere. I spent a solid evening just fighting my own linter, eventually having to disable the directories entirely and rigidly structure my directories just to get the CI to pass.
+However, integrating Rust into a modern Vite pipeline felt like fighting two different build systems simultaneously. `wasm-pack` generates a mountain of glue code that TypeScript absolutely hated; implicit `any` types everywhere. I spent a solid evening just fighting my own linter, eventually having to disable the directories entirely and rigidly structure my directories just to get the CI to pass.
 
 By offloading the physics calculations to Rust, I achieve several critical wins:
 
-1.  **Instruction Density**: Rust compiles to highly optimized WASM bytecode. Unlike JavaScript, there is no JIT compilation "warm-up" or unpredictable de-optimizations.
+1.  **Instruction Density**: Rust compiles to highly optimized WASM bytecode. Unlike JavaScript, there is no JIT compilation "warm-up" or unpredictable optimisations.
 2.  **Zero-Copy Memory**: I created a `Float32Array` view directly on the **shared WASM memory buffer**. This allows the browser to render the coordinates directly from Rust's memory space without any expensive copying or serialisation.
 3.  **Predictable Latency**: By using a systems language with manual memory management (no Garbage Collector), I eliminate the tiny "micro-stutters" that occur when JS cleans up temporary objects.
 
@@ -68,27 +88,10 @@ In the visualise above, I have compared **JavaScript (Array of Objects)** agains
 - **JavaScript (AoO)**: The CPU spends significant time jumping around the memory heap to find object properties, leading to frequent L2/L3 cache misses.
 - **Rust / WASM (SoA)**: The linear memory layout allows the CPU's pre-fetcher to load data with near 100% efficiency.
 
-You might notice that on smaller scales, the difference is negligible. This is a testament to the incredible engineering in engines like V8 and JSC. However, once the dataset exceeds the **CPU Cache**, the architectural decisions of Rust's memory model becomes the deciding factor.
+You might notice that on smaller scales, the difference is negligible. This is a testament to the optimisation engineering in engines like V8 and JSC. However, once the dataset exceeds the **CPU Cache**, the architectural decisions of Rust's memory model becomes the deciding factor.
 
-### Avoiding Layout Thrashing
-
-In my first attempt I had overlooked the calculation of mouse position being relative to the canvas requiring calling `getBoundingClientRect()` on every `mousemove` event. This is an expensive operation because it forces the browser to recalculate the page layout; effectively worse than standard React virtualDOM. I optimised this by **caching the canvas boundaries** and only updating them when the user scrolls or resizes the window, ensuring the animation loop remains lean and focused strictly on the physics maths.
-
-### Performance Impact
-
-To quantify these changes, let's look at the theoretical and practical wins:
-
-- **Time Complexity:** While both approaches are technically $O(n)$, the SoA approach significantly reduces the constant factor by improving cache locality.
-- **Memory Footprint:** Switching to TypedArrays reduced the memory usage for the grid data by approximately **60%**. I no longer store object headers, pointers, and property keys for 2,000+ points - just raw, contiguous binary data. Below is the processing time for **20000** points:
-
-```text
-Array of Objects (AoS): 20ms - timer ended
-TypedArray (SoA): 10ms - timer ended
-```
-
-An initial thought might be that it is only a 10ms saving in processing time, and that isn't even the realistic element count.
-
-- **Scripting Overhead:** Removing `getBoundingClientRect` from the `mousemove` handler reduced the "Scripting" time in the browser's performance profiler by over **90%** during interaction. I eliminated the forced reflows (layout calculations) that were previously firing on every mouse event, ensuring the main thread is free to drive the animation at a rock-solid 240 FPS (I'm limited by my monitor's refresh rate).
+Another consideration that is eliminated with the move to **rust**, is the discrepancies in performance between the JS engines.
+![safari](./safari.png)![chrome](./chrome.png)![firefox](./firefox.png)
 
 ## Svelte 5
 
