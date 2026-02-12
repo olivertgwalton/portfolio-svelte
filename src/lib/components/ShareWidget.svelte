@@ -40,14 +40,14 @@
 			class="btn-icon bg-surface-100-900 transition-colors hover:bg-primary-500 hover:text-white"
 			aria-label="Share on Twitter"
 		>
-			<TwitterLogoIcon size={20} weight="fill" />
+			<span aria-hidden="true"><TwitterLogoIcon size={20} weight="fill" /></span>
 		</button>
 		<button
 			onclick={shareLinkedin}
 			class="btn-icon bg-surface-100-900 transition-colors hover:bg-[#0077b5] hover:text-white"
 			aria-label="Share on LinkedIn"
 		>
-			<LinkedinLogoIcon size={20} weight="fill" />
+			<span aria-hidden="true"><LinkedinLogoIcon size={20} weight="fill" /></span>
 		</button>
 		<button
 			onclick={copyLink}
@@ -56,11 +56,11 @@
 		>
 			{#if copied}
 				<div in:fade={{ duration: 150 }} class="absolute inset-0 flex items-center justify-center">
-					<CheckIcon size={20} weight="bold" class="text-success-500" />
+					<span aria-hidden="true"><CheckIcon size={20} weight="bold" class="text-success-500" /></span>
 				</div>
 			{:else}
 				<div in:fade={{ duration: 150 }} class="absolute inset-0 flex items-center justify-center">
-					<LinkIcon size={20} weight="bold" />
+					<span aria-hidden="true"><LinkIcon size={20} weight="bold" /></span>
 				</div>
 			{/if}
 		</button>

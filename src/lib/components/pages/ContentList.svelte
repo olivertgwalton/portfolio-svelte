@@ -87,7 +87,7 @@
 			{#if ready}
 				<div class="relative max-w-xl">
 					<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-						<MagnifyingGlassIcon class="size-5 text-surface-400" />
+						<span aria-hidden="true"><MagnifyingGlassIcon class="size-5 text-surface-400" /></span>
 					</div>
 					<input
 						type="text"
@@ -98,7 +98,7 @@
 					{#if query}<button
 							onclick={() => (query = '')}
 							class="absolute inset-y-0 right-0 pr-4 text-surface-400 hover:text-surface-950-50"
-							><XIcon class="size-4" /></button
+							><span aria-hidden="true"><XIcon class="size-4" /></span></button
 						>{/if}
 				</div>
 			{/if}
@@ -116,10 +116,10 @@
 								: 'variant-soft-surface'}"
 						>
 							<span class="flex items-center gap-2"
-								>{#if selectedTags.includes(tag)}<XIcon
+								>{#if selectedTags.includes(tag)}<span aria-hidden="true"><XIcon
 										weight="bold"
 										class="size-3"
-									/>{/if}{tag}</span
+									/></span>{/if}{tag}</span
 							>
 						</button>
 					{/each}
@@ -174,11 +174,11 @@
 							>
 								<div class="from-surface-100-800 h-full w-full bg-linear-to-t to-transparent"></div>
 
-								{#if !isPosts}<CodeIcon
+								{#if !isPosts}<span aria-hidden="true"><CodeIcon
 										size={48}
 										weight="thin"
 										class="absolute text-surface-400"
-									/>{/if}
+									/></span>{/if}
 							</div>
 						{/if}
 
@@ -217,9 +217,9 @@
 								<div
 									class="flex items-center gap-2 font-bold text-surface-600-400 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-primary-500"
 								>
-									{#if !isPosts}<span class="text-xs">Explore</span>{/if}<ArrowRightIcon
+									{#if !isPosts}<span class="text-xs">Explore</span>{/if}<span aria-hidden="true"><ArrowRightIcon
 										size={20}
-									/>
+									/></span>
 								</div>
 							</div>
 						</div>

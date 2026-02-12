@@ -92,7 +92,7 @@
 							<div
 								class="text-surface-400 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-primary-500"
 							>
-								<ArrowRightIcon size={20} />
+								<span aria-hidden="true"><ArrowRightIcon size={20} /></span>
 							</div>
 						</div>
 					</div>

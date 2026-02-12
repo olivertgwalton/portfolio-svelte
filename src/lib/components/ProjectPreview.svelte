@@ -66,7 +66,7 @@
 							style="background-color: {getHSL(project.title)};"
 						>
 							<div class="from-surface-100-800 h-full w-full bg-linear-to-t to-transparent"></div>
-							<CodeIcon size={48} weight="thin" class="absolute text-surface-400" />
+							<span aria-hidden="true"><CodeIcon size={48} weight="thin" class="absolute text-surface-400" /></span>
 						</div>
 					{/if}
 
@@ -98,7 +98,7 @@
 								class="text-surface-400 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-primary-500"
 								aria-label="View project: {project.title}"
 							>
-								<ArrowRightIcon size={20} />
+								<span aria-hidden="true"><ArrowRightIcon size={20} /></span>
 							</div>
 						</div>
 					</div>

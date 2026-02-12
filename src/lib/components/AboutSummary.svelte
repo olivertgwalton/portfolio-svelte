@@ -49,7 +49,7 @@
 						href={resolve('/about')}
 						class="inline-flex items-center gap-3 border-b-2 border-surface-950-50 pb-1 text-lg font-bold text-surface-950-50 hover:border-surface-800-200 hover:text-surface-800-200"
 					>
-						Read full bio <ArrowRightIcon size={16} weight="bold" />
+						Read full bio <span aria-hidden="true"><ArrowRightIcon size={16} weight="bold" /></span>
 					</a>
 				</div>
 			</div>
@@ -68,40 +68,44 @@
 							<a
 								href="https://github.com/olivertgwalton"
 								target="_blank"
+								title="Github (opens in new window)"
 								rel="noopener noreferrer"
 								class="flex items-center gap-2 transition-colors hover:text-surface-950-50 md:justify-end"
 							>
-								Github <ArrowUpRightIcon size={16} class="opacity-50" />
+								Github <span aria-hidden="true"><ArrowUpRightIcon size={16} class="opacity-50" /></span>
 							</a>
 						</li>
 						<li use:reveal={{ delay: 500 }}>
 							<a
 								href="https://www.linkedin.com/in/oliver-walton03/"
 								target="_blank"
+								title="LinkedIn (opens in new window)"
 								rel="noopener noreferrer"
 								class="flex items-center gap-2 transition-colors hover:text-surface-950-50 md:justify-end"
 							>
-								LinkedIn <ArrowUpRightIcon size={16} class="opacity-50" />
+								LinkedIn <span aria-hidden="true"><ArrowUpRightIcon size={16} class="opacity-50" /></span>
 							</a>
 						</li>
 						<li use:reveal={{ delay: 550 }}>
 							<a
 								href="https://t.me/oliverwalton03"
 								target="_blank"
+								title="Telegram (opens in new window)"
 								rel="noopener noreferrer"
 								class="flex items-center gap-2 transition-colors hover:text-surface-950-50 md:justify-end"
 							>
-								Telegram <ArrowUpRightIcon size={16} class="opacity-50" />
+								Telegram <span aria-hidden="true"><ArrowUpRightIcon size={16} class="opacity-50" /></span>
 							</a>
 						</li>
 						<li use:reveal={{ delay: 600 }}>
 							<a
 								href="https://instagram.com/olivertgwalton03"
 								target="_blank"
+								title="Instagram (opens in new window)"
 								rel="noopener noreferrer"
 								class="flex items-center gap-2 transition-colors hover:text-surface-950-50 md:justify-end"
 							>
-								Instagram <ArrowUpRightIcon size={16} class="opacity-50" />
+								Instagram <span aria-hidden="true"><ArrowUpRightIcon size={16} class="opacity-50" /></span>
 							</a>
 						</li>
 					</ul>
@@ -109,7 +113,7 @@
 
 				<div use:reveal={{ delay: 700 }} class="flex flex-col gap-2 md:items-end">
 					<div class="font-heading text-2xl font-bold text-surface-950-50">Oliver.</div>
-					<div class="text-sm font-medium text-surface-800-200">
+					<div class="text-xs font-medium text-surface-800-200 sm:text-base">
 						&copy; {new Date().getFullYear()} Oliver Walton. All rights reserved.
 					</div>
 				</div>

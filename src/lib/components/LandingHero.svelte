@@ -42,8 +42,8 @@
 				>
 					British developer with a focus on design and performance. Specialising in
 					<strong
-						class="font-extrabold text-surface-950-50 underline decoration-primary-500 decoration-4 underline-offset-4"
-						>Frontend Architecture</strong
+						class="font-extrabold text-surface-950-50"
+						><span class="border-b-4 border-primary-500 pb-0.5">Frontend Architecture</span></strong
 					>,
 					<strong class="font-extrabold text-surface-950-50">Linux Systems</strong>, and
 					<strong class="font-extrabold text-surface-950-50">Embedded Development</strong>.
@@ -97,7 +97,7 @@
 		class="text-muted-foreground absolute bottom-8 left-1/2 -translate-x-1/2"
 	>
 		<span class="block animate-bounce">
-			<ArrowDownIcon size={24} weight="bold" />
+			<span aria-hidden="true"><ArrowDownIcon size={24} weight="bold" /></span>
 		</span>
 	</div>
 </section>

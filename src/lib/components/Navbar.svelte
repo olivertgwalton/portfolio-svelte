@@ -39,7 +39,7 @@
 					use:reveal={{ delay: 100 + i * 30, y: -10 }}
 					href={resolve(link.href)}
 					aria-current={isActive ? 'page' : undefined}
-					class="group relative text-sm leading-none font-semibold tracking-wide text-surface-600-400 transition-colors hover:text-surface-950-50
+					class="group relative text-sm leading-none font-semibold tracking-wide text-surface-800-200 transition-colors hover:text-surface-950-50
 							{isActive ? 'text-surface-950-50' : ''}"
 				>
 					{link.label}
@@ -62,6 +62,7 @@
 					href={asset('/oliver-walton-cv.pdf')}
 					class="btn preset-filled-primary-500 btn-sm px-5 py-2 text-xs"
 					target="_blank"
+					title="Download CV (opens in new window)"
 				>
 					CV
 				</a>
@@ -70,7 +71,7 @@
 				<div class="md:hidden">
 					<Menu>
 						<Menu.Trigger class="rounded-md p-2 text-surface-950-50" aria-label="Open Menu">
-							<ListIcon size={24} weight="bold" />
+							<span aria-hidden="true"><ListIcon size={24} weight="bold" /></span>
 						</Menu.Trigger>
 						<Portal>
 							<Menu.Positioner>

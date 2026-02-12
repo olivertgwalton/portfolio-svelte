@@ -129,6 +129,7 @@
 								{item.current
 								? 'border-primary-500 bg-primary-500 text-white'
 								: 'border-surface-300-700 bg-surface-50-950 text-surface-500'}"
+							aria-hidden="true"
 						>
 							<ActiveIcon size={14} weight="bold" />
 						</div>
@@ -175,11 +176,12 @@
 										<a
 											href={item.link}
 											target="_blank"
+											title="View Project (opens in new window)"
 											rel="external noopener noreferrer"
 											class="inline-flex items-center gap-2 text-sm font-bold text-primary-500 transition-colors hover:text-primary-600"
 										>
 											<span>View Project</span>
-											<ArrowSquareOutIcon size={16} weight="bold" />
+											<span aria-hidden="true"><ArrowSquareOutIcon size={16} weight="bold" /></span>
 										</a>
 									{:else}
 										<a
@@ -187,7 +189,7 @@
 											class="inline-flex items-center gap-2 text-sm font-bold text-primary-500 transition-colors hover:text-primary-600"
 										>
 											<span>View Project</span>
-											<ArrowSquareOutIcon size={16} weight="bold" />
+											<span aria-hidden="true"><ArrowSquareOutIcon size={16} weight="bold" /></span>
 										</a>
 									{/if}
 								</div>
