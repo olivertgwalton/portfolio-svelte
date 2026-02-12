@@ -1,0 +1,42 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.3.15/schema.json",
+	"files": {
+		"includes": [
+			"**",
+			"!package-lock.json",
+			"!pnpm-lock.yaml",
+			"!yarn.lock",
+			"!bun.lock",
+			"!bun.lockb",
+			"!static/**",
+			"!drizzle/**",
+			"!src/lib/wasm/**",
+			"!rust-grid/**",
+			"!.svelte-kit/**"
+		]
+	},
+	"formatter": {
+		"indentStyle": "tab",
+		"lineWidth": 100
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "single",
+			"trailingCommas": "none"
+		}
+	},
+	"css": {
+		"parser": {
+			"tailwindDirectives": true
+		}
+	},
+	"html": {
+		"experimentalFullSupportEnabled": true
+	},
+	"assist": {
+		"enabled": false
+	},
+	"linter": {
+		"enabled": false
+	}
+}

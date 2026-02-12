@@ -96,7 +96,7 @@
 					use:reveal={{ delay: 100 }}
 					class="hidden max-w-xs text-right text-sm font-bold tracking-wide text-surface-800-200 md:block"
 				>
-					Professional journey, <br />education, and projects.
+					Professional journey, <br>education, and projects.
 				</p>
 			</div>
 		</div>

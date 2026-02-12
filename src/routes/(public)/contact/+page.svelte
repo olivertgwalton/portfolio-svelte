@@ -13,7 +13,7 @@
 
 <svelte:head>
 	<title>Contact | Oliver Walton</title>
-	<meta name="description" content="Get in touch via email or social media." />
+	<meta name="description" content="Get in touch via email or social media.">
 </svelte:head>
 
 <section class="relative min-h-[30vh] w-full overflow-hidden border-b border-surface-200-800/80">
@@ -32,7 +32,7 @@
 			<p
 				class="hidden max-w-xs text-right font-mono text-sm tracking-wide text-surface-800-200 md:block"
 			>
-				Open for new projects, <br />and technical discussions.
+				Open for new projects, <br>and technical discussions.
 			</p>
 		</div>
 	</div>

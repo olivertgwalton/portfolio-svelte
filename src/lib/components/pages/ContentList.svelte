@@ -72,9 +72,9 @@
 				class="hidden max-w-xs text-right font-mono text-sm tracking-wide text-surface-800-200 md:block"
 			>
 				{#if isPosts}
-					Archive of thoughts, <br />deep-dives, and experiments.
+					Archive of thoughts, <br>deep-dives, and experiments.
 				{:else}
-					A collection of tools, <br />published work, and ad-hoc documentation.
+					A collection of tools, <br>published work, and ad-hoc documentation.
 				{/if}
 			</p>
 		</div>

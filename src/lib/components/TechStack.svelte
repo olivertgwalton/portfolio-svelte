@@ -74,7 +74,7 @@
 					use:reveal={{ delay: 100 }}
 					class="max-w-xs text-right text-sm font-bold tracking-wide text-surface-600-400"
 				>
-					The tools I use <br />to build high-performance software.
+					The tools I use <br>to build high-performance software.
 				</p>
 			</div>
 		</div>

@@ -1,23 +1,23 @@
-@import 'tailwindcss';
-@plugin '@tailwindcss/forms';
-@plugin '@tailwindcss/typography';
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/typography";
 
 @theme {
-	--font-heading: 'Space Grotesk Variable', sans-serif;
-	--font-body: 'Manrope Variable', sans-serif;
-	--font-mono: 'JetBrains Mono Variable', monospace;
+	--font-heading: "Space Grotesk Variable", sans-serif;
+	--font-body: "Manrope Variable", sans-serif;
+	--font-mono: "JetBrains Mono Variable", monospace;
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-@import '@skeletonlabs/skeleton';
-@import '@skeletonlabs/skeleton/themes/cerberus';
-@import '@skeletonlabs/skeleton/themes/rose';
-@import '@skeletonlabs/skeleton/themes/nosh';
-@import '@skeletonlabs/skeleton/themes/mona';
-@import '@skeletonlabs/skeleton/themes/sahara';
-@import '../themes/t3-chat.css';
-@import '../themes/modern.css';
+@import "@skeletonlabs/skeleton";
+@import "@skeletonlabs/skeleton/themes/cerberus";
+@import "@skeletonlabs/skeleton/themes/rose";
+@import "@skeletonlabs/skeleton/themes/nosh";
+@import "@skeletonlabs/skeleton/themes/mona";
+@import "@skeletonlabs/skeleton/themes/sahara";
+@import "../themes/t3-chat.css";
+@import "../themes/modern.css";
 
 @layer base {
 	:root {
