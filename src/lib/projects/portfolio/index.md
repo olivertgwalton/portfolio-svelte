@@ -64,7 +64,7 @@ function handleMouseMove(e: MouseEvent) {
 
 ### Performance Impact
 
-An initial optimisation was to use **Structure of Arrays (SoA)** - a low level performance optimisation that factors in how the underlying CPU architecture is designed. This approach allows for **Single Instruction, Multiple Data (SIMD)** operations, which can significantly improve performance by executing multiple operations in parallel - the same approach made by Zig, mentioned earlier.
+An initial optimisation was to use **Structure of Arrays (SoA)** - a low-level performance optimisation that factors in how the underlying CPU architecture is designed. This approach allows for **Single Instruction, Multiple Data (SIMD)** operations, which can significantly improve performance by executing multiple operations in parallel - the same approach made by Zig, mentioned earlier.
 
 - **Time Complexity:** While both **Array of Objects (AoO)** and **Structure of Arrays (SoA)** approaches are technically $O(n)$, the SoA approach significantly reduces the constant factor by improving cache locality.
 - **Memory Footprint:** Switching to TypedArrays reduced the memory usage for the grid data by approximately **60%**. I no longer store object headers, pointers, and property keys for 2,000+ points - just raw, contiguous binary data. The Rust engine takes this further with a pure SoA layout, each field is a contiguous `Vec<f32>`:
@@ -103,7 +103,7 @@ However, integrating Rust into a modern Vite pipeline felt like fighting two dif
 
 By offloading the physics calculations to Rust, I achieve several critical wins:
 
-1.  **Instruction Density**: Rust compiles to highly optimized WASM bytecode. Unlike JavaScript, there is no JIT compilation "warm-up" or unpredictable optimisations.
+1.  **Instruction Density**: Rust compiles to highly optimised WASM bytecode. Unlike JavaScript, there is no JIT compilation "warm-up" or unpredictable optimisations.
 2.  **Zero-Copy Memory**: I created a `Float32Array` view directly on the **shared WASM memory buffer**. This allows the browser to render the coordinates directly from Rust's memory space without any expensive copying or serialisation.
 3.  **Predictable Latency**: By using a systems language with manual memory management (no Garbage Collector), I eliminate the tiny "micro-stutters" that occur when JS cleans up temporary objects.
 
@@ -180,7 +180,7 @@ let fps = $derived(frameTime > 0 ? 1000 / frameTime : 0);
 
 ### Zero-Overhead
 
-Because Svelte 5 knows exactly which part of the DOM depends on which piece of state, it can generate optimized JavaScript that updates the DOM directly. This reduces the complexity of updates to $O(1)$; precise changes without traversing a tree (and not at runtime)
+Because Svelte 5 knows exactly which part of the DOM depends on which piece of state, it can generate optimised JavaScript that updates the DOM directly. This reduces the complexity of updates to $O(1)$; precise changes without traversing a tree (and not at runtime)
 . Compiling at build time turning the components directly into JavaScript and DOM instructions.
 
 This means that as your application grows, you don't pay a "framework tax" on every interaction. The performance remains predictable because the work is done during your build step, not on your user's device. For a portfolio built on the principle of maximum performance, this was a strong consideration that was factored in.
