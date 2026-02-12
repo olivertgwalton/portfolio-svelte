@@ -10,7 +10,18 @@ import { toString } from 'mdast-util-to-string';
 
 const highlighter = await createHighlighter({
 	themes: ['github-light', 'github-dark'],
-	langs: ['typescript', 'javascript', 'svelte', 'bash', 'css', 'html', 'json', 'markdown', 'python']
+	langs: [
+		'typescript',
+		'javascript',
+		'svelte',
+		'bash',
+		'css',
+		'html',
+		'json',
+		'markdown',
+		'python',
+		'rust'
+	]
 });
 
 function remarkReadTime() {
