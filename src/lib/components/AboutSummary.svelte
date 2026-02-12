@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import ArrowRightIcon from 'phosphor-svelte/lib/ArrowRightIcon';
+	import ArrowUpRightIcon from 'phosphor-svelte/lib/ArrowUpRightIcon';
 	import { reveal } from '$lib/actions';
 	import { socialLinks } from '$lib/site.config';
 </script>
@@ -74,6 +75,7 @@
 								>
 									<Icon size={18} class="shrink-0 text-surface-600-400" />
 									{label}
+									<ArrowUpRightIcon size={14} class="shrink-0 text-surface-600-400" />
 								</a>
 							</li>
 						{/each}

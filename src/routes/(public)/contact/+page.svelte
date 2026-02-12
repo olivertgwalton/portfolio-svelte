@@ -2,6 +2,7 @@
 	import InteractiveGrid from '$lib/components/visuals/InteractiveGrid.svelte';
 	import { fly } from 'svelte/transition';
 	import { socialLinks } from '$lib/site.config';
+	import ArrowUpRightIcon from 'phosphor-svelte/lib/ArrowUpRightIcon';
 </script>
 
 <svelte:head>
@@ -76,6 +77,7 @@
 									>
 										<Icon size={24} weight="bold" class="shrink-0 text-surface-600-400" />
 										{label}
+										<ArrowUpRightIcon size={16} class="shrink-0 text-surface-600-400" />
 									</a>
 								</li>
 							{/each}
