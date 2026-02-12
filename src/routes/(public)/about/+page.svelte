@@ -15,7 +15,7 @@
 	<meta
 		name="description"
 		content="22 years old. Breaking Linux installs since age 10. Now addicted to homelabbing and embedded systems."
-	/>
+	>
 </svelte:head>
 
 <section class="relative min-h-[30vh] w-full overflow-hidden border-b border-surface-200-800/80">
@@ -35,7 +35,7 @@
 				<p
 					class="max-w-xs text-right font-mono text-sm tracking-wide text-surface-800-200 lg:ml-auto"
 				>
-					Breaking Linux installs <br />since age 10.
+					Breaking Linux installs <br>since age 10.
 				</p>
 			</div>
 		</div>

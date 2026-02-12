@@ -22,7 +22,7 @@
 					use:reveal={{ delay: 100 }}
 					class="hidden max-w-xs text-right text-sm font-bold tracking-wide text-surface-600-400 md:block"
 				>
-					A brief introduction <br />to who I am and what I do.
+					A brief introduction <br>to who I am and what I do.
 				</p>
 			</div>
 		</div>
