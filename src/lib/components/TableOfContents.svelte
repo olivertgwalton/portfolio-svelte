@@ -123,14 +123,14 @@
 					class="flex cursor-pointer items-center justify-between p-4 font-heading text-sm font-bold tracking-tight text-surface-950-50 select-none hover:bg-surface-100-900 focus:outline-none"
 				>
 					<div class="flex items-center gap-3">
-						<ListIcon class="size-4 text-primary-500" />
+						<span aria-hidden="true"><ListIcon class="size-4 text-primary-500" /></span>
 						<span class="text-xs font-bold tracking-[0.2em] text-surface-400 uppercase"
 							>Contents</span
 						>
 					</div>
-					<CaretDownIcon
+					<span aria-hidden="true"><CaretDownIcon
 						class="size-4 text-surface-500 transition-transform duration-300 group-open:-rotate-180"
-					/>
+					/></span>
 				</summary>
 				<nav class="border-t border-surface-200-800 bg-surface-100-900/80 px-6 py-6">
 					<div class="relative">

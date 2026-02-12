@@ -118,7 +118,7 @@
 
 <Menu>
 	<Menu.Trigger class="btn-icon hover:preset-tonal" aria-label="Appearance">
-		<PaletteIcon size={20} weight="bold" />
+		<span aria-hidden="true"><PaletteIcon size={20} weight="bold" /></span>
 	</Menu.Trigger>
 	<Menu.Positioner>
 		<Menu.Content
@@ -139,7 +139,7 @@
 					>
 						<Menu.ItemText>{theme.name}</Menu.ItemText>
 						{#if currentTheme === theme.id}
-							<Menu.ItemIndicator><CheckIcon size={16} weight="bold" /></Menu.ItemIndicator>
+							<Menu.ItemIndicator><span aria-hidden="true"><CheckIcon size={16} weight="bold" /></span></Menu.ItemIndicator>
 						{/if}
 					</Menu.Item>
 				{/each}
@@ -162,11 +162,11 @@
 							: ''}"
 					>
 						<div class="flex items-center gap-2">
-							<Icon size={16} />
+							<span aria-hidden="true"><Icon size={16} /></span>
 							<Menu.ItemText>{mode.name}</Menu.ItemText>
 						</div>
 						{#if currentMode === mode.id}
-							<Menu.ItemIndicator><CheckIcon size={16} weight="bold" /></Menu.ItemIndicator>
+							<Menu.ItemIndicator><span aria-hidden="true"><CheckIcon size={16} weight="bold" /></span></Menu.ItemIndicator>
 						{/if}
 					</Menu.Item>
 				{/each}
