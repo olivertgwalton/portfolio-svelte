@@ -160,7 +160,7 @@ import rehypeKatex from 'rehype-katex';
 const mdsvexOptions = {
 	extensions: ['.md'],
 	highlight: {
-		highlighter: async (code, lang = 'text') => {
+		highlighter: async (code, lang = 'text', meta = '') => {
 			const html = highlighter.codeToHtml(code, {
 				lang,
 				themes: {
@@ -169,7 +169,9 @@ const mdsvexOptions = {
 				},
 				defaultColor: false
 			});
-			const withLang = html.replace('<pre ', `<pre data-language="${lang}" `);
+			const titleMatch = meta?.match(/title="([^"]+)"/);
+			const titleAttr = titleMatch ? ` data-title="${titleMatch[1]}"` : '';
+			const withLang = html.replace('<pre ', `<pre data-language="${lang}"${titleAttr} `);
 			return `{@html \`${escapeSvelte(withLang)}\`}`;
 		}
 	},
