@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { reveal } from '$lib/actions';
+	import SectionHeader from '$lib/components/SectionHeader.svelte';
+	import TabGroup from '$lib/components/TabGroup.svelte';
 	import BriefcaseIcon from 'phosphor-svelte/lib/BriefcaseIcon';
 	import GraduationCapIcon from 'phosphor-svelte/lib/GraduationCapIcon';
 	import ArrowSquareOutIcon from 'phosphor-svelte/lib/ArrowSquareOutIcon';
@@ -81,39 +83,17 @@
 
 <section class="border-t border-surface-200-800/80 bg-surface-50-950 py-32">
 	<div class="container mx-auto max-w-7xl px-6">
-		<!-- Header -->
-		<div class="mb-12 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
-			<div>
-				<h2
-					use:reveal={{ delay: 0 }}
-					class="font-heading text-5xl font-black tracking-tighter text-surface-950-50 md:text-6xl"
-				>
-					Background.
-				</h2>
-			</div>
-			<div class="hidden md:block">
-				<p
-					use:reveal={{ delay: 100 }}
-					class="hidden max-w-xs text-right text-sm font-bold tracking-wide text-surface-800-200 md:block"
-				>
-					Professional journey, <br>education, and projects.
-				</p>
-			</div>
-		</div>
+		<SectionHeader title="Background." class="mb-12">
+			{#snippet subtitle()}
+				Professional journey, <br>education, and projects.
+			{/snippet}
+		</SectionHeader>
 
-		<!-- Tabs -->
-		<div use:reveal={{ delay: 150 }} class="mb-16 flex flex-wrap gap-2">
-			{#each Object.entries(categories) as [id, config] (id)}
-				<button
-					onclick={() => (activeTab = id as Category)}
-					class="rounded-full px-5 py-2.5 font-mono text-xs font-bold tracking-wider uppercase transition-all
-						{activeTab === id
-						? 'bg-primary-500 text-white'
-						: 'bg-surface-200-700 hover:bg-surface-300-600 text-surface-600-400 hover:text-surface-950-50'}"
-				>
-					{config.label}
-				</button>
-			{/each}
+		<div use:reveal={{ delay: 150 }} class="mb-16">
+			<TabGroup
+				tabs={Object.entries(categories).map(([id, config]) => ({ id: id as Category, label: config.label }))}
+				bind:active={activeTab}
+			/>
 		</div>
 
 		<!-- Timeline -->

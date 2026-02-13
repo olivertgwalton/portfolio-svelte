@@ -9,6 +9,7 @@
 	import IconC from '$lib/components/icons/IconC.svelte';
 	import IconLinux from '$lib/components/icons/IconLinux.svelte';
 	import { reveal } from '$lib/actions';
+	import SectionHeader from '$lib/components/SectionHeader.svelte';
 
 	interface IconProps {
 		class?: string;
@@ -59,25 +60,11 @@
 
 <section class="border-t border-surface-200-800/80 bg-surface-50-950">
 	<div class="relative z-10 container mx-auto max-w-7xl px-6 pt-32 pb-24 md:pt-40 md:pb-32">
-		<!-- Header -->
-		<div class="mb-16 grid gap-8 md:mb-20 md:grid-cols-[1fr_auto] md:items-end">
-			<div>
-				<h2
-					use:reveal={{ delay: 0 }}
-					class="font-heading text-5xl font-black tracking-tighter text-surface-950-50 md:text-6xl"
-				>
-					Technologies.
-				</h2>
-			</div>
-			<div class="hidden md:block">
-				<p
-					use:reveal={{ delay: 100 }}
-					class="max-w-xs text-right text-sm font-bold tracking-wide text-surface-600-400"
-				>
-					The tools I use <br>to build high-performance software.
-				</p>
-			</div>
-		</div>
+		<SectionHeader title="Technologies." class="mb-16 md:mb-20">
+			{#snippet subtitle()}
+				The tools I use <br>to build high-performance software.
+			{/snippet}
+		</SectionHeader>
 
 		<!-- Tech Cards -->
 		<ul

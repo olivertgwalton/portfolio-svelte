@@ -49,60 +49,35 @@
 		return () => media.removeEventListener('change', onChange);
 	});
 
-	// Helper to perform the circular transition
-
 	async function performTransition(action: () => void, event?: MouseEvent | KeyboardEvent) {
 		if (!document.startViewTransition || !event || !(event instanceof MouseEvent)) {
 			action();
-
 			return;
 		}
 
 		const x = event.clientX;
-
 		const y = event.clientY;
-
-		const endRadius = Math.hypot(
-			Math.max(x, innerWidth - x),
-
-			Math.max(y, innerHeight - y)
-		);
-
-		// Set variables for CSS to prevent flash
+		const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
 
 		document.documentElement.style.setProperty('--x', x + 'px');
-
 		document.documentElement.style.setProperty('--y', y + 'px');
 
 		const transition = document.startViewTransition(async () => {
 			action();
-
 			await tick();
 		});
 
 		await transition.ready;
 
-		const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`];
-
 		document.documentElement.animate(
-			{
-				clipPath: clipPath
-			},
-
-			{
-				duration: 500,
-
-				easing: 'ease-in-out',
-
-				pseudoElement: '::view-transition-new(root)'
-			}
+			{ clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`] },
+			{ duration: 500, easing: 'ease-in-out', pseudoElement: '::view-transition-new(root)' }
 		);
 	}
 
 	function setTheme(theme: string, event?: MouseEvent | KeyboardEvent) {
 		performTransition(() => {
 			currentTheme = theme;
-
 			setCookie('theme', theme);
 		}, event);
 	}
@@ -110,7 +85,6 @@
 	function setMode(mode: string, event?: MouseEvent | KeyboardEvent) {
 		performTransition(() => {
 			currentMode = mode;
-
 			setCookie('mode', mode);
 		}, event);
 	}

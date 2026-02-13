@@ -1,8 +1,7 @@
 <script lang="ts">
-	import InteractiveGrid from '$lib/components/visuals/InteractiveGrid.svelte';
+	import PageHero from '$lib/components/PageHero.svelte';
 	import { fly } from 'svelte/transition';
-	import { socialLinks } from '$lib/site.config';
-	import ArrowUpRightIcon from 'phosphor-svelte/lib/ArrowUpRightIcon';
+	import SocialLinks from '$lib/components/SocialLinks.svelte';
 </script>
 
 <svelte:head>
@@ -10,27 +9,11 @@
 	<meta name="description" content="Get in touch via email or social media.">
 </svelte:head>
 
-<section class="relative min-h-[30vh] w-full overflow-hidden border-b border-surface-200-800/80">
-	<InteractiveGrid />
-	<div
-		class="relative z-10 container mx-auto flex h-full min-h-[30vh] max-w-7xl flex-col justify-end px-6 pt-32 pb-12"
-	>
-		<div class="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
-			<div>
-				<h1
-					class="font-heading text-5xl font-black tracking-tighter text-surface-950-50 md:text-8xl"
-				>
-					Say Hello.
-				</h1>
-			</div>
-			<p
-				class="hidden max-w-xs text-right font-mono text-sm tracking-wide text-surface-800-200 md:block"
-			>
-				Open for new projects, <br>and technical discussions.
-			</p>
-		</div>
-	</div>
-</section>
+<PageHero title="Say Hello.">
+	{#snippet subtitle()}
+		Open for new projects, <br>and technical discussions.
+	{/snippet}
+</PageHero>
 
 <section class="min-h-screen bg-surface-50-950 py-24">
 	<div class="container mx-auto max-w-7xl px-6">
@@ -66,23 +49,7 @@
 						<h2 class="font-mono text-xs font-bold tracking-widest text-surface-800-200 uppercase">
 							Socials
 						</h2>
-						<ul class="space-y-4 font-heading text-2xl font-bold text-surface-950-50">
-							{#each socialLinks as { label, href, icon: Icon } (label)}
-								<li>
-									<a
-										{href}
-										target="_blank"
-										title="{label} (opens in new window)"
-										rel="external noopener noreferrer"
-										class="flex items-center gap-3 transition-colors hover:text-surface-600-400"
-									>
-										<Icon size={24} weight="bold" class="shrink-0 text-surface-600-400" />
-										{label}
-										<span aria-hidden="true"><ArrowUpRightIcon size={18} weight="bold" class="text-surface-600-400" /></span>
-									</a>
-								</li>
-							{/each}
-						</ul>
+						<SocialLinks size="lg" />
 					</div>
 				</div>
 		</div>

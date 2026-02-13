@@ -27,6 +27,10 @@ export interface ContentMetadata {
 
 export type ContentType = 'posts' | 'projects' | 'experience' | 'education';
 
+export function getItemTags(item: ContentMetadata): string[] {
+	return [...(item.tags ?? []), ...(item.tech ?? [])];
+}
+
 function resolveImage(slug: string, type: ContentType, image?: string) {
 	if (!image?.startsWith('./')) return image;
 	// Resolve relative path ./cover.jpg -> /src/lib/posts/slug/cover.jpg
@@ -84,10 +88,7 @@ export function getRelatedContent(
 	return all
 		.filter((item) => item.slug !== slug)
 		.map((item) => {
-			const itemTags = (item.tags?.length ? item.tags : (item.tech ?? [])).map((t) =>
-				t.toLowerCase()
-			);
-			const overlap = itemTags.filter((t) => tagSet.has(t)).length;
+			const overlap = getItemTags(item).filter((t) => tagSet.has(t.toLowerCase())).length;
 			return { item, overlap };
 		})
 		.filter(({ overlap }) => overlap > 0)

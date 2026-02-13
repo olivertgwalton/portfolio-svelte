@@ -1,11 +1,12 @@
 <script lang="ts">
     import { resolve } from "$app/paths";
-    import { dateFormatter } from "$lib/utils";
+    import { formatDate } from "$lib/utils";
     import { reveal } from "$lib/actions";
     import MetaTags from "$lib/components/MetaTags.svelte";
     import TableOfContents from "$lib/components/TableOfContents.svelte";
     import ScrollProgress from "$lib/components/ScrollProgress.svelte";
     import ShareWidget from "$lib/components/ShareWidget.svelte";
+    import ContentCard from "$lib/components/ContentCard.svelte";
     import type { Component } from "svelte";
     import {
         ArrowLeftIcon,
@@ -110,9 +111,7 @@
                                 ><CalendarIcon size={18} /></span
                             >
                             <span class="font-bold"
-                                >{dateFormatter.format(
-                                    new Date(meta.date),
-                                )}</span
+                                >{formatDate(meta.date)}</span
                             >
                         </div>
                         {#if meta.readTime}
@@ -230,50 +229,7 @@
                 </h2>
                 <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {#each related as item (item.slug)}
-                        <a
-                            href={resolve(
-                                "/(public)/[collection=collection]/[slug]",
-                                {
-                                    collection: isProject ? "projects" : "blog",
-                                    slug: item.slug,
-                                },
-                            )}
-                            class="group rounded-xl border border-surface-200-800 p-5 transition-colors hover:border-primary-500/50 hover:bg-surface-100-900"
-                        >
-                            <h3
-                                class="font-heading text-lg font-bold text-surface-950-50 group-hover:text-primary-500"
-                            >
-                                {item.title}
-                            </h3>
-                            <p
-                                class="mt-2 line-clamp-2 text-sm text-surface-600-400"
-                            >
-                                {item.description}
-                            </p>
-                            <div
-                                class="mt-3 flex items-center gap-3 text-xs text-surface-500"
-                            >
-                                <span
-                                    >{dateFormatter.format(
-                                        new Date(item.date),
-                                    )}</span
-                                >
-                                {#if item.tags?.length || item.tech?.length}
-                                    <span class="text-surface-300-700"
-                                        >&middot;</span
-                                    >
-                                    <div class="flex flex-wrap gap-1">
-                                        {#each (item.tags ?? item.tech ?? []).slice(0, 3) as tag (tag)}
-                                            <span
-                                                class="rounded-full border border-surface-200-800 px-2 py-0.5 text-[10px] font-bold uppercase"
-                                            >
-                                                {tag}
-                                            </span>
-                                        {/each}
-                                    </div>
-                                {/if}
-                            </div>
-                        </a>
+                        <ContentCard {item} collection={isProject ? "projects" : "blog"} variant="compact" />
                     {/each}
                 </div>
             </section>

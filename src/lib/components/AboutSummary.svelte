@@ -1,32 +1,18 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
 	import ArrowRightIcon from 'phosphor-svelte/lib/ArrowRightIcon';
-	import ArrowUpRightIcon from 'phosphor-svelte/lib/ArrowUpRightIcon';
 	import { reveal } from '$lib/actions';
-	import { socialLinks } from '$lib/site.config';
+	import SectionHeader from '$lib/components/SectionHeader.svelte';
+	import SocialLinks from '$lib/components/SocialLinks.svelte';
 </script>
 
 <section class="border-t border-surface-200-800/80 bg-surface-50-950 py-32">
 	<div class="relative z-10 container mx-auto max-w-7xl px-6">
-		<!-- Header -->
-		<div class="mb-20 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
-			<div>
-				<h2
-					use:reveal={{ delay: 0 }}
-					class="font-heading text-5xl font-black tracking-tighter text-surface-950-50 md:text-6xl"
-				>
-					About Me.
-				</h2>
-			</div>
-			<div class="hidden md:block">
-				<p
-					use:reveal={{ delay: 100 }}
-					class="hidden max-w-xs text-right text-sm font-bold tracking-wide text-surface-600-400 md:block"
-				>
-					A brief introduction <br>to who I am and what I do.
-				</p>
-			</div>
-		</div>
+		<SectionHeader title="About Me." class="mb-20">
+			{#snippet subtitle()}
+				A brief introduction <br>to who I am and what I do.
+			{/snippet}
+		</SectionHeader>
 
 		<div class="grid gap-20 md:grid-cols-2">
 			<!-- Left Column: About/Bio -->
@@ -64,23 +50,7 @@
 					>
 						Connect.
 					</h3>
-					<ul class="space-y-4 text-lg font-medium text-surface-800-200">
-						{#each socialLinks as { label, href, icon: Icon }, i (label)}
-							<li use:reveal={{ delay: 450 + i * 50 }}>
-								<a
-									{href}
-									target="_blank"
-									title="{label} (opens in new window)"
-									rel="external noopener noreferrer"
-									class="flex items-center gap-2 transition-colors hover:text-surface-950-50 md:justify-end"
-								>
-									<Icon size={18} class="shrink-0 text-surface-600-400" />
-									{label}
-									<span aria-hidden="true"><ArrowUpRightIcon size={14} class="text-surface-600-400" /></span>
-								</a>
-							</li>
-						{/each}
-					</ul>
+					<SocialLinks animated />
 				</div>
 
 				<div use:reveal={{ delay: 700 }} class="flex flex-col gap-2 md:items-end">

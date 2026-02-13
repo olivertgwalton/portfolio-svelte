@@ -22,6 +22,21 @@
 		scrollTimeout = setTimeout(onScrollEnd, 100);
 	}
 
+	function scrollToHeading(id: string) {
+		const el = document.getElementById(id);
+		if (!el) return;
+
+		isManualScroll = true;
+		window.addEventListener('scroll', onScrollHandler, { passive: true });
+		el.scrollIntoView({ behavior: 'smooth' });
+
+		activeId = id;
+		const url = new SvelteURL(page.url);
+		url.hash = id;
+		// eslint-disable-next-line svelte/no-navigation-without-resolve
+		replaceState(url, page.state);
+	}
+
 	function updateHeadings() {
 		const elements = Array.from(document.querySelectorAll('.prose h2, .prose h3'));
 		headings = elements.map((elem) => ({
@@ -86,17 +101,7 @@
 									: 'text-surface-600-200 hover:translate-x-1 hover:text-surface-950-50'}"
 								onclick={(e) => {
 									e.preventDefault();
-									isManualScroll = true;
-									window.addEventListener('scroll', onScrollHandler, { passive: true });
-
-									const el = document.getElementById(heading.id);
-									if (el) el.scrollIntoView({ behavior: 'smooth' });
-
-									activeId = heading.id;
-									const url = new SvelteURL(page.url);
-									url.hash = heading.id;
-									// eslint-disable-next-line svelte/no-navigation-without-resolve
-									replaceState(url, page.state);
+									scrollToHeading(heading.id);
 								}}
 							>
 								<!-- Active Indicator Dot -->
@@ -149,23 +154,8 @@
 											: 'text-surface-800-200 hover:translate-x-1 hover:text-surface-950-50'}"
 										onclick={(e) => {
 											e.preventDefault();
-											// Close the details first to settle layout
 											e.currentTarget.closest('details')?.removeAttribute('open');
-
-											// Wait for layout update then scroll
-											setTimeout(() => {
-												isManualScroll = true;
-												window.addEventListener('scroll', onScrollHandler, { passive: true });
-
-												const el = document.getElementById(heading.id);
-												if (el) el.scrollIntoView({ behavior: 'smooth' });
-
-												activeId = heading.id;
-												const url = new SvelteURL(page.url);
-												url.hash = heading.id;
-												// eslint-disable-next-line svelte/no-navigation-without-resolve
-												replaceState(url, page.state);
-											}, 10);
+											setTimeout(() => scrollToHeading(heading.id), 10);
 										}}
 									>
 										<!-- Active Indicator Dot -->

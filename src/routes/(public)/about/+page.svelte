@@ -1,5 +1,6 @@
 <script lang="ts">
-	import InteractiveGrid from '$lib/components/visuals/InteractiveGrid.svelte';
+	import PageHero from '$lib/components/PageHero.svelte';
+	import StatCard from '$lib/components/StatCard.svelte';
 	import { fly } from 'svelte/transition';
 </script>
 
@@ -11,29 +12,11 @@
 	>
 </svelte:head>
 
-<section class="relative min-h-[30vh] w-full overflow-hidden border-b border-surface-200-800/80">
-	<InteractiveGrid />
-	<div
-		class="relative z-10 container mx-auto flex h-full min-h-[30vh] max-w-7xl flex-col justify-end px-6 pt-32 pb-12"
-	>
-		<div class="grid gap-6 lg:grid-cols-[1fr_1fr] lg:items-end lg:gap-32">
-			<div>
-				<h1
-					class="font-heading text-5xl font-black tracking-tighter text-surface-950-50 md:text-8xl"
-				>
-					Background.
-				</h1>
-			</div>
-			<div class="hidden lg:block">
-				<p
-					class="max-w-xs text-right font-mono text-sm tracking-wide text-surface-800-200 lg:ml-auto"
-				>
-					Breaking Linux installs <br>since age 10.
-				</p>
-			</div>
-		</div>
-	</div>
-</section>
+<PageHero title="Background.">
+	{#snippet subtitle()}
+		Breaking Linux installs <br>since age 10.
+	{/snippet}
+</PageHero>
 
 <section class="min-h-screen bg-surface-50-950 py-24">
 		<div class="container mx-auto grid max-w-7xl gap-16 px-6 lg:grid-cols-[1fr_1fr] lg:gap-32">
@@ -78,34 +61,9 @@
 
 			<!-- Right Column: Stats / Highlights -->
 			<div class="space-y-16" in:fly={{ y: 20, duration: 600, delay: 400 }}>
-				<div class="border-t border-surface-200-800 pt-8">
-					<div
-						class="mb-2 font-mono text-xs font-bold tracking-widest text-surface-800-200 uppercase"
-					>
-						Location
-					</div>
-					<div class="font-heading text-4xl font-bold text-surface-950-50">
-						Soihull, United Kingdom
-					</div>
-				</div>
-
-				<div class="border-t border-surface-200-800 pt-8">
-					<div
-						class="mb-2 font-mono text-xs font-bold tracking-widest text-surface-800-200 uppercase"
-					>
-						Focus
-					</div>
-					<div class="font-heading text-4xl font-bold text-surface-950-50">Systems & Frontend</div>
-				</div>
-
-				<div class="border-t border-surface-200-800 pt-8">
-					<div
-						class="mb-2 font-mono text-xs font-bold tracking-widest text-surface-800-200 uppercase"
-					>
-						Age
-					</div>
-					<div class="font-heading text-4xl font-bold text-surface-950-50">22 Years Old</div>
-				</div>
+				<StatCard label="Location" value="Solihull, United Kingdom" />
+				<StatCard label="Focus" value="Systems & Frontend" />
+				<StatCard label="Age" value="22 Years Old" />
 			</div>
 		</div>
 </section>
