@@ -4,14 +4,15 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
-		"dev": "vite dev",
-		"build": "vite build",
-		"preview": "vite preview",
+		"start": "bun ./build/index.js",
+		"dev": "bun x --bun vite dev",
+		"build": "bun x --bun vite build",
+		"preview": "bun x --bun vite preview",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "biome check . && eslint .",
-		"format": "biome format --write .",
+		"lint": "bun biome check . && bun eslint .",
+		"format": "bun biome format --write .",
 		"build:wasm": "mkdir -p static/wasm && cd rust-grid && RUSTFLAGS='-C target-feature=+simd128' wasm-pack build --target web --out-dir ../src/lib/wasm && mv ../src/lib/wasm/rust_grid_bg.wasm ../static/wasm/"
 	},
 	"devDependencies": {
@@ -40,6 +41,7 @@
 		"sharp": "^0.34.5",
 		"shiki": "^3.22.0",
 		"svelte": "^5.50.0",
+		"svelte-adapter-bun": "^1.0.1",
 		"svelte-check": "^4.3.6",
 		"tailwindcss": "^4.1.18",
 		"typescript": "^5.9.3",
@@ -55,8 +57,6 @@
 		"@skeletonlabs/skeleton-svelte": "^4.12.0",
 		"@takumi-rs/core": "^0.68.0",
 		"@takumi-rs/helpers": "^0.68.0",
-		"@vercel/analytics": "^1.6.1",
-		"@vercel/speed-insights": "^1.3.1",
 		"phosphor-svelte": "^3.1.0"
 	}
 }

@@ -1,47 +1,62 @@
-# Use the official Bun image
-FROM oven/bun:1 AS base
+# syntax=docker/dockerfile:1
+
+# --- Stage 1: Rust/WASM Builder ---
+# Using 'slim' for a smaller footprint on your SD card
+FROM rust:slim AS wasm-builder
 WORKDIR /app
 
-# Install dependencies into temp directory
-# This will cache them and speed up future builds
-FROM base AS install
-RUN mkdir -p /temp/dev
-COPY package.json bun.lock /temp/dev/
-RUN cd /temp/dev && bun install --frozen-lockfile
+# Install wasm-pack and essential build tools
+RUN apt-get update && apt-get install -y curl pkg-config libssl-dev && \
+    curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
-# Install production dependencies
-RUN mkdir -p /temp/prod
-COPY package.json bun.lock /temp/prod/
-RUN cd /temp/prod && bun install --frozen-lockfile --production
+# Copy Rust source code
+COPY rust-grid ./rust-grid
 
-# Build the project
-FROM base AS prerelease
-COPY --from=install /temp/dev/node_modules node_modules
+# Build WASM with SIMD for the Pi 5's ARMv8 architecture
+# We use a cache mount to speed up subsequent builds on your SD card
+RUN --mount=type=cache,target=/usr/local/cargo/registry \
+    cd rust-grid && RUSTFLAGS='-C target-feature=+simd128' wasm-pack build --target web --out-dir ../src/lib/wasm
+
+# --- Stage 2: SvelteKit/Bun Builder ---
+# Using 'oven/bun' (the official tag for the latest stable v1.x)
+FROM oven/bun AS builder
+WORKDIR /app
+
+# Copy dependency files first for better caching
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
+
+# Bring in the WASM artifacts from the Rust stage
+COPY --from=wasm-builder /app/src/lib/wasm ./src/lib/wasm
+
+# Copy the rest of the project
 COPY . .
 
-# Set environment variables for build time (e.g. PUBLIC_ vars needed for client bundle)
-# Note: These are defaults, override in docker-compose or build args if needed
+# Move WASM to static for the production build
+RUN mkdir -p static/wasm && \
+    mv src/lib/wasm/rust_grid_bg.wasm static/wasm/
+
+# Build the SvelteKit app (ensure you have adapter-bun configured)
 ENV NODE_ENV=production
-# Run build
 RUN bun run build
 
-# Final production image
-FROM base AS release
-COPY --from=install /temp/prod/node_modules node_modules
-COPY --from=prerelease /app/build build
-COPY --from=prerelease /app/package.json .
+# --- Stage 3: Production Runner ---
+# Final minimal image
+FROM oven/bun:slim AS release
+WORKDIR /app
 
-# Copy static assets or other necessary files if not included in build
-# COPY --from=prerelease /app/static static 
-# (SvelteKit adapter-bun usually bundles assets, but static folder might need explicit copy depending on config.
-# Adapter-bun copies static assets to build/client usually.)
+# Copy only production build artifacts
+COPY --from=builder /app/build ./build
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/static ./static
 
-# Expose port
-EXPOSE 3000
+# Security: Run as the built-in 'bun' user
+USER bun
+EXPOSE 3000/tcp
 
-# Set production environment
 ENV NODE_ENV=production
 ENV PORT=3000
 
-# Start the server
-CMD ["bun", "run", "build/index.js"]
+# Start the SvelteKit server
+ENTRYPOINT [ "bun", "run", "build/index.js" ]

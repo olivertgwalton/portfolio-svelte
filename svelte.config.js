@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-vercel';
+import adapter from 'svelte-adapter-bun';
 import { mdsvex, escapeSvelte } from 'mdsvex';
 import { createHighlighter } from 'shiki';
 import rehypeSlug from 'rehype-slug';
@@ -199,7 +199,12 @@ const config = {
 			mode: 'auto',
 			directives: {
 				'default-src': ['self'],
-				'script-src': ['self', 'blob:', "'wasm-unsafe-eval'", 'https://va.vercel-scripts.com'],
+				'script-src': [
+					'self',
+					'blob:',
+					"'wasm-unsafe-eval'",
+					'https://static.cloudflareinsights.com'
+				],
 				'worker-src': ['self', 'blob:'],
 				'style-src': ['self', 'unsafe-inline'],
 				'style-src-attr': ['self', 'unsafe-inline'],
@@ -208,8 +213,7 @@ const config = {
 				'connect-src': [
 					'self',
 					'https://cdn.jsdelivr.net',
-					'https://va.vercel-scripts.com',
-					'https://vitals.vercel-insights.com'
+					'https://cloudflareinsights.com'
 				].filter(Boolean),
 				'object-src': ['none'],
 				'base-uri': ['self']

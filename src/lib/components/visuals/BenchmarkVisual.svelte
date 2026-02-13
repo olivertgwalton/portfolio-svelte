@@ -48,7 +48,7 @@
 			if (!wasmGlue) {
 				const wasmPkg = await import('../../wasm/rust_grid.js');
 
-				const wasmExports = await wasmPkg.default('/wasm/rust_grid_bg.wasm');
+				const wasmExports = await wasmPkg.default({ module_or_path: '/wasm/rust_grid_bg.wasm' });
 				wasmGlue = wasmPkg;
 				wasmMemory = wasmExports.memory;
 			}
