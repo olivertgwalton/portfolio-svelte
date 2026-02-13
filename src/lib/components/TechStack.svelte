@@ -6,6 +6,7 @@
     import IconPython from "$lib/components/icons/IconPython.svelte";
     import IconC from "$lib/components/icons/IconC.svelte";
     import IconLinux from "$lib/components/icons/IconLinux.svelte";
+    import IconDocker from "$lib/components/icons/IconDocker.svelte";
     import { reveal } from "$lib/actions";
     import SectionHeader from "$lib/components/SectionHeader.svelte";
 
@@ -27,6 +28,7 @@
         { name: "Python", color: "#3776AB", component: IconPython, level: 65 },
         { name: "C", color: "#A8B9CC", component: IconC, level: 25 },
         { name: "Linux", color: "#FCC624", component: IconLinux, level: 90 },
+        { name: "Docker", color: "#2496ED", component: IconDocker, level: 75 },
     ];
 
     function setupObserver(node: HTMLElement) {
