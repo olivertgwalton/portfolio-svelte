@@ -1,7 +1,7 @@
 ---
 title: 'Portfolio'
 description: 'Hello world.'
-date: '2026-02-12'
+date: '2026-02-13'
 tags: ['svelte', 'bun', 'markdown']
 image: './cover.jpg'
 source: 'https://github.com/olivertgwalton/portfolio-svelte'
