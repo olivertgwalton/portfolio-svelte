@@ -65,50 +65,20 @@
 						Connect.
 					</h3>
 					<ul class="space-y-4 text-lg font-medium text-surface-800-200">
-						<li use:reveal={{ delay: 450 }}>
-							<a
-								href="https://github.com/olivertgwalton"
-								target="_blank"
-								title="Github (opens in new window)"
-								rel="noopener noreferrer"
-								class="flex items-center gap-2 transition-colors hover:text-surface-950-50 md:justify-end"
-							>
-								Github <span aria-hidden="true"><ArrowUpRightIcon size={16} class="opacity-50" /></span>
-							</a>
-						</li>
-						<li use:reveal={{ delay: 500 }}>
-							<a
-								href="https://www.linkedin.com/in/oliver-walton03/"
-								target="_blank"
-								title="LinkedIn (opens in new window)"
-								rel="noopener noreferrer"
-								class="flex items-center gap-2 transition-colors hover:text-surface-950-50 md:justify-end"
-							>
-								LinkedIn <span aria-hidden="true"><ArrowUpRightIcon size={16} class="opacity-50" /></span>
-							</a>
-						</li>
-						<li use:reveal={{ delay: 550 }}>
-							<a
-								href="https://t.me/oliverwalton03"
-								target="_blank"
-								title="Telegram (opens in new window)"
-								rel="noopener noreferrer"
-								class="flex items-center gap-2 transition-colors hover:text-surface-950-50 md:justify-end"
-							>
-								Telegram <span aria-hidden="true"><ArrowUpRightIcon size={16} class="opacity-50" /></span>
-							</a>
-						</li>
-						<li use:reveal={{ delay: 600 }}>
-							<a
-								href="https://instagram.com/olivertgwalton03"
-								target="_blank"
-								title="Instagram (opens in new window)"
-								rel="noopener noreferrer"
-								class="flex items-center gap-2 transition-colors hover:text-surface-950-50 md:justify-end"
-							>
-								Instagram <span aria-hidden="true"><ArrowUpRightIcon size={16} class="opacity-50" /></span>
-							</a>
-						</li>
+						{#each socialLinks as { label, href }, i (label)}
+							<li use:reveal={{ delay: 450 + i * 50 }}>
+								<a
+									{href}
+									target="_blank"
+									title="{label} (opens in new window)"
+									rel="external noopener noreferrer"
+									class="flex items-center gap-2 transition-colors hover:text-surface-950-50 md:justify-end"
+								>
+									{label}
+									<span aria-hidden="true"><ArrowUpRightIcon size={16} class="text-surface-600-400" /></span>
+								</a>
+							</li>
+						{/each}
 					</ul>
 				</div>
 

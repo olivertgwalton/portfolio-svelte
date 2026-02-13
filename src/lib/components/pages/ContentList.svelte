@@ -45,7 +45,6 @@
 		(selectedTags = selectedTags.includes(t)
 			? selectedTags.filter((s) => s !== t)
 			: [...selectedTags, t]);
-
 </script>
 
 <svelte:head><title>{isPosts ? 'Blog' : 'Projects'} | Oliver Walton</title></svelte:head>
@@ -80,21 +79,21 @@
 	<div class="container mx-auto max-w-7xl px-6">
 		<div class="mb-16 space-y-8">
 			<div class="relative max-w-xl">
-					<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-						<span aria-hidden="true"><MagnifyingGlassIcon class="size-5 text-surface-400" /></span>
-					</div>
-					<input
-						type="text"
-						bind:value={query}
-						placeholder="Search {isPosts ? 'articles' : 'projects'}..."
-						class="bg-surface-100-800 input w-full rounded-xl border-surface-200-800 py-3 pl-12 font-medium text-surface-950-50 placeholder:text-surface-800-200"
-					/>
-					{#if query}<button
-							onclick={() => (query = '')}
-							class="absolute inset-y-0 right-0 pr-4 text-surface-400 hover:text-surface-950-50"
-							><span aria-hidden="true"><XIcon class="size-4" /></span></button
-						>{/if}
+				<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+					<span aria-hidden="true"><MagnifyingGlassIcon class="size-5 text-surface-400" /></span>
 				</div>
+				<input
+					type="text"
+					bind:value={query}
+					placeholder="Search {isPosts ? 'articles' : 'projects'}..."
+					class="bg-surface-100-800 input w-full rounded-xl border-surface-200-800 py-3 pl-12 font-medium text-surface-950-50 placeholder:text-surface-800-200"
+				/>
+				{#if query}<button
+						onclick={() => (query = '')}
+						class="absolute inset-y-0 right-0 pr-4 text-surface-400 hover:text-surface-950-50"
+					><span aria-hidden="true"><XIcon class="size-4" /></span></button
+					>{/if}
+			</div>
 
 			<div class="flex flex-wrap gap-2">
 				{#each allTags as tag, i (tag)}
@@ -108,21 +107,14 @@
 							: 'variant-soft-surface'}"
 					>
 						<span class="flex items-center gap-2"
-							>{#if selectedTags.includes(tag)}<XIcon
-									weight="bold"
-									class="size-3"
-								/>{/if}{tag}</span
-						>
-							<span class="flex items-center gap-2"
-								>{#if selectedTags.includes(tag)}<span aria-hidden="true"><XIcon
+							>{#if selectedTags.includes(tag)}<span aria-hidden="true"><XIcon
 										weight="bold"
 										class="size-3"
 									/></span>{/if}{tag}</span
-							>
-						</button>
-					{/each}
-				</div>
-			{/if}
+						>
+					</button>
+				{/each}
+			</div>
 		</div>
 
 		<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -167,11 +159,11 @@
 							style="background-color: {getHSL(i.title)};"
 						>
 							<div class="from-surface-100-800 h-full w-full bg-linear-to-t to-transparent"></div>
-							{#if !isPosts}<CodeIcon
-									size={48}
-									weight="thin"
-									class="absolute text-surface-400"
-								/>{/if}
+							{#if !isPosts}<span aria-hidden="true"><CodeIcon
+										size={48}
+										weight="thin"
+										class="absolute text-surface-400"
+									/></span>{/if}
 						</div>
 					{/if}
 
@@ -197,51 +189,22 @@
 							{/if}
 						</div>
 
-								{#if !isPosts}<span aria-hidden="true"><CodeIcon
-										size={48}
-										weight="thin"
-										class="absolute text-surface-400"
-									/></span>{/if}
+						<div class="flex items-center justify-between border-t border-surface-200-800 pt-6">
+							<div class="flex flex-wrap gap-2">
+								{#if tags}{#each tags.slice(0, 2) as t (t)}<span
+											class="text-xs font-bold text-surface-600-400 uppercase"
+											>{isPosts ? '#' : ''}{t}</span
+										>{/each}{#if tags.length > 2}<span
+											class="text-xs font-bold text-surface-600-400">+ {tags.length - 2}</span
+										>{/if}{/if}
 							</div>
 
 							<div
 								class="flex items-center gap-2 font-bold text-surface-600-400 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-primary-500"
 							>
-								{i.title}
-							</h2>
-
-							<p class="mb-4 line-clamp-3 grow text-base text-surface-800-200">
-								{i.description}
-							</p>
-
-							<div class="mb-6 flex items-center gap-4">
-								<time class="font-mono text-xs font-bold text-surface-600-400 uppercase"
-									>{dateFormatter.format(new Date(i.date))}</time
-								>
-								{#if !isPosts && i.type}
-									<span class="font-mono text-xs font-bold text-primary-500 uppercase"
-										>{i.type}</span
-									>
-								{/if}
-							</div>
-
-							<div class="flex items-center justify-between border-t border-surface-200-800 pt-6">
-								<div class="flex flex-wrap gap-2">
-									{#if tags}{#each tags.slice(0, 2) as t (t)}<span
-												class="text-xs font-bold text-surface-600-400 uppercase"
-												>{isPosts ? '#' : ''}{t}</span
-											>{/each}{#if tags.length > 2}<span
-												class="text-xs font-bold text-surface-600-400">+ {tags.length - 2}</span
-											>{/if}{/if}
-								</div>
-
-								<div
-									class="flex items-center gap-2 font-bold text-surface-600-400 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-primary-500"
-								>
-									{#if !isPosts}<span class="text-xs">Explore</span>{/if}<span aria-hidden="true"><ArrowRightIcon
-										size={20}
-									/></span>
-								</div>
+								{#if !isPosts}<span class="text-xs">Explore</span>{/if}<span aria-hidden="true"><ArrowRightIcon
+									size={20}
+								/></span>
 							</div>
 						</div>
 					</div>

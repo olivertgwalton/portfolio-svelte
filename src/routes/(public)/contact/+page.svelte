@@ -67,50 +67,20 @@
 							Socials
 						</h2>
 						<ul class="space-y-4 font-heading text-2xl font-bold text-surface-950-50">
-							<li>
-								<a
-									href="https://github.com/olivertgwalton"
-									target="_blank"
-									title="Github (opens in new window)"
-									rel="noopener noreferrer"
-									class="flex items-center gap-2 transition-colors hover:text-surface-600-400"
-								>
-									Github <span aria-hidden="true"><ArrowUpRightIcon size={20} weight="bold" class="text-surface-500" /></span>
-								</a>
-							</li>
-							<li>
-								<a
-									href="https://www.linkedin.com/in/oliver-walton03/"
-									target="_blank"
-									title="LinkedIn (opens in new window)"
-									rel="noopener noreferrer"
-									class="flex items-center gap-2 transition-colors hover:text-surface-600-400"
-								>
-									LinkedIn <span aria-hidden="true"><ArrowUpRightIcon size={20} weight="bold" class="text-surface-50" /></span>
-								</a>
-							</li>
-							<li>
-								<a
-									href="https://t.me/oliverwalton03"
-									target="_blank"
-									title="Telegram (opens in new window)"
-									rel="noopener noreferrer"
-									class="flex items-center gap-2 transition-colors hover:text-surface-600-400"
-								>
-									Telegram <span aria-hidden="true"><ArrowUpRightIcon size={20} weight="bold" class="text-surface-500" /></span>
-								</a>
-							</li>
-							<li>
-								<a
-									href="https://instagram.com/olivertgwalton03"
-									target="_blank"
-									title="Instagram (opens in new window)"
-									rel="noopener noreferrer"
-									class="flex items-center gap-2 transition-colors hover:text-surface-600-400"
-								>
-									Instagram <span aria-hidden="true"><ArrowUpRightIcon size={20} weight="bold" class="text-surface-500" /></span>
-								</a>
-							</li>
+							{#each socialLinks as { label, href } (label)}
+								<li>
+									<a
+										{href}
+										target="_blank"
+										title="{label} (opens in new window)"
+										rel="external noopener noreferrer"
+										class="flex items-center gap-2 transition-colors hover:text-surface-600-400"
+									>
+										{label}
+										<span aria-hidden="true"><ArrowUpRightIcon size={20} weight="bold" class="text-surface-600-400" /></span>
+									</a>
+								</li>
+							{/each}
 						</ul>
 					</div>
 				</div>
