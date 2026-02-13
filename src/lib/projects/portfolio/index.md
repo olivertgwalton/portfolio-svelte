@@ -284,10 +284,13 @@ function remarkReadTime() {
 
 I have made sure that all interactive elements are capable of being navigated via keyboard, and have appropriate ARIA labels for full screenreader support. The benchmark visualisation for example, includes controls that are usable by screen readers and keyboard navigation, despite being a heavy graphical simulation.
 
+### Dynamic OG Images
+
+Every page generates its own Open Graph image on the fly using [**Takumi**](https://github.com/kane50613/takumi), a Rust-based image rendering engine. Unlike the traditional Satori → Resvg pipeline which generates an intermediate SVG before rasterising, Takumi renders directly to PNG, with built-in Tailwind CSS support; so when you share the link on social media, you get a branded, page-specific preview card without me maintaining a single static image.
+
 ### Convenience Features
 
 I have also included a few other quality-of-life features throughout the website:
-- **Dynamic OG Images**: Every page generates its own Open Graph image on the fly using [**Takumi**](https://github.com/kane50613/takumi), a Rust-based image rendering engine. Unlike the traditional Satori → Resvg pipeline which generates an intermediate SVG before rasterising, Takumi renders directly to PNG, with built-in Tailwind CSS support; so when you share the link on social media, you get a branded, page-specific preview card without me maintaining a single static image.
 - **Copy Buttons**: Every code block has a one-click copy button.
 - **Table of Contents**: Generated automatically from the markdown headers, allowing you to jump straight to the sections that interest you.
 - **Scroll Progress**: An indicator at the top of the page showing how far you've read.
