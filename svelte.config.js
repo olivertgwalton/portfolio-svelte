@@ -10,7 +10,18 @@ import { toString } from 'mdast-util-to-string';
 
 const highlighter = await createHighlighter({
 	themes: ['github-light', 'github-dark'],
-	langs: ['typescript', 'javascript', 'svelte', 'bash', 'css', 'html', 'json', 'markdown', 'python']
+	langs: [
+		'typescript',
+		'javascript',
+		'svelte',
+		'bash',
+		'css',
+		'html',
+		'json',
+		'markdown',
+		'python',
+		'rust'
+	]
 });
 
 function remarkReadTime() {
@@ -149,7 +160,13 @@ import rehypeKatex from 'rehype-katex';
 const mdsvexOptions = {
 	extensions: ['.md'],
 	highlight: {
-		highlighter: async (code, lang = 'text') => {
+		highlighter: async (code, lang = 'text', meta = '') => {
+			const escapeAttr = (s) =>
+				s
+					.replace(/&/g, '&amp;')
+					.replace(/"/g, '&quot;')
+					.replace(/</g, '&lt;')
+					.replace(/>/g, '&gt;');
 			const html = highlighter.codeToHtml(code, {
 				lang,
 				themes: {
@@ -158,7 +175,9 @@ const mdsvexOptions = {
 				},
 				defaultColor: false
 			});
-			const withLang = html.replace('<pre ', `<pre data-language="${lang}" `);
+			const titleMatch = meta?.match(/title="([^"]+)"/);
+			const titleAttr = titleMatch ? ` data-title="${escapeAttr(titleMatch[1])}"` : '';
+			const withLang = html.replace('<pre ', `<pre data-language="${lang}"${titleAttr} `);
 			return `{@html \`${escapeSvelte(withLang)}\`}`;
 		}
 	},

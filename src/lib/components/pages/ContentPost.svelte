@@ -19,7 +19,13 @@
 
 	import { getEnhancedImage } from '$lib/images';
 
-	let { meta, slug, type }: { meta: ContentMetadata; slug: string; type: ContentType } = $props();
+	let {
+		meta,
+		slug,
+		type,
+		related = []
+	}: { meta: ContentMetadata; slug: string; type: ContentType; related?: ContentMetadata[] } =
+		$props();
 
 	let ContentComponent = $state<Component | null>(null);
 	// Unified directory-based structure: src/lib/posts/[slug]/index.md
@@ -36,12 +42,16 @@
 
 	const isProject = $derived(type === 'projects');
 	const featuredImage = $derived(getEnhancedImage(meta.image));
+	const ogImage = $derived(
+		`/api/og?title=${encodeURIComponent(meta.title)}&description=${encodeURIComponent(meta.description)}`
+	);
 </script>
 
 <MetaTags
 	title={meta.title}
 	description={meta.description}
 	type={isProject ? 'website' : 'article'}
+	image={ogImage}
 />
 
 <ScrollProgress />
@@ -183,5 +193,48 @@
 				</div>
 			</aside>
 		</div>
+
+		{#if related.length > 0}
+			<section class="mt-16 border-t border-surface-200-800 pt-12">
+				<h2 class="font-heading text-2xl font-black tracking-tight text-surface-950-50">
+					Related {isProject ? 'Projects' : 'Posts'}
+				</h2>
+				<div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+					{#each related as item (item.slug)}
+						<a
+							href={resolve('/(public)/[collection=collection]/[slug]', {
+								collection: isProject ? 'projects' : 'blog',
+								slug: item.slug
+							})}
+							class="group rounded-xl border border-surface-200-800 p-5 transition-colors hover:border-primary-500/50 hover:bg-surface-100-900"
+						>
+							<h3
+								class="font-heading text-lg font-bold text-surface-950-50 group-hover:text-primary-500"
+							>
+								{item.title}
+							</h3>
+							<p class="mt-2 line-clamp-2 text-sm text-surface-600-400">
+								{item.description}
+							</p>
+							<div class="mt-3 flex items-center gap-3 text-xs text-surface-500">
+								<span>{dateFormatter.format(new Date(item.date))}</span>
+								{#if item.tags?.length || item.tech?.length}
+									<span class="text-surface-300-700">&middot;</span>
+									<div class="flex flex-wrap gap-1">
+										{#each (item.tags ?? item.tech ?? []).slice(0, 3) as tag (tag)}
+											<span
+												class="rounded-full border border-surface-200-800 px-2 py-0.5 text-[10px] font-bold uppercase"
+											>
+												{tag}
+											</span>
+										{/each}
+									</div>
+								{/if}
+							</div>
+						</a>
+					{/each}
+				</div>
+			</section>
+		{/if}
 	</div>
 </article>

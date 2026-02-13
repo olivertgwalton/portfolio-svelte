@@ -1,4 +1,4 @@
-import { getContentItem, type ContentType } from '$lib/content';
+import { getContentItem, getRelatedContent, type ContentType } from '$lib/content';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -16,9 +16,12 @@ export const load: PageServerLoad = async ({ params }) => {
 		throw error(404, `${type === 'posts' ? 'Post' : 'Project'} not found: ${params.slug}`);
 	}
 
+	const related = getRelatedContent(type, params.slug, content.tags ?? content.tech ?? []);
+
 	return {
 		meta: content,
 		slug: params.slug,
-		type
+		type,
+		related
 	};
 };

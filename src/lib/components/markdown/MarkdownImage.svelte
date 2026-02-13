@@ -51,14 +51,33 @@
 	</div>
 {/if}
 
-<button
-	onclick={open}
-	class="group block w-full cursor-zoom-in overflow-hidden rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
-	aria-label="Zoom image: {alt}"
->
-	<enhanced:img
-		{src}
-		{alt}
-		class="h-auto w-full transition-transform duration-500 group-hover:scale-105 {className}"
-	/>
-</button>
+<figure>
+	<button
+		onclick={open}
+		class="image-card group block w-full cursor-zoom-in overflow-hidden rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+		aria-label="Zoom image: {alt}"
+	>
+		<enhanced:img
+			{src}
+			{alt}
+			class="block h-auto w-full transition-transform duration-500 group-hover:scale-105 {className}"
+		/>
+	</button>
+	{#if alt}
+		<figcaption class="text-center font-mono text-xs text-surface-500">{alt}</figcaption>
+	{/if}
+</figure>
+
+<style>
+	figure {
+		margin: 0;
+	}
+
+	figure :global(figcaption) {
+		margin: 0;
+	}
+
+	.image-card :global(picture) {
+		display: block;
+	}
+</style>

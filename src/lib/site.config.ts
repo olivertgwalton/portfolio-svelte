@@ -1,3 +1,19 @@
+import GithubLogoIcon from 'phosphor-svelte/lib/GithubLogoIcon';
+import LinkedinLogoIcon from 'phosphor-svelte/lib/LinkedinLogoIcon';
+import TelegramLogoIcon from 'phosphor-svelte/lib/TelegramLogoIcon';
+import InstagramLogoIcon from 'phosphor-svelte/lib/InstagramLogoIcon';
+
+export const socialLinks = [
+	{ label: 'Github', href: 'https://github.com/olivertgwalton', icon: GithubLogoIcon },
+	{
+		label: 'LinkedIn',
+		href: 'https://www.linkedin.com/in/oliver-walton03/',
+		icon: LinkedinLogoIcon
+	},
+	{ label: 'Telegram', href: 'https://t.me/oliverwalton03', icon: TelegramLogoIcon },
+	{ label: 'Instagram', href: 'https://instagram.com/olivertgwalton03', icon: InstagramLogoIcon }
+];
+
 export const siteConfig = {
 	title: 'Oliver Walton | Software Engineer',
 	description:

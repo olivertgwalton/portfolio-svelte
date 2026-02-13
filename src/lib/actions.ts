@@ -56,6 +56,28 @@ export const enhanceCodeBlocks: Action<HTMLElement> = (node) => {
 
 	for (const pre of pres) {
 		pre.classList.add('relative', 'group');
+
+		const title = pre.dataset.title;
+		if (title) {
+			const lang = pre.dataset.language ?? '';
+			const wrapper = document.createElement('div');
+			wrapper.className = 'code-block-wrapper';
+			pre.parentElement?.insertBefore(wrapper, pre);
+			const header = document.createElement('div');
+			header.className = 'code-block-header';
+			const titleSpan = document.createElement('span');
+			titleSpan.textContent = title;
+			header.appendChild(titleSpan);
+			if (lang) {
+				const langSpan = document.createElement('span');
+				langSpan.className = 'code-block-lang';
+				langSpan.textContent = lang;
+				header.appendChild(langSpan);
+			}
+			wrapper.appendChild(header);
+			wrapper.appendChild(pre);
+		}
+
 		const component = mount(CopyButton, {
 			target: pre,
 			props: { text: pre.innerText }

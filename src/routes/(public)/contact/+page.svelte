@@ -1,14 +1,8 @@
 <script lang="ts">
-	import ArrowUpRightIcon from 'phosphor-svelte/lib/ArrowUpRightIcon';
 	import InteractiveGrid from '$lib/components/visuals/InteractiveGrid.svelte';
 	import { fly } from 'svelte/transition';
-	import { onMount } from 'svelte';
-
-	let ready = $state(false);
-
-	onMount(() => {
-		ready = true;
-	});
+	import { socialLinks } from '$lib/site.config';
+	import ArrowUpRightIcon from 'phosphor-svelte/lib/ArrowUpRightIcon';
 </script>
 
 <svelte:head>
@@ -41,13 +35,12 @@
 <section class="min-h-screen bg-surface-50-950 py-24">
 	<div class="container mx-auto max-w-7xl px-6">
 		<div class="space-y-16">
-			{#if ready}
 				<div
 					class="max-w-3xl space-y-6 text-lg leading-relaxed text-surface-800-200"
 					in:fly={{ y: 20, duration: 600, delay: 200 }}
 				>
 					<p>
-						I’m always open to discussing new projects, technical challenges, or simply chatting
+						I'm always open to discussing new projects, technical challenges, or simply chatting
 						about Formula 1 and systems architecture.
 					</p>
 
@@ -121,7 +114,6 @@
 						</ul>
 					</div>
 				</div>
-			{/if}
 		</div>
 	</div>
 </section>

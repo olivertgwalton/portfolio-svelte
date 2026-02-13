@@ -3,6 +3,7 @@
 	import ArrowRightIcon from 'phosphor-svelte/lib/ArrowRightIcon';
 	import ArrowUpRightIcon from 'phosphor-svelte/lib/ArrowUpRightIcon';
 	import { reveal } from '$lib/actions';
+	import { socialLinks } from '$lib/site.config';
 </script>
 
 <section class="border-t border-surface-200-800/80 bg-surface-50-950 py-32">

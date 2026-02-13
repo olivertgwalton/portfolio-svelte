@@ -70,6 +70,35 @@ export function getContentList(type: ContentType): ContentMetadata[] {
 		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
+export function getRelatedContent(
+	type: ContentType,
+	slug: string,
+	tags: string[] = [],
+	limit = 3
+): ContentMetadata[] {
+	if (tags.length === 0) return [];
+
+	const all = getContentList(type);
+	const tagSet = new Set(tags.map((t) => t.toLowerCase()));
+
+	return all
+		.filter((item) => item.slug !== slug)
+		.map((item) => {
+			const itemTags = (item.tags?.length ? item.tags : (item.tech ?? [])).map((t) =>
+				t.toLowerCase()
+			);
+			const overlap = itemTags.filter((t) => tagSet.has(t)).length;
+			return { item, overlap };
+		})
+		.filter(({ overlap }) => overlap > 0)
+		.sort(
+			(a, b) =>
+				b.overlap - a.overlap || new Date(b.item.date).getTime() - new Date(a.item.date).getTime()
+		)
+		.slice(0, limit)
+		.map(({ item }) => item);
+}
+
 export function getContentItem(type: ContentType, slug: string): ContentMetadata | null {
 	const files = type === 'posts' ? postFiles : projectFiles;
 	const dir = type === 'posts' ? 'posts' : 'projects';

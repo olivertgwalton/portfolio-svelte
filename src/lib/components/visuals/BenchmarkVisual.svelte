@@ -43,19 +43,6 @@
 	let metricsFrames = 0;
 	let frameTimeAccum = 0;
 
-	function updateThemeColor() {
-		if (typeof window === 'undefined') return;
-		const style = getComputedStyle(document.body);
-		let color = style.color || 'rgb(0, 0, 0)';
-
-		if (color.includes('rgba') || color.includes('hsla')) {
-			color = color
-				.replace(/rgba?\(/, 'rgb(')
-				.replace(/hsla?\(/, 'hsl(')
-				.replace(/[,/]\s*[\d.]+\)$/, ')');
-		}
-	}
-
 	async function initWasm() {
 		try {
 			if (!wasmGlue) {
@@ -66,8 +53,7 @@
 				wasmMemory = wasmExports.memory;
 			}
 		} catch (e) {
-			console.log(e);
-			console.error('WASM Init Failed');
+			console.error('WASM Init Failed', e);
 		}
 	}
 
@@ -108,8 +94,8 @@
 		if (engine) {
 			try {
 				engine.free();
-			} catch (e) {
-				console.log(e);
+			} catch {
+				/* WASM object already freed */
 			}
 			engine = undefined;
 		}
@@ -266,24 +252,15 @@
 		ctx = canvas.getContext('2d', { alpha: true });
 
 		initData();
-		updateThemeColor();
 
-		window.addEventListener('resize', () => {
-			initData();
-			updateThemeColor();
-		});
-		const observer = new MutationObserver(updateThemeColor);
-		observer.observe(document.documentElement, {
-			attributes: true,
-			attributeFilter: ['class', 'data-theme']
-		});
+		window.addEventListener('resize', initData);
 
 		metricsStart = performance.now();
 		animationId = requestAnimationFrame(animate);
 
 		return () => {
 			cancelAnimationFrame(animationId);
-			observer.disconnect();
+			window.removeEventListener('resize', initData);
 		};
 	});
 </script>
@@ -296,7 +273,7 @@
 	<!-- Pause Button -->
 	<button
 		onclick={togglePause}
-		class="absolute right-4 bottom-4 z-50 rounded-full border border-surface-700 bg-surface-900/50 p-2 text-surface-400 backdrop-blur transition-all hover:bg-surface-800 hover:text-white"
+		class="absolute right-4 bottom-4 z-50 rounded-full border border-white/20 bg-black/50 p-2 text-white/50 backdrop-blur transition-all hover:bg-white/10 hover:text-white"
 		aria-label={isPaused ? 'Play Animation' : 'Pause Animation'}
 	>
 		{#if isPaused}
@@ -326,12 +303,12 @@
 			>
 				{Math.round(fps)}
 			</span>
-			<span class="text-sm font-bold text-surface-400">FPS</span>
+			<span class="text-sm font-bold text-white/50">FPS</span>
 		</div>
-		<div class="font-mono text-xs text-surface-500">
+		<div class="font-mono text-xs text-white/40">
 			Physics Time: {frameTime.toFixed(2)}ms
 		</div>
-		<div class="font-mono text-xs text-surface-500">
+		<div class="font-mono text-xs text-white/40">
 			Particles: {(particleCount / 1000).toFixed(0)}k
 		</div>
 	</div>
@@ -341,12 +318,12 @@
 		class="pointer-events-auto absolute bottom-6 left-1/2 flex w-full max-w-md -translate-x-1/2 flex-col items-center gap-4 px-6"
 	>
 		<!-- Engine Toggle -->
-		<div class="flex rounded-full border border-surface-700 bg-surface-900/80 p-1 backdrop-blur">
+		<div class="flex rounded-full border border-white/20 bg-black/80 p-1 backdrop-blur">
 			<button
 				onclick={() => updateEngine('js')}
 				class="rounded-full px-6 py-2 text-sm font-bold transition-all {activeEngine === 'js'
 					? 'bg-red-500 text-white shadow-lg'
-					: 'text-surface-400 hover:text-white'}"
+					: 'text-white/50 hover:text-white'}"
 			>
 				JavaScript
 			</button>
@@ -354,7 +331,7 @@
 				onclick={() => updateEngine('rust')}
 				class="rounded-full px-6 py-2 text-sm font-bold transition-all {activeEngine === 'rust'
 					? 'bg-green-500 text-white shadow-lg'
-					: 'text-surface-400 hover:text-white'}"
+					: 'text-white/50 hover:text-white'}"
 			>
 				Rust / WASM
 			</button>
@@ -362,9 +339,9 @@
 
 		<!-- Slider -->
 		<div
-			class="flex w-full items-center gap-4 rounded-xl border border-surface-800 bg-surface-900/50 px-4 py-2 backdrop-blur"
+			class="flex w-full items-center gap-4 rounded-xl border border-white/20 bg-black/50 px-4 py-2 backdrop-blur"
 		>
-			<span class="text-xs font-bold text-surface-500">10k</span>
+			<span class="text-xs font-bold text-white/50">10k</span>
 			<input
 				type="range"
 				min="10000"
@@ -372,9 +349,9 @@
 				step="10000"
 				value={particleCount}
 				onchange={handleCountChange}
-				class="h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-surface-700 accent-white"
+				class="h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-white/20 accent-white"
 			/>
-			<span class="text-xs font-bold text-surface-500">1M</span>
+			<span class="text-xs font-bold text-white/50">1M</span>
 		</div>
 	</div>
 </div>
