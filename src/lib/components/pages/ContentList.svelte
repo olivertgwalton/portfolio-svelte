@@ -81,7 +81,7 @@
 		<div class="mb-16 space-y-8">
 			<div class="relative max-w-xl">
 					<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-						<MagnifyingGlassIcon class="size-5 text-surface-400" />
+						<span aria-hidden="true"><MagnifyingGlassIcon class="size-5 text-surface-400" /></span>
 					</div>
 					<input
 						type="text"
@@ -92,7 +92,7 @@
 					{#if query}<button
 							onclick={() => (query = '')}
 							class="absolute inset-y-0 right-0 pr-4 text-surface-400 hover:text-surface-950-50"
-							><XIcon class="size-4" /></button
+							><span aria-hidden="true"><XIcon class="size-4" /></span></button
 						>{/if}
 				</div>
 
@@ -113,9 +113,16 @@
 									class="size-3"
 								/>{/if}{tag}</span
 						>
-					</button>
-				{/each}
-			</div>
+							<span class="flex items-center gap-2"
+								>{#if selectedTags.includes(tag)}<span aria-hidden="true"><XIcon
+										weight="bold"
+										class="size-3"
+									/></span>{/if}{tag}</span
+							>
+						</button>
+					{/each}
+				</div>
+			{/if}
 		</div>
 
 		<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -190,22 +197,51 @@
 							{/if}
 						</div>
 
-						<div class="flex items-center justify-between border-t border-surface-200-800 pt-6">
-							<div class="flex flex-wrap gap-2">
-								{#if tags}{#each tags.slice(0, 2) as t (t)}<span
-											class="text-xs font-bold text-surface-600-400 uppercase"
-											>{isPosts ? '#' : ''}{t}</span
-										>{/each}{#if tags.length > 2}<span
-											class="text-xs font-bold text-surface-600-400">+ {tags.length - 2}</span
-										>{/if}{/if}
+								{#if !isPosts}<span aria-hidden="true"><CodeIcon
+										size={48}
+										weight="thin"
+										class="absolute text-surface-400"
+									/></span>{/if}
 							</div>
 
 							<div
 								class="flex items-center gap-2 font-bold text-surface-600-400 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-primary-500"
 							>
-								{#if !isPosts}<span class="text-xs">Explore</span>{/if}<ArrowRightIcon
-									size={20}
-								/>
+								{i.title}
+							</h2>
+
+							<p class="mb-4 line-clamp-3 grow text-base text-surface-800-200">
+								{i.description}
+							</p>
+
+							<div class="mb-6 flex items-center gap-4">
+								<time class="font-mono text-xs font-bold text-surface-600-400 uppercase"
+									>{dateFormatter.format(new Date(i.date))}</time
+								>
+								{#if !isPosts && i.type}
+									<span class="font-mono text-xs font-bold text-primary-500 uppercase"
+										>{i.type}</span
+									>
+								{/if}
+							</div>
+
+							<div class="flex items-center justify-between border-t border-surface-200-800 pt-6">
+								<div class="flex flex-wrap gap-2">
+									{#if tags}{#each tags.slice(0, 2) as t (t)}<span
+												class="text-xs font-bold text-surface-600-400 uppercase"
+												>{isPosts ? '#' : ''}{t}</span
+											>{/each}{#if tags.length > 2}<span
+												class="text-xs font-bold text-surface-600-400">+ {tags.length - 2}</span
+											>{/if}{/if}
+								</div>
+
+								<div
+									class="flex items-center gap-2 font-bold text-surface-600-400 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-primary-500"
+								>
+									{#if !isPosts}<span class="text-xs">Explore</span>{/if}<span aria-hidden="true"><ArrowRightIcon
+										size={20}
+									/></span>
+								</div>
 							</div>
 						</div>
 					</div>

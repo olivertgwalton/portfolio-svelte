@@ -99,7 +99,7 @@
 						>
 							<div class="from-surface-100-800 h-full w-full bg-linear-to-t to-transparent"></div>
 							{#if isProject}
-								<CodeIcon size={48} weight="thin" class="absolute text-surface-400" />
+								<span aria-hidden="true"><CodeIcon size={48} weight="thin" class="absolute text-surface-400" /></span>
 							{/if}
 						</div>
 					{/if}
@@ -158,9 +158,9 @@
 										rel="external noopener noreferrer"
 										class="text-surface-500 transition-colors hover:text-primary-500"
 										aria-label="Live Demo"
-										title="Live Demo"
+										title="Live Demo (opens in new window)"
 									>
-										<ArrowSquareOutIcon size={20} />
+										<span aria-hidden="true"><ArrowSquareOutIcon size={20} /></span>
 									</a>
 								{/if}
 								<a
@@ -171,7 +171,7 @@
 									class="text-surface-500 transition-transform duration-300 group-hover:translate-x-1 hover:text-primary-500"
 									aria-label="View {isProject ? 'project' : 'post'}: {item.title}"
 								>
-									<ArrowRightIcon size={20} />
+									<span aria-hidden="true"><ArrowRightIcon size={20} /></span>
 								</a>
 							</div>
 						</div>

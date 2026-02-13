@@ -25,11 +25,11 @@
 >
 	{#if copied}
 		<div in:fade={{ duration: 150 }}>
-			<CheckIcon size={16} weight="bold" class="text-success-500" />
+			<span aria-hidden="true"><CheckIcon size={16} weight="bold" class="text-success-500" /></span>
 		</div>
 	{:else}
 		<div in:fade={{ duration: 150 }}>
-			<CopyIcon size={16} weight="bold" class="text-surface-600-400" />
+			<span aria-hidden="true"><CopyIcon size={16} weight="bold" class="text-surface-600-400" /></span>
 		</div>
 	{/if}
 </button>

@@ -66,7 +66,7 @@
 				})}
 				class="mb-8 inline-flex items-center gap-2 text-sm font-bold text-surface-600-400 hover:text-primary-500"
 			>
-				<ArrowLeftIcon size={16} /> BACK TO {isProject ? 'PROJECTS' : 'BLOG'}
+				<span aria-hidden="true"><ArrowLeftIcon size={16} /></span> BACK TO {isProject ? 'PROJECTS' : 'BLOG'}
 			</a>
 
 			<div class="grid gap-12 lg:grid-cols-[1fr_auto] lg:items-center">
@@ -95,18 +95,18 @@
 
 					<div class="mt-8 flex flex-wrap gap-x-8 gap-y-4 text-sm text-surface-600-400">
 						<div class="flex items-center gap-2">
-							<CalendarIcon size={18} />
+							<span aria-hidden="true"><CalendarIcon size={18} /></span>
 							<span class="font-bold">{dateFormatter.format(new Date(meta.date))}</span>
 						</div>
 						{#if meta.readTime}
 							<div class="flex items-center gap-2">
-								<ClockIcon size={18} />
+								<span aria-hidden="true"><ClockIcon size={18} /></span>
 								<span class="font-bold">{meta.readTime}</span>
 							</div>
 						{/if}
 						{#if isProject && meta.tech}
 							<div class="flex items-center gap-2">
-								<TagIcon size={18} />
+								<span aria-hidden="true"><TagIcon size={18} /></span>
 								<div class="flex flex-wrap gap-2">
 									{#each meta.tech as t (t)}
 										<span
@@ -123,20 +123,22 @@
 								<a
 									href={meta.demo}
 									target="_blank"
+									title="Live Demo (opens in new window)"
 									rel="external noreferrer"
 									class="flex items-center gap-2 font-bold transition-colors hover:text-primary-500"
 								>
-									<GlobeIcon size={18} /> Live Demo
+									<span aria-hidden="true"><GlobeIcon size={18} /></span> Live Demo
 								</a>
 							{/if}
 							{#if meta.source}
 								<a
 									href={meta.source}
 									target="_blank"
+									title="Source Code (opens in new window)"
 									rel="external noreferrer"
 									class="flex items-center gap-2 font-bold transition-colors hover:text-primary-500"
 								>
-									<GithubLogoIcon size={18} /> Source Code
+									<span aria-hidden="true"><GithubLogoIcon size={18} /></span> Source Code
 								</a>
 							{/if}
 						{/if}

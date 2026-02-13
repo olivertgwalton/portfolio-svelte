@@ -20,6 +20,6 @@
 		class="fixed right-6 bottom-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-primary-500 text-white shadow-lg transition-transform hover:scale-110 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:outline-none md:right-8 md:bottom-8 dark:focus:ring-offset-surface-900"
 		aria-label="Back to Top"
 	>
-		<ArrowUpIcon size={24} weight="bold" />
+		<span aria-hidden="true"><ArrowUpIcon size={24} weight="bold" /></span>
 	</button>
 {/if}

@@ -39,7 +39,7 @@
 			onclick={close}
 			aria-label="Close image zoom"
 		>
-			<XIcon size={24} weight="bold" />
+			<span aria-hidden="true"><XIcon size={24} weight="bold" /></span>
 		</button>
 
 		<enhanced:img
