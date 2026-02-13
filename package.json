@@ -51,12 +51,12 @@
 		"@fontsource-variable/jetbrains-mono": "^5.2.8",
 		"@fontsource-variable/manrope": "^5.2.8",
 		"@fontsource-variable/space-grotesk": "^5.2.10",
-		"@resvg/resvg-js": "^2.6.2",
 		"@skeletonlabs/skeleton": "^4.12.0",
 		"@skeletonlabs/skeleton-svelte": "^4.12.0",
+		"@takumi-rs/core": "^0.68.0",
+		"@takumi-rs/helpers": "^0.68.0",
 		"@vercel/analytics": "^1.6.1",
 		"@vercel/speed-insights": "^1.3.1",
-		"phosphor-svelte": "^3.1.0",
-		"satori": "^0.19.1"
+		"phosphor-svelte": "^3.1.0"
 	}
 }
