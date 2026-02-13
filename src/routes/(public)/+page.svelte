@@ -4,6 +4,7 @@
 	import AboutSummary from '$lib/components/AboutSummary.svelte';
 	import TechStack from '$lib/components/TechStack.svelte';
 	import Experience from '$lib/components/Experience.svelte';
+	import GitHubActivity from '$lib/components/GitHubActivity.svelte';
 
 	let { data } = $props();
 </script>
@@ -12,5 +13,9 @@
 <TechStack />
 <FeaturedWork projects={data.projects} posts={data.posts} />
 <Experience experience={data.experience} education={data.education} />
+
+{#if data.github}
+	<GitHubActivity github={data.github} />
+{/if}
 
 <AboutSummary />
