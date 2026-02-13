@@ -6,6 +6,7 @@
     import IconPython from "$lib/components/icons/IconPython.svelte";
     import IconC from "$lib/components/icons/IconC.svelte";
     import IconLinux from "$lib/components/icons/IconLinux.svelte";
+    import IconDocker from "$lib/components/icons/IconDocker.svelte";
     import { reveal } from "$lib/actions";
     import SectionHeader from "$lib/components/SectionHeader.svelte";
 
@@ -22,11 +23,12 @@
 
     const technologies: Technology[] = [
         { name: "Svelte", color: "#FF3E00", component: IconSvelte, level: 70 },
-        { name: "Bun", color: "#FBF0DF", component: IconBun, level: 80 },
+        { name: "Bun", color: "#F6DECE", component: IconBun, level: 80 },
         { name: "Rust", color: "#DEA584", component: IconRust, level: 10 },
         { name: "Python", color: "#3776AB", component: IconPython, level: 65 },
         { name: "C", color: "#A8B9CC", component: IconC, level: 25 },
         { name: "Linux", color: "#FCC624", component: IconLinux, level: 90 },
+        { name: "Docker", color: "#2496ED", component: IconDocker, level: 75 },
     ];
 
     function setupObserver(node: HTMLElement) {
@@ -66,14 +68,14 @@
 
         <!-- Tech Cards -->
         <ul
-            class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 md:gap-8 lg:grid-cols-8"
+            class="grid grid-cols-3 gap-2.5 sm:grid-cols-4 sm:gap-3 md:grid-cols-4 md:gap-8 lg:grid-cols-8"
             use:setupObserver
         >
             {#each technologies as tech, i (tech.name)}
                 {@const Icon = tech.component}
                 <li
                     use:reveal={{ delay: 200 + i * 50 }}
-                    class="tech-card group relative flex h-40 w-full flex-col items-center justify-center gap-4 overflow-hidden rounded-2xl border border-surface-200-800 bg-surface-50-950 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:hover:shadow-black/80"
+                    class="tech-card group relative flex h-24 w-full flex-col items-center justify-center gap-2 overflow-hidden rounded-xl border border-surface-200-800 bg-surface-50-950 shadow-sm transition-all duration-300 sm:h-28 md:h-40 md:gap-4 md:rounded-2xl hover:-translate-y-1 hover:shadow-xl dark:hover:shadow-black/80"
                     style="--tech-color: {tech.color}; --tech-level: {tech.level}%"
                 >
                     <!-- Fill Background -->
@@ -81,7 +83,7 @@
 
                     <!-- Icon Container -->
                     <div
-                        class="relative z-10 h-12 w-12 text-surface-600-400 transition-colors duration-300 group-hover:text-(--tech-color)"
+                        class="relative z-10 h-8 w-8 text-surface-600-400 transition-colors duration-300 sm:h-10 sm:w-10 md:h-12 md:w-12 group-hover:text-(--tech-color)"
                         aria-hidden="true"
                     >
                         <Icon class="h-full w-full" />
@@ -92,7 +94,7 @@
                         class="relative z-10 flex flex-col items-center gap-0.5 text-center"
                     >
                         <span
-                            class="font-sans text-[10px] font-bold tracking-widest text-surface-600-400 uppercase transition-colors group-hover:text-surface-950-50"
+                            class="font-sans text-[9px] font-bold tracking-widest text-surface-600-400 uppercase transition-colors md:text-[10px] group-hover:text-surface-950-50"
                         >
                             {tech.name}
                         </span>
