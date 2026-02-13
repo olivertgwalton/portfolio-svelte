@@ -65,7 +65,7 @@
 						Connect.
 					</h3>
 					<ul class="space-y-4 text-lg font-medium text-surface-800-200">
-						{#each socialLinks as { label, href }, i (label)}
+						{#each socialLinks as { label, href, icon: Icon }, i (label)}
 							<li use:reveal={{ delay: 450 + i * 50 }}>
 								<a
 									{href}
@@ -74,8 +74,9 @@
 									rel="external noopener noreferrer"
 									class="flex items-center gap-2 transition-colors hover:text-surface-950-50 md:justify-end"
 								>
+									<Icon size={18} class="shrink-0 text-surface-600-400" />
 									{label}
-									<span aria-hidden="true"><ArrowUpRightIcon size={16} class="text-surface-600-400" /></span>
+									<span aria-hidden="true"><ArrowUpRightIcon size={14} class="text-surface-600-400" /></span>
 								</a>
 							</li>
 						{/each}

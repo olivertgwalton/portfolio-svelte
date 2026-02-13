@@ -67,17 +67,18 @@
 							Socials
 						</h2>
 						<ul class="space-y-4 font-heading text-2xl font-bold text-surface-950-50">
-							{#each socialLinks as { label, href } (label)}
+							{#each socialLinks as { label, href, icon: Icon } (label)}
 								<li>
 									<a
 										{href}
 										target="_blank"
 										title="{label} (opens in new window)"
 										rel="external noopener noreferrer"
-										class="flex items-center gap-2 transition-colors hover:text-surface-600-400"
+										class="flex items-center gap-3 transition-colors hover:text-surface-600-400"
 									>
+										<Icon size={24} weight="bold" class="shrink-0 text-surface-600-400" />
 										{label}
-										<span aria-hidden="true"><ArrowUpRightIcon size={20} weight="bold" class="text-surface-600-400" /></span>
+										<span aria-hidden="true"><ArrowUpRightIcon size={18} weight="bold" class="text-surface-600-400" /></span>
 									</a>
 								</li>
 							{/each}
