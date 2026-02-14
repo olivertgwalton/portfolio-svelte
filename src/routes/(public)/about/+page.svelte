@@ -18,7 +18,7 @@
 	{/snippet}
 </PageHero>
 
-<section class="min-h-screen bg-surface-50-950 py-24">
+<section class="bg-surface-50-950 py-24">
 		<div class="container mx-auto grid max-w-7xl gap-16 px-6 lg:grid-cols-[1fr_1fr] lg:gap-32">
 			<!-- Left Column: The Narrative -->
 			<div class="space-y-12 text-lg leading-relaxed text-surface-800-200">

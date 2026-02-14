@@ -2,6 +2,7 @@
     import PageHero from "$lib/components/PageHero.svelte";
     import { fly } from "svelte/transition";
     import SocialLinks from "$lib/components/SocialLinks.svelte";
+    import ArrowRightIcon from "phosphor-svelte/lib/ArrowRightIcon";
 </script>
 
 <svelte:head>
@@ -18,11 +19,12 @@
     {/snippet}
 </PageHero>
 
-<section class="min-h-screen bg-surface-50-950 py-24">
-    <div class="container mx-auto max-w-7xl px-6">
-        <div class="space-y-16">
+<section class="bg-surface-50-950 py-24">
+    <div class="container mx-auto grid max-w-7xl gap-16 px-6 lg:grid-cols-[1fr_1fr] lg:gap-32">
+        <!-- Left Column: Intro + Email CTA -->
+        <div class="space-y-12">
             <div
-                class="max-w-3xl space-y-6 text-lg leading-relaxed text-surface-800-200"
+                class="space-y-6 text-lg leading-relaxed text-surface-800-200"
                 in:fly={{ y: 20, duration: 600, delay: 200 }}
             >
                 <p>
@@ -37,38 +39,37 @@
                 </p>
             </div>
 
-            <div class="grid gap-12 md:grid-cols-2 lg:gap-24">
-                <!-- Email -->
-                <div
-                    class="space-y-4"
-                    in:fly={{ y: 20, duration: 600, delay: 300 }}
+            <!-- Email CTA -->
+            <div in:fly={{ y: 20, duration: 600, delay: 300 }}>
+                <h2
+                    class="mb-4 font-mono text-xs font-bold tracking-widest text-surface-800-200 uppercase"
                 >
-                    <h2
-                        class="font-mono text-xs font-bold tracking-widest text-surface-800-200 uppercase"
-                    >
-                        Direct
-                    </h2>
-                    <a
-                        href="mailto:olivertgwalton03@gmail.com"
-                        class="block font-heading text-2xl font-bold text-surface-950-50"
-                    >
+                    Direct
+                </h2>
+                <a
+                    href="mailto:olivertgwalton03@gmail.com"
+                    class="group flex items-center gap-4 border-y border-surface-200-800/80 py-6 transition-colors hover:border-surface-950-50/30"
+                >
+                    <span class="font-heading text-2xl font-bold text-surface-950-50 md:text-3xl">
                         olivertgwalton03@gmail.com
-                    </a>
-                </div>
-
-                <!-- Socials -->
-                <div
-                    class="space-y-4 md:pl-12"
-                    in:fly={{ y: 20, duration: 600, delay: 400 }}
-                >
-                    <h2
-                        class="font-mono text-xs font-bold tracking-widest text-surface-800-200 uppercase"
-                    >
-                        Socials
-                    </h2>
-                    <SocialLinks size="lg" />
-                </div>
+                    </span>
+                    <ArrowRightIcon
+                        size={24}
+                        weight="bold"
+                        class="shrink-0 text-surface-600-400 transition-transform group-hover:translate-x-1"
+                    />
+                </a>
             </div>
+        </div>
+
+        <!-- Right Column: Socials -->
+        <div in:fly={{ y: 20, duration: 600, delay: 400 }}>
+            <h2
+                class="mb-4 font-mono text-xs font-bold tracking-widest text-surface-800-200 uppercase"
+            >
+                Socials
+            </h2>
+            <SocialLinks size="lg" />
         </div>
     </div>
 </section>
