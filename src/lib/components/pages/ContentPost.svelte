@@ -48,7 +48,8 @@
     });
 
     const isProject = $derived(type === "projects");
-    let featuredImage = $state<Awaited<ReturnType<typeof getEnhancedImage>>>(null);
+    let featuredImage =
+        $state<Awaited<ReturnType<typeof getEnhancedImage>>>(null);
 
     $effect(() => {
         if (!meta.image) {
@@ -64,7 +65,7 @@
                 if (!cancelled) featuredImage = result;
             })
             .catch((err) => {
-                if (!cancelled) console.error('Failed to load featured image:', err);
+                if (!cancelled) featuredImage = null;
             });
 
         return () => {
@@ -241,7 +242,11 @@
                 </h2>
                 <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {#each related as item (item.slug)}
-                        <ContentCard {item} collection={isProject ? "projects" : "blog"} variant="compact" />
+                        <ContentCard
+                            {item}
+                            collection={isProject ? "projects" : "blog"}
+                            variant="compact"
+                        />
                     {/each}
                 </div>
             </section>

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import type * as WasmGrid from '../../wasm/rust_grid.js';
+	import { onMount } from "svelte";
+	import type * as WasmGrid from "../../wasm/rust_grid.js";
 
 	// Svelte 5 Runes
 	let canvas = $state<HTMLCanvasElement>();
@@ -14,7 +14,7 @@
 
 	// Benchmark State
 	let isPaused = $state(true);
-	let activeEngine = $state<'rust' | 'js'>('rust');
+	let activeEngine = $state<"rust" | "js">("rust");
 	let particleCount = $state(100000);
 
 	// Buffers
@@ -46,14 +46,16 @@
 	async function initWasm() {
 		try {
 			if (!wasmGlue) {
-				const wasmPkg = await import('../../wasm/rust_grid.js');
+				const wasmPkg = await import("../../wasm/rust_grid.js");
 
-				const wasmExports = await wasmPkg.default({ module_or_path: '/wasm/rust_grid_bg.wasm' });
+				const wasmExports = await wasmPkg.default({
+					module_or_path: "/wasm/rust_grid_bg.wasm",
+				});
 				wasmGlue = wasmPkg;
 				wasmMemory = wasmExports.memory;
 			}
 		} catch (e) {
-			console.error('WASM Init Failed', e);
+			// Silently fail WASM init
 		}
 	}
 
@@ -104,8 +106,16 @@
 		engine.init(canvas!.width, canvas!.height);
 
 		// Map Views
-		posX = new Float32Array(wasmMemory.buffer, engine.pos_x_ptr(), particleCount);
-		posY = new Float32Array(wasmMemory.buffer, engine.pos_y_ptr(), particleCount);
+		posX = new Float32Array(
+			wasmMemory.buffer,
+			engine.pos_x_ptr(),
+			particleCount,
+		);
+		posY = new Float32Array(
+			wasmMemory.buffer,
+			engine.pos_y_ptr(),
+			particleCount,
+		);
 
 		// Setup JS
 		jsParticles = new Float32Array(particleCount * 4);
@@ -133,13 +143,13 @@
 		}
 
 		// Worker Setup
-		const Worker = await import('../../workers/physics.worker.js?worker');
+		const Worker = await import("../../workers/physics.worker.js?worker");
 		jsWorker = new Worker.default();
 		jsWorker.onmessage = (e) => {
 			const { particles, duration } = e.data;
 			workerParticles = particles;
 			jsParticles.set(workerParticles);
-			if (activeEngine === 'js') frameTime = duration;
+			if (activeEngine === "js") frameTime = duration;
 			jsWorkerBusy = false;
 		};
 	}
@@ -169,12 +179,20 @@
 	}
 
 	function renderComparison() {
-		if (!engine || !posX || !posY || !jsParticles || !canvas || !pixelBuffer) return;
+		if (
+			!engine ||
+			!posX ||
+			!posY ||
+			!jsParticles ||
+			!canvas ||
+			!pixelBuffer
+		)
+			return;
 
 		if (isPaused) return;
 
 		const time = performance.now();
-		const isRust = activeEngine === 'rust';
+		const isRust = activeEngine === "rust";
 		const w = canvas.width;
 		const h = canvas.height;
 
@@ -185,8 +203,15 @@
 
 			const pixelBytes = w * h * 4;
 
-			if (renderPtr && wasmMemory.buffer.byteLength >= renderPtr + pixelBytes) {
-				const rustPixels = new Uint8ClampedArray(wasmMemory.buffer, renderPtr, pixelBytes);
+			if (
+				renderPtr &&
+				wasmMemory.buffer.byteLength >= renderPtr + pixelBytes
+			) {
+				const rustPixels = new Uint8ClampedArray(
+					wasmMemory.buffer,
+					renderPtr,
+					pixelBytes,
+				);
 				const rustImageData = new ImageData(rustPixels, w, h);
 				ctx!.putImageData(rustImageData, 0, 0);
 			}
@@ -199,9 +224,9 @@
 						particles: workerParticles,
 						width: w,
 						height: h,
-						time: time
+						time: time,
 					},
-					[workerParticles.buffer]
+					[workerParticles.buffer],
 				);
 			}
 
@@ -232,7 +257,7 @@
 		frameTime = 0;
 	}
 
-	function updateEngine(eng: 'rust' | 'js') {
+	function updateEngine(eng: "rust" | "js") {
 		activeEngine = eng;
 		resetMetrics();
 	}
@@ -249,18 +274,18 @@
 
 	onMount(() => {
 		if (!canvas) return;
-		ctx = canvas.getContext('2d', { alpha: true });
+		ctx = canvas.getContext("2d", { alpha: true });
 
 		initData();
 
-		window.addEventListener('resize', initData);
+		window.addEventListener("resize", initData);
 
 		metricsStart = performance.now();
 		animationId = requestAnimationFrame(animate);
 
 		return () => {
 			cancelAnimationFrame(animationId);
-			window.removeEventListener('resize', initData);
+			window.removeEventListener("resize", initData);
 		};
 	});
 </script>
@@ -268,13 +293,16 @@
 <div
 	class="group relative my-8 h-150 w-full overflow-hidden rounded-xl border border-surface-200-800 bg-black font-sans"
 >
-	<canvas bind:this={canvas} class="absolute inset-0 h-full w-full cursor-crosshair"></canvas>
+	<canvas
+		bind:this={canvas}
+		class="absolute inset-0 h-full w-full cursor-crosshair"
+	></canvas>
 
 	<!-- Pause Button -->
 	<button
 		onclick={togglePause}
 		class="absolute right-4 bottom-4 z-50 rounded-full border border-white/20 bg-black/50 p-2 text-white/50 backdrop-blur transition-all hover:bg-white/10 hover:text-white"
-		aria-label={isPaused ? 'Play Animation' : 'Pause Animation'}
+		aria-label={isPaused ? "Play Animation" : "Pause Animation"}
 	>
 		{#if isPaused}
 			<svg
@@ -290,7 +318,8 @@
 				width="24"
 				height="24"
 				viewBox="0 0 24 24"
-				fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg
+				fill="currentColor"
+				><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg
 			>
 		{/if}
 	</button>
@@ -299,7 +328,9 @@
 	<div class="pointer-events-none absolute top-6 left-6 space-y-1">
 		<div class="flex items-baseline gap-2">
 			<span
-				class="text-4xl font-bold {activeEngine === 'rust' ? 'text-green-500' : 'text-red-500'}"
+				class="text-4xl font-bold {activeEngine === 'rust'
+					? 'text-green-500'
+					: 'text-red-500'}"
 			>
 				{Math.round(fps)}
 			</span>
@@ -318,18 +349,22 @@
 		class="pointer-events-auto absolute bottom-6 left-1/2 flex w-full max-w-md -translate-x-1/2 flex-col items-center gap-4 px-6"
 	>
 		<!-- Engine Toggle -->
-		<div class="flex rounded-full border border-white/20 bg-black/80 p-1 backdrop-blur">
+		<div
+			class="flex rounded-full border border-white/20 bg-black/80 p-1 backdrop-blur"
+		>
 			<button
-				onclick={() => updateEngine('js')}
-				class="rounded-full px-6 py-2 text-sm font-bold transition-all {activeEngine === 'js'
+				onclick={() => updateEngine("js")}
+				class="rounded-full px-6 py-2 text-sm font-bold transition-all {activeEngine ===
+				'js'
 					? 'bg-red-500 text-white shadow-lg'
 					: 'text-white/50 hover:text-white'}"
 			>
 				JavaScript
 			</button>
 			<button
-				onclick={() => updateEngine('rust')}
-				class="rounded-full px-6 py-2 text-sm font-bold transition-all {activeEngine === 'rust'
+				onclick={() => updateEngine("rust")}
+				class="rounded-full px-6 py-2 text-sm font-bold transition-all {activeEngine ===
+				'rust'
 					? 'bg-green-500 text-white shadow-lg'
 					: 'text-white/50 hover:text-white'}"
 			>

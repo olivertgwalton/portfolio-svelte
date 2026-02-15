@@ -1,7 +1,7 @@
 <script lang="ts">
-	import CopyIcon from 'phosphor-svelte/lib/CopyIcon';
-	import CheckIcon from 'phosphor-svelte/lib/CheckIcon';
-	import { fade } from 'svelte/transition';
+	import CopyIcon from "phosphor-svelte/lib/CopyIcon";
+	import CheckIcon from "phosphor-svelte/lib/CheckIcon";
+	import { fade } from "svelte/transition";
 
 	let { text } = $props();
 	let copied = $state(false);
@@ -12,7 +12,7 @@
 			copied = true;
 			setTimeout(() => (copied = false), 2000);
 		} catch (err) {
-			console.error('Failed to copy text: ', err);
+			// Silently fail copy
 		}
 	}
 </script>
@@ -25,11 +25,23 @@
 >
 	{#if copied}
 		<div in:fade={{ duration: 150 }}>
-			<span aria-hidden="true"><CheckIcon size={16} weight="bold" class="text-success-500" /></span>
+			<span aria-hidden="true"
+				><CheckIcon
+					size={16}
+					weight="bold"
+					class="text-success-500"
+				/></span
+			>
 		</div>
 	{:else}
 		<div in:fade={{ duration: 150 }}>
-			<span aria-hidden="true"><CopyIcon size={16} weight="bold" class="text-surface-600-400" /></span>
+			<span aria-hidden="true"
+				><CopyIcon
+					size={16}
+					weight="bold"
+					class="text-surface-600-400"
+				/></span
+			>
 		</div>
 	{/if}
 </button>

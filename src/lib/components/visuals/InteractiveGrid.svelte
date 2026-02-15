@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import type * as WasmGrid from '../../wasm/rust_grid.js';
+	import { onMount } from "svelte";
+	import type * as WasmGrid from "../../wasm/rust_grid.js";
 
 	// Svelte 5 Runes for element binding
 	let canvas = $state<HTMLCanvasElement>();
@@ -19,7 +19,7 @@
 	let width = 0;
 	let height = 0;
 	let dpr = 1;
-	let dotColor = $state('rgb(0, 0, 0)');
+	let dotColor = $state("rgb(0, 0, 0)");
 	// Buffers
 	let posX: Float32Array; // Rust View X
 	let posY: Float32Array; // Rust View Y
@@ -35,19 +35,23 @@
 	let engine: WasmGrid.GridEngine | undefined;
 
 	function updateThemeColor() {
-		if (typeof window === 'undefined') return;
+		if (typeof window === "undefined") return;
 		const style = getComputedStyle(document.body);
-		let color = style.color || 'rgb(0, 0, 0)';
+		let color = style.color || "rgb(0, 0, 0)";
 
-		if (color.includes('rgba') || color.includes('hsla')) {
+		if (color.includes("rgba") || color.includes("hsla")) {
 			color = color
-				.replace(/rgba?\(/, 'rgb(')
-				.replace(/hsla?\(/, 'hsl(')
-				.replace(/[,/]\s*[\d.]+\)$/, ')');
+				.replace(/rgba?\(/, "rgb(")
+				.replace(/hsla?\(/, "hsl(")
+				.replace(/[,/]\s*[\d.]+\)$/, ")");
 		}
 
-		if (color.includes('0, 0, 0') || color === 'black' || color === 'rgb(0, 0, 0)') {
-			dotColor = 'rgb(255, 255, 255)';
+		if (
+			color.includes("0, 0, 0") ||
+			color === "black" ||
+			color === "rgb(0, 0, 0)"
+		) {
+			dotColor = "rgb(255, 255, 255)";
 		} else {
 			dotColor = color;
 		}
@@ -58,17 +62,19 @@
 			if (!wasmGlue) {
 				// With target: web, we import the default as an initializer
 				// and the wasm file as a URL.
-				const wasmPkg = await import('../../wasm/rust_grid.js');
+				const wasmPkg = await import("../../wasm/rust_grid.js");
 
 				// Initialize with path to static asset
 
-				const wasmExports = await wasmPkg.default({ module_or_path: '/wasm/rust_grid_bg.wasm' });
+				const wasmExports = await wasmPkg.default({
+					module_or_path: "/wasm/rust_grid_bg.wasm",
+				});
 
 				wasmGlue = wasmPkg;
 				wasmMemory = wasmExports.memory;
 			}
 		} catch {
-			console.error('WASM Init Failed');
+			// Silently fail WASM init
 		}
 	}
 	async function initData() {
@@ -112,8 +118,16 @@
 		engine = new wasmGlue.GridEngine(numPoints);
 		engine.init(width, height, spacing, dpr);
 
-		posX = new Float32Array(wasmMemory.buffer, engine.pos_x_ptr(), numPoints);
-		posY = new Float32Array(wasmMemory.buffer, engine.pos_y_ptr(), numPoints);
+		posX = new Float32Array(
+			wasmMemory.buffer,
+			engine.pos_x_ptr(),
+			numPoints,
+		);
+		posY = new Float32Array(
+			wasmMemory.buffer,
+			engine.pos_y_ptr(),
+			numPoints,
+		);
 	}
 
 	function animate() {
@@ -159,7 +173,7 @@
 
 	onMount(() => {
 		if (!canvas) return;
-		ctx = canvas.getContext('2d', { alpha: true });
+		ctx = canvas.getContext("2d", { alpha: true });
 
 		initData();
 		updateThemeColor();
@@ -175,13 +189,13 @@
 			}, 150);
 		};
 
-		window.addEventListener('resize', handleResize);
-		window.addEventListener('scroll', updateCachedRect, { passive: true });
+		window.addEventListener("resize", handleResize);
+		window.addEventListener("scroll", updateCachedRect, { passive: true });
 
 		const observer = new MutationObserver(updateThemeColor);
 		observer.observe(document.documentElement, {
 			attributes: true,
-			attributeFilter: ['class', 'data-theme']
+			attributeFilter: ["class", "data-theme"],
 		});
 
 		animationId = requestAnimationFrame(animate);
@@ -189,8 +203,8 @@
 		return () => {
 			cancelAnimationFrame(animationId);
 			clearTimeout(resizeTimer);
-			window.removeEventListener('resize', handleResize);
-			window.removeEventListener('scroll', updateCachedRect);
+			window.removeEventListener("resize", handleResize);
+			window.removeEventListener("scroll", updateCachedRect);
 			observer.disconnect();
 		};
 	});
@@ -201,6 +215,8 @@
 <div class="contents">
 	<canvas
 		bind:this={canvas}
-		class="pointer-events-none inset-0 z-0 h-full w-full {fixed ? 'fixed' : 'absolute'}"
+		class="pointer-events-none inset-0 z-0 h-full w-full {fixed
+			? 'fixed'
+			: 'absolute'}"
 	></canvas>
 </div>
