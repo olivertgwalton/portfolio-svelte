@@ -3,91 +3,95 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-	--font-heading: "Space Grotesk Variable", sans-serif;
-	--font-body: "Manrope Variable", sans-serif;
-	--font-mono: "JetBrains Mono Variable", monospace;
+    --font-heading: "Space Grotesk Variable", sans-serif;
+    --font-body: "Manrope Variable", sans-serif;
+    --font-mono: "JetBrains Mono Variable", monospace;
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @import "@skeletonlabs/skeleton";
-@import "@skeletonlabs/skeleton/themes/cerberus";
 @import "@skeletonlabs/skeleton/themes/rose";
 @import "@skeletonlabs/skeleton/themes/nosh";
 @import "@skeletonlabs/skeleton/themes/mona";
 @import "@skeletonlabs/skeleton/themes/sahara";
+@import "@skeletonlabs/skeleton/themes/vintage";
+@import "@skeletonlabs/skeleton/themes/nouveau";
 @import "../themes/t3-chat.css";
 @import "../themes/modern.css";
 
 @layer base {
-	:root {
-		color-scheme: light;
-		scroll-padding-top: 5rem;
-		scroll-behavior: smooth;
-	}
-	html.dark {
-		color-scheme: dark;
-	}
-	:focus-visible {
-		@apply outline-2 outline-offset-2 outline-primary-500;
-	}
-	#svelte-announcer {
-		@apply sr-only;
-	}
+    :root {
+        color-scheme: light;
+        scroll-padding-top: 5rem;
+        scroll-behavior: smooth;
+    }
+    html.dark {
+        color-scheme: dark;
+    }
+    :focus-visible {
+        @apply outline-2 outline-offset-2 outline-primary-500;
+    }
+    #svelte-announcer {
+        @apply sr-only;
+    }
 
-	/* Code Block Language Badge */
-	pre[data-language]::before {
-		content: attr(data-language);
-		@apply pointer-events-none absolute right-3 bottom-2 font-mono text-[10px] font-bold tracking-widest text-surface-600-400 uppercase opacity-60 transition-opacity;
-	}
-	pre[data-language]:hover::before {
-		@apply opacity-100;
-	}
+    /* Code Block Language Badge */
+    pre[data-language]::before {
+        content: attr(data-language);
+        @apply pointer-events-none absolute right-3 bottom-2 font-mono text-[10px] font-bold tracking-widest text-surface-600-400 uppercase opacity-60 transition-opacity;
+    }
+    pre[data-language]:hover::before {
+        @apply opacity-100;
+    }
 
-	::selection {
-		@apply bg-primary-500/30 text-surface-950-50;
-	}
+    ::selection {
+        @apply bg-primary-500/30 text-surface-950-50;
+    }
 }
 
 @utility bg-grid-paper {
-	background-color: light-dark(var(--color-surface-50), var(--color-surface-950));
-	background-image: radial-gradient(
-		light-dark(var(--color-surface-200), var(--color-surface-800)) 1.5px,
-		transparent 1.5px
-	);
-	background-size: 40px 40px;
+    background-color: light-dark(
+        var(--color-surface-50),
+        var(--color-surface-950)
+    );
+    background-image: radial-gradient(
+        light-dark(var(--color-surface-200), var(--color-surface-800)) 1.5px,
+        transparent 1.5px
+    );
+    background-size: 40px 40px;
 }
 
 /* Code Block Filename Header */
 .code-block-wrapper .code-block-header {
-	@apply flex items-center justify-between rounded-t-lg bg-surface-100-900 px-4 py-2 font-mono text-xs font-bold text-surface-600-400;
+    @apply flex items-center justify-between rounded-t-lg bg-surface-100-900 px-4 py-2 font-mono text-xs font-bold text-surface-600-400;
 }
 .code-block-wrapper pre {
-	@apply m-0 rounded-t-none border-0;
+    @apply m-0 rounded-t-none border-0;
 
-	padding-top: 0;
+    padding-top: 0;
 }
 .code-block-lang {
-	@apply text-[10px] tracking-widest uppercase opacity-60;
+    @apply text-[10px] tracking-widest uppercase opacity-60;
 }
 .code-block-wrapper pre[data-language]::before {
-	display: none;
+    display: none;
 }
 
 /* Shiki Dual Themes - Use light-dark() to auto-switch based on color-scheme */
 .shiki,
 .shiki span {
-	background-color: light-dark(var(--shiki-light-bg), var(--shiki-dark-bg));
-	color: light-dark(var(--shiki-light), var(--shiki-dark));
+    background-color: light-dark(var(--shiki-light-bg), var(--shiki-dark-bg));
+    color: light-dark(var(--shiki-light), var(--shiki-dark));
 }
 
 /* View Transitions */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-	animation: none;
-	mix-blend-mode: normal;
-	will-change: clip-path;
+    animation: none;
+    mix-blend-mode: normal;
+    will-change: clip-path;
 }
 ::view-transition-new(root) {
-	clip-path: circle(0px at var(--x, 50%) var(--y, 50%));
+    clip-path: circle(0px at var(--x, 50%) var(--y, 50%));
 }
