@@ -21,7 +21,7 @@ Every decision I make in software is intended with performance being considered,
 
 ### JavaScriptCore
 
-Most runtimes, including the likes of Node and Duno, use Google's V8 engine. Bun instead opts for Apple's [**JavaScriptCore**](https://developer.apple.com/documentation/javascriptcore) (JSC). They both have their advantages; while V8 is optimised for raw throughput, JSC is optimised for faster startup times and lower memory usage - crucial for CLI tools and serverless environments. This makes it ideal for the majority of web environments.
+Most runtimes, including the likes of Node and Deno, use Google's V8 engine. Bun instead opts for Apple's [**JavaScriptCore**](https://developer.apple.com/documentation/javascriptcore) (JSC). They both have their advantages; while V8 is optimised for raw throughput, JSC is optimised for faster startup times and lower memory usage - crucial for CLI tools and serverless environments. This makes it ideal for the majority of web environments.
 
 ### Zig
 
@@ -123,14 +123,14 @@ pub fn pos_y_ptr(&self) -> *const f32 { self.pos_y.as_ptr() }
 
 ### Benchmark Results: JS vs. Rust/WASM
 
-In the visualise above, I have compared **JavaScript (Array of Objects)** against **Rust (Structure of Arrays)**. At a scale of up to **1 million particles**, and the results speak for themselves:
+In the visual above, I have compared **JavaScript (Array of Objects)** against **Rust (Structure of Arrays)**. At a scale of up to **1 million particles**, and the results speak for themselves:
 
 - **JavaScript (AoO)**: The CPU spends significant time jumping around the memory heap to find object properties, leading to frequent L2/L3 cache misses.
 - **Rust / WASM (SoA)**: The linear memory layout allows the CPU's pre-fetcher to load data with near 100% efficiency.
 
-You might notice that on smaller scales, the difference is negligible. This is a testament to the optimisation engineering in engines like V8 and JSC. However, once the dataset exceeds the **CPU Cache**, the architectural decisions of Rust's memory model becomes the deciding factor.
+You might notice that on smaller scales, the difference is negligible. This is a testament to the optimisation engineering in engines like V8 and JSC. However, once the dataset exceeds the **CPU Cache**, the architectural decisions of Rust's memory model become the deciding factor.
 
-Another consideration that is eliminated with the move to **rust**, is the discrepancies in performance between the JS engines. I was surprised to see the 150% performance gap between Firefox and Safari. Rust at 110fps, with Firefox's SpiderMonkey JavaScript engine at 10fps, there is an **11x** uplift in performance - following [Moore's Law](https://en.wikipedia.org/wiki/Moore%27s_law), this would be equivalent to 7 years of performance gains.
+Another consideration that is eliminated with the move to **Rust**, is the discrepancies in performance between the JS engines. I was surprised to see the 150% performance gap between Firefox and Safari. Rust at 110fps, with Firefox's SpiderMonkey JavaScript engine at 10fps, there is an **11x** uplift in performance - following [Moore's Law](https://en.wikipedia.org/wiki/Moore%27s_law), this would be equivalent to 7 years of performance gains.
 
 ![safari](./safari.png)![chrome](./chrome.png)![firefox](./firefox.png)
 
@@ -140,7 +140,7 @@ Modern web frameworks often feel like they're competing on features, but Svelte 
 
 ### Re-rendering vs. Reactivity
 
-In **React**, when state changes, the entire component (and potentially its children) re-renders. React then creates a new Virtual DOM tree, compares it with the previous one (diffing), and calculates the minimum set of changes to apply to the real DOM. This process is effectively $O(n^3)$ relative to the size of the component tree - work that has to happen in the user's browser every single time. In react's defense it uses a heuristic algorithm, which allows for a far more acceptable $O(n)$. However, this still includes the memory overhead and the **committing** to the real DOM.
+In **React**, when state changes, the entire component (and potentially its children) re-renders. React then creates a new Virtual DOM tree, compares it with the previous one (diffing), and calculates the minimum set of changes to apply to the real DOM. This process is effectively $O(n^3)$ relative to the size of the component tree - work that has to happen in the user's browser every single time. In React's defense it uses a heuristic algorithm, which allows for a far more acceptable $O(n)$. However, this still includes the memory overhead and the **committing** to the real DOM.
 
 **Svelte 5** takes a different path. It doesn't have a Virtual DOM. Instead, it uses **Runes** (`$state`, `$derived`, `$effect`) to create fine-grained, signals-based reactivity at compile-time.
 
@@ -180,8 +180,7 @@ let fps = $derived(frameTime > 0 ? 1000 / frameTime : 0);
 
 ### Zero-Overhead
 
-Because Svelte 5 knows exactly which part of the DOM depends on which piece of state, it can generate optimised JavaScript that updates the DOM directly. This reduces the complexity of updates to $O(1)$; precise changes without traversing a tree (and not at runtime)
-. Compiling at build time turning the components directly into JavaScript and DOM instructions.
+Because Svelte 5 knows exactly which part of the DOM depends on which piece of state, it can generate optimised JavaScript that updates the DOM directly. This reduces the complexity of updates to $O(1)$; precise changes without traversing a tree (and not at runtime). Compiling at build time turns the components directly into JavaScript and DOM instructions.
 
 This means that as your application grows, you don't pay a "framework tax" on every interaction. The performance remains predictable because the work is done during your build step, not on your user's device. For a portfolio built on the principle of maximum performance, this was a strong consideration that was factored in.
 
@@ -286,7 +285,7 @@ I have made sure that all interactive elements are capable of being navigated vi
 
 ### Dynamic OG Images
 
-Every page generates its own Open Graph image on the fly using [**Takumi**](https://github.com/kane50613/takumi), a Rust-based image rendering engine. Unlike the traditional Satori → Resvg pipeline which generates an intermediate SVG before rasterising, Takumi renders directly to PNG, with built-in Tailwind CSS support; so when you share the link on social media, you get a branded, page-specific preview card without me maintaining a single static image.
+Every page generates its own Open Graph image on the fly using [**Takumi**](https://github.com/kane50613/takumi), a Rust-based image rendering engine. Unlike the traditional Satori → Resvg pipeline which generates an intermediate SVG before rasterising, Takumi renders directly to PNG, with built-in Tailwind CSS support. So when you share the link on social media, you get a branded, page-specific preview card without me maintaining a single static image.
 
 ### Convenience Features
 
