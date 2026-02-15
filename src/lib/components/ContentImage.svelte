@@ -24,7 +24,7 @@
 			.then((result) => {
 				if (!cancelled) img = result;
 			})
-			.catch((err) => {
+			.catch(() => {
 				if (!cancelled) {
 					img = null;
 				}

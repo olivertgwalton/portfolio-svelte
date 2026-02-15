@@ -54,7 +54,7 @@
 				wasmGlue = wasmPkg;
 				wasmMemory = wasmExports.memory;
 			}
-		} catch (e) {
+		} catch {
 			// Silently fail WASM init
 		}
 	}

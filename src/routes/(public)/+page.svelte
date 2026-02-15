@@ -4,17 +4,17 @@
 
 	const FeaturedWork = import("$lib/components/FeaturedWork.svelte")
 		.then((m) => m.default)
-		.catch((e) => {
+		.catch(() => {
 			return null;
 		});
 	const Experience = import("$lib/components/Experience.svelte")
 		.then((m) => m.default)
-		.catch((e) => {
+		.catch(() => {
 			return null;
 		});
 	const AboutSummary = import("$lib/components/AboutSummary.svelte")
 		.then((m) => m.default)
-		.catch((e) => {
+		.catch(() => {
 			return null;
 		});
 

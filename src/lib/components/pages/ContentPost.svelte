@@ -64,7 +64,7 @@
             .then((result) => {
                 if (!cancelled) featuredImage = result;
             })
-            .catch((err) => {
+            .catch(() => {
                 if (!cancelled) featuredImage = null;
             });
 

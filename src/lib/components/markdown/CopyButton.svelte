@@ -11,7 +11,7 @@
 			await navigator.clipboard.writeText(text);
 			copied = true;
 			setTimeout(() => (copied = false), 2000);
-		} catch (err) {
+		} catch {
 			// Silently fail copy
 		}
 	}
