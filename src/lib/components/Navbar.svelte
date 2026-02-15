@@ -6,8 +6,6 @@
 	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
 	import { reveal } from '$lib/actions';
 
-	let { theme, mode } = $props();
-
 	const links = [
 		{ href: '/', label: 'Home' },
 		{ href: '/projects', label: 'Projects' },
@@ -55,7 +53,7 @@
 		<div class="flex items-center gap-4">
 			<div use:reveal={{ delay: 300, y: -10 }} class="flex items-center gap-4">
 				<!-- Theme Toggle -->
-				<ThemeSwitcher {theme} {mode} />
+				<ThemeSwitcher />
 
 				<!-- CTA Button -->
 				<a

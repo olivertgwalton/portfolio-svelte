@@ -1,9 +1,25 @@
 // Hoist globs to top level for static analysis
-const postFiles = import.meta.glob('/src/lib/posts/**/index.md', { eager: true });
-const projectFiles = import.meta.glob('/src/lib/projects/**/index.md', { eager: true });
-const experienceFiles = import.meta.glob('/src/lib/experience/*.md', { eager: true });
-const educationFiles = import.meta.glob('/src/lib/education/*.md', { eager: true });
-const certificationFiles = import.meta.glob('/src/lib/certifications/*.md', { eager: true });
+
+const postFiles = import.meta.glob('/src/lib/posts/**/index.md', {
+	eager: true,
+	import: 'metadata'
+});
+const projectFiles = import.meta.glob('/src/lib/projects/**/index.md', {
+	eager: true,
+	import: 'metadata'
+});
+const experienceFiles = import.meta.glob('/src/lib/experience/*.md', {
+	eager: true,
+	import: 'metadata'
+});
+const educationFiles = import.meta.glob('/src/lib/education/*.md', {
+	eager: true,
+	import: 'metadata'
+});
+const certificationFiles = import.meta.glob('/src/lib/certifications/*.md', {
+	eager: true,
+	import: 'metadata'
+});
 
 export interface ContentMetadata {
 	slug: string;
@@ -68,7 +84,7 @@ export function getContentList(type: ContentType): ContentMetadata[] {
 			const parts = path.split('/');
 			const slug = parts[parts.length - 2];
 
-			const metadata = (file as { metadata: Omit<ContentMetadata, 'slug'> }).metadata;
+			const metadata = file as Omit<ContentMetadata, 'slug'>;
 			return {
 				slug,
 				...metadata,
@@ -113,7 +129,7 @@ export function getContentItem(type: ContentType, slug: string): ContentMetadata
 	const file = files[path];
 
 	if (!file) return null;
-	const metadata = (file as { metadata: Omit<ContentMetadata, 'slug'> }).metadata;
+	const metadata = file as Omit<ContentMetadata, 'slug'>;
 
 	return {
 		slug,

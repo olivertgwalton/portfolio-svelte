@@ -1,150 +1,86 @@
 <script lang="ts">
-	import PaletteIcon from 'phosphor-svelte/lib/PaletteIcon';
-	import CheckIcon from 'phosphor-svelte/lib/CheckIcon';
-	import MoonIcon from 'phosphor-svelte/lib/MoonIcon';
-	import SunIcon from 'phosphor-svelte/lib/SunIcon';
-	import MonitorIcon from 'phosphor-svelte/lib/MonitorIcon';
-	import { Menu } from '@skeletonlabs/skeleton-svelte';
-	import { tick, untrack } from 'svelte';
+    import PaletteIcon from "phosphor-svelte/lib/PaletteIcon";
+    import CheckIcon from "phosphor-svelte/lib/CheckIcon";
+    import MoonIcon from "phosphor-svelte/lib/MoonIcon";
+    import SunIcon from "phosphor-svelte/lib/SunIcon";
+    import MonitorIcon from "phosphor-svelte/lib/MonitorIcon";
+    import { Menu } from "@skeletonlabs/skeleton-svelte";
+    import { getThemeContext, themes } from "$lib/theme.svelte";
 
-	const themes = [
-		{ id: 'modern', name: 'Modern' },
-		{ id: 'cerberus', name: 'Cerberus' },
-		{ id: 'rose', name: 'Rose' },
-		{ id: 'nosh', name: 'Nosh' },
-		{ id: 'mona', name: 'Mona' },
-		{ id: 'sahara', name: 'Sahara' },
-		{ id: 't3-chat', name: 'T3 Chat' }
-	];
+    const modeOptions = [
+        { id: "light", name: "Light", icon: SunIcon },
+        { id: "dark", name: "Dark", icon: MoonIcon },
+        { id: "system", name: "System", icon: MonitorIcon },
+    ];
 
-	const modes = [
-		{ id: 'light', name: 'Light', icon: SunIcon },
-		{ id: 'dark', name: 'Dark', icon: MoonIcon },
-		{ id: 'system', name: 'System', icon: MonitorIcon }
-	];
-
-	let { theme: initialTheme = 'modern', mode: initialMode = 'system' } = $props();
-
-	let currentTheme = $state(untrack(() => initialTheme));
-	let currentMode = $state(untrack(() => initialMode));
-	let systemDark = $state(false);
-
-	function setCookie(name: string, value: string) {
-		document.cookie = `${name}=${value}; max-age=31536000; path=/; SameSite=Lax`;
-	}
-
-	// Reactive: Sync System Preference & Update DOM
-	$effect(() => {
-		// 1. Monitor System Preference
-		const media = window.matchMedia('(prefers-color-scheme: dark)');
-		systemDark = media.matches;
-		const onChange = (e: MediaQueryListEvent) => (systemDark = e.matches);
-		media.addEventListener('change', onChange);
-
-		// 2. Synchronize DOM (Runes will re-run this when currentMode, currentTheme, or systemDark changes)
-		const isDark = currentMode === 'dark' || (currentMode === 'system' && systemDark);
-		document.documentElement.classList.toggle('dark', isDark);
-		document.documentElement.setAttribute('data-theme', currentTheme);
-
-		return () => media.removeEventListener('change', onChange);
-	});
-
-	async function performTransition(action: () => void, event?: MouseEvent | KeyboardEvent) {
-		if (!document.startViewTransition || !event || !(event instanceof MouseEvent)) {
-			action();
-			return;
-		}
-
-		const x = event.clientX;
-		const y = event.clientY;
-		const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-
-		document.documentElement.style.setProperty('--x', x + 'px');
-		document.documentElement.style.setProperty('--y', y + 'px');
-
-		const transition = document.startViewTransition(async () => {
-			action();
-			await tick();
-		});
-
-		await transition.ready;
-
-		document.documentElement.animate(
-			{ clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`] },
-			{ duration: 500, easing: 'ease-in-out', pseudoElement: '::view-transition-new(root)', composite: 'replace' }
-		);
-	}
-
-	function setTheme(theme: string, event?: MouseEvent | KeyboardEvent) {
-		performTransition(() => {
-			currentTheme = theme;
-			setCookie('theme', theme);
-		}, event);
-	}
-
-	function setMode(mode: string, event?: MouseEvent | KeyboardEvent) {
-		performTransition(() => {
-			currentMode = mode;
-			setCookie('mode', mode);
-		}, event);
-	}
+    const theme = getThemeContext();
 </script>
 
 <Menu>
-	<Menu.Trigger class="btn-icon hover:preset-tonal" aria-label="Appearance">
-		<span aria-hidden="true"><PaletteIcon size={20} weight="bold" /></span>
-	</Menu.Trigger>
-	<Menu.Positioner>
-		<Menu.Content
-			class="z-50 w-56 rounded-container border border-surface-200-800 bg-surface-50-950 p-2 shadow-xl"
-		>
-			<Menu.ItemGroup>
-				<Menu.ItemGroupLabel class="px-3 py-1.5 text-xs font-bold uppercase opacity-60"
-					>Theme</Menu.ItemGroupLabel
-				>
-				{#each themes as theme (theme.id)}
-					<Menu.Item
-						value={theme.id}
-						onclick={(e) => setTheme(theme.id, e)}
-						class="flex cursor-pointer items-center justify-between rounded-container px-3 py-2 text-sm font-medium transition-colors hover:preset-tonal {currentTheme ===
-						theme.id
-							? 'text-primary-500'
-							: ''}"
-					>
-						<Menu.ItemText>{theme.name}</Menu.ItemText>
-						{#if currentTheme === theme.id}
-							<Menu.ItemIndicator><span aria-hidden="true"><CheckIcon size={16} weight="bold" /></span></Menu.ItemIndicator>
-						{/if}
-					</Menu.Item>
-				{/each}
-			</Menu.ItemGroup>
+    <Menu.Trigger class="btn-icon hover:preset-tonal" aria-label="Appearance">
+        <span aria-hidden="true"><PaletteIcon size={20} weight="bold" /></span>
+    </Menu.Trigger>
+    <Menu.Positioner>
+        <Menu.Content
+            class="z-50 w-56 rounded-container border border-surface-200-800 bg-surface-50-950 p-2 shadow-xl"
+        >
+            <Menu.ItemGroup>
+                <Menu.ItemGroupLabel
+                    class="px-3 py-1.5 text-xs font-bold uppercase opacity-60"
+                    >Theme</Menu.ItemGroupLabel
+                >
+                {#each themes as t (t.id)}
+                    <Menu.Item
+                        value={t.id}
+                        onclick={(e) => theme.setTheme(t.id, e)}
+                        class="flex cursor-pointer items-center justify-between rounded-container px-3 py-2 text-sm font-medium transition-colors hover:preset-tonal {theme.theme ===
+                        t.id
+                            ? 'text-primary-500'
+                            : ''}"
+                    >
+                        <Menu.ItemText>{t.name}</Menu.ItemText>
+                        {#if theme.theme === t.id}
+                            <Menu.ItemIndicator
+                                ><span aria-hidden="true"
+                                    ><CheckIcon size={16} weight="bold" /></span
+                                ></Menu.ItemIndicator
+                            >
+                        {/if}
+                    </Menu.Item>
+                {/each}
+            </Menu.ItemGroup>
 
-			<Menu.Separator class="my-1 h-px bg-surface-200-800" />
+            <Menu.Separator class="my-1 h-px bg-surface-200-800" />
 
-			<Menu.ItemGroup>
-				<Menu.ItemGroupLabel class="px-3 py-1.5 text-xs font-bold uppercase opacity-60"
-					>Mode</Menu.ItemGroupLabel
-				>
-				{#each modes as mode (mode.id)}
-					{@const Icon = mode.icon}
-					<Menu.Item
-						value={mode.id}
-						onclick={(e) => setMode(mode.id, e)}
-						class="flex cursor-pointer items-center justify-between rounded-container px-3 py-2 text-sm font-medium transition-colors hover:preset-tonal {currentMode ===
-						mode.id
-							? 'text-primary-500'
-							: ''}"
-					>
-						<div class="flex items-center gap-2">
-							<span aria-hidden="true"><Icon size={16} /></span>
-							<Menu.ItemText>{mode.name}</Menu.ItemText>
-						</div>
-						{#if currentMode === mode.id}
-							<Menu.ItemIndicator><span aria-hidden="true"><CheckIcon size={16} weight="bold" /></span></Menu.ItemIndicator>
-						{/if}
-					</Menu.Item>
-				{/each}
-			</Menu.ItemGroup>
-		</Menu.Content>
-	</Menu.Positioner>
+            <Menu.ItemGroup>
+                <Menu.ItemGroupLabel
+                    class="px-3 py-1.5 text-xs font-bold uppercase opacity-60"
+                    >Mode</Menu.ItemGroupLabel
+                >
+                {#each modeOptions as m (m.id)}
+                    {@const Icon = m.icon}
+                    <Menu.Item
+                        value={m.id}
+                        onclick={(e) => theme.setMode(m.id, e)}
+                        class="flex cursor-pointer items-center justify-between rounded-container px-3 py-2 text-sm font-medium transition-colors hover:preset-tonal {theme.mode ===
+                        m.id
+                            ? 'text-primary-500'
+                            : ''}"
+                    >
+                        <div class="flex items-center gap-2">
+                            <span aria-hidden="true"><Icon size={16} /></span>
+                            <Menu.ItemText>{m.name}</Menu.ItemText>
+                        </div>
+                        {#if theme.mode === m.id}
+                            <Menu.ItemIndicator
+                                ><span aria-hidden="true"
+                                    ><CheckIcon size={16} weight="bold" /></span
+                                ></Menu.ItemIndicator
+                            >
+                        {/if}
+                    </Menu.Item>
+                {/each}
+            </Menu.ItemGroup>
+        </Menu.Content>
+    </Menu.Positioner>
 </Menu>
