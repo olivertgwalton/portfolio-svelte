@@ -8,22 +8,22 @@ interface RevealParams {
 	y?: number;
 }
 
-export const reveal: Action<HTMLElement, RevealParams> = (el, params = {}) => {
-	const { delay = 0, duration = 600, y = 20 } = params;
+// Shared IntersectionObserver for all reveal elements
+const revealElements = new WeakMap<Element, RevealParams>();
+let sharedObserver: IntersectionObserver | null = null;
 
-	// Skip if already revealed
-	if (el.dataset.revealed === 'true') {
-		el.style.opacity = '1';
-		return { destroy() {} };
-	}
+function getSharedObserver(): IntersectionObserver {
+	if (sharedObserver) return sharedObserver;
 
-	// Initial hidden state
-	el.style.opacity = '0';
-	el.style.transform = `translateY(${y}px)`;
+	sharedObserver = new IntersectionObserver(
+		(entries) => {
+			for (const entry of entries) {
+				if (!entry.isIntersecting) continue;
 
-	const observer = new IntersectionObserver(
-		([entry]) => {
-			if (entry.isIntersecting) {
+				const el = entry.target as HTMLElement;
+				const params = revealElements.get(el) ?? {};
+				const { delay = 0, duration = 600, y = 20 } = params;
+
 				el.dataset.revealed = 'true';
 				el.style.transition = 'none';
 
@@ -39,15 +39,36 @@ export const reveal: Action<HTMLElement, RevealParams> = (el, params = {}) => {
 					el.style.transition = '';
 				};
 
-				observer.disconnect();
+				sharedObserver!.unobserve(el);
+				revealElements.delete(el);
 			}
 		},
 		{ threshold: 0.1 }
 	);
 
-	observer.observe(el);
+	return sharedObserver;
+}
 
-	return { destroy: () => observer.disconnect() };
+export const reveal: Action<HTMLElement, RevealParams> = (el, params = {}) => {
+	const { y = 20 } = params;
+
+	if (el.dataset.revealed === 'true') {
+		el.style.opacity = '1';
+		return { destroy() {} };
+	}
+
+	el.style.opacity = '0';
+	el.style.transform = `translateY(${y}px)`;
+
+	revealElements.set(el, params);
+	getSharedObserver().observe(el);
+
+	return {
+		destroy() {
+			getSharedObserver().unobserve(el);
+			revealElements.delete(el);
+		}
+	};
 };
 
 export const enhanceCodeBlocks: Action<HTMLElement> = (node) => {

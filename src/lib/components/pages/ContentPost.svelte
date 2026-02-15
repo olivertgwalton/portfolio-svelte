@@ -48,7 +48,29 @@
     });
 
     const isProject = $derived(type === "projects");
-    const featuredImage = $derived(getEnhancedImage(meta.image));
+    let featuredImage = $state<Awaited<ReturnType<typeof getEnhancedImage>>>(null);
+
+    $effect(() => {
+        if (!meta.image) {
+            featuredImage = null;
+            return;
+        }
+
+        let cancelled = false;
+        featuredImage = null;
+
+        getEnhancedImage(meta.image)
+            .then((result) => {
+                if (!cancelled) featuredImage = result;
+            })
+            .catch((err) => {
+                if (!cancelled) console.error('Failed to load featured image:', err);
+            });
+
+        return () => {
+            cancelled = true;
+        };
+    });
     const ogImage = $derived(
         `/api/og?title=${encodeURIComponent(meta.title)}&description=${encodeURIComponent(meta.description)}`,
     );
@@ -169,27 +191,17 @@
                     </div>
                 </div>
 
-                {#if meta.image}
+                {#if featuredImage}
                     <div
                         class="aspect-video w-full max-w-xl overflow-hidden rounded-3xl border border-surface-200-800 shadow-2xl"
                     >
-                        {#if featuredImage}
-                            <enhanced:img
-                                src={featuredImage}
-                                alt={meta.title}
-                                fetchpriority="high"
-                                loading="eager"
-                                class="h-full w-full object-cover"
-                            />
-                        {:else}
-                            <img
-                                src={meta.image}
-                                alt={meta.title}
-                                fetchpriority="high"
-                                loading="eager"
-                                class="h-full w-full object-cover"
-                            />
-                        {/if}
+                        <enhanced:img
+                            src={featuredImage}
+                            alt={meta.title}
+                            fetchpriority="high"
+                            loading="eager"
+                            class="h-full w-full object-cover"
+                        />
                     </div>
                 {/if}
             </div>

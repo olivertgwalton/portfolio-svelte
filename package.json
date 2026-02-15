@@ -19,7 +19,6 @@
 		"@biomejs/biome": "^2.3.15",
 		"@eslint/compat": "^2.0.2",
 		"@eslint/js": "^9.39.2",
-		"@sveltejs/adapter-vercel": "^6.3.1",
 		"@sveltejs/enhanced-img": "^0.10.2",
 		"@sveltejs/kit": "^2.51.0",
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",

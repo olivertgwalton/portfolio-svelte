@@ -12,7 +12,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		htmlAttributes += ' class="dark"';
 	}
 
-	return await resolve(event, {
+	const response = await resolve(event, {
 		transformPageChunk: ({ html }) => {
 			html = html.replace('%sveltekit.html.attributes%', htmlAttributes);
 			if (!dev) {
@@ -21,4 +21,17 @@ export const handle: Handle = async ({ event, resolve }) => {
 			return html;
 		}
 	});
+
+	// Set cache headers for pages (static assets are handled by the adapter)
+	const path = event.url.pathname;
+	if (!response.headers.has('cache-control')) {
+		if (path.startsWith('/api/')) {
+			response.headers.set('Cache-Control', 'public, max-age=600');
+		} else {
+			// HTML pages: private cache (content varies by theme/mode cookies)
+			response.headers.set('Cache-Control', 'private, max-age=3600, must-revalidate');
+		}
+	}
+
+	return response;
 };

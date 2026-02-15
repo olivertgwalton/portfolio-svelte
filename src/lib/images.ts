@@ -1,5 +1,5 @@
 // Centralized image resolution for enhanced images
-// Eagerly load all images to ensure they are available for synchronous resolution
+// Lazy-load images to avoid bundling all variants upfront
 const images = import.meta.glob(
 	[
 		'/src/lib/assets/**/*.{jpg,jpeg,png,webp,avif}',
@@ -7,8 +7,7 @@ const images = import.meta.glob(
 		'/src/lib/projects/**/*.{jpg,jpeg,png,webp,avif}'
 	],
 	{
-		query: { enhanced: true, w: '410;640;724;820;1024;1200;1600' },
-		eager: true
+		query: { enhanced: true, w: '410;640;724;820;1024;1200;1600' }
 	}
 );
 
@@ -22,21 +21,24 @@ type Picture = {
 	};
 };
 
+// Cache resolved images to avoid re-importing
+const cache = new Map<string, Picture | string>();
+
 /**
  * Resolves a frontmatter image path (e.g., '/assets/blog/image.jpg')
  * to the imported enhanced image module.
  */
-export function getEnhancedImage(path: string | undefined): Picture | string | null {
+export async function getEnhancedImage(path: string | undefined): Promise<Picture | string | null> {
 	if (!path) return null;
 
-	// path is typically '/assets/blog/image.jpg'
-	// We want to match any key that ends with '/blog/image.jpg'
-	// removing the '/assets' prefix from the input path to search against the glob keys
-	// which will be like '/src/lib/assets/blog/image.jpg'
+	if (cache.has(path)) return cache.get(path)!;
 
 	const suffix = path.replace(/^\/assets/, '');
-	// suffix is now '/blog/image.jpg'
 
 	const match = Object.entries(images).find(([key]) => key.endsWith(suffix));
-	return match ? (match[1] as { default: Picture | string }).default : null;
+	if (!match) return null;
+
+	const module = (await match[1]()) as { default: Picture | string };
+	cache.set(path, module.default);
+	return module.default;
 }

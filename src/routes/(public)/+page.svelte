@@ -1,20 +1,47 @@
 <script lang="ts">
 	import LandingHero from '$lib/components/LandingHero.svelte';
-	import FeaturedWork from '$lib/components/FeaturedWork.svelte';
-	import AboutSummary from '$lib/components/AboutSummary.svelte';
 	import TechStack from '$lib/components/TechStack.svelte';
-	import Experience from '$lib/components/Experience.svelte';
+
+	const FeaturedWork = import('$lib/components/FeaturedWork.svelte')
+		.then((m) => m.default)
+		.catch((e) => {
+			console.error('Failed to load FeaturedWork:', e);
+			return null;
+		});
+	const Experience = import('$lib/components/Experience.svelte')
+		.then((m) => m.default)
+		.catch((e) => {
+			console.error('Failed to load Experience:', e);
+			return null;
+		});
+	const AboutSummary = import('$lib/components/AboutSummary.svelte')
+		.then((m) => m.default)
+		.catch((e) => {
+			console.error('Failed to load AboutSummary:', e);
+			return null;
+		});
 
 	let { data } = $props();
 </script>
 
 <LandingHero />
 <TechStack />
-<FeaturedWork projects={data.projects} posts={data.posts} />
-<Experience
-	experience={data.experience}
-	education={data.education}
-	certifications={data.certifications}
-/>
-
-<AboutSummary />
+{#await FeaturedWork then FeaturedWork}
+	{#if FeaturedWork}
+		<FeaturedWork projects={data.projects} posts={data.posts} />
+	{/if}
+{/await}
+{#await Experience then Experience}
+	{#if Experience}
+		<Experience
+			experience={data.experience}
+			education={data.education}
+			certifications={data.certifications}
+		/>
+	{/if}
+{/await}
+{#await AboutSummary then AboutSummary}
+	{#if AboutSummary}
+		<AboutSummary />
+	{/if}
+{/await}

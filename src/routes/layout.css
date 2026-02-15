@@ -86,6 +86,7 @@
 ::view-transition-new(root) {
 	animation: none;
 	mix-blend-mode: normal;
+	will-change: clip-path;
 }
 ::view-transition-new(root) {
 	clip-path: circle(0px at var(--x, 50%) var(--y, 50%));

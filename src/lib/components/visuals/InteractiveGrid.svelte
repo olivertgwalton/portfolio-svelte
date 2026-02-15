@@ -144,13 +144,17 @@
 		ctx!.fill();
 	}
 
-	// Interaction
+	// Interaction — cache bounding rect to avoid forced reflow on every mousemove
+	let cachedRect: DOMRect | null = null;
+
+	function updateCachedRect() {
+		cachedRect = canvas?.getBoundingClientRect() ?? null;
+	}
+
 	function handleMouseMove(e: MouseEvent) {
-		// Track mouse globally for background interaction
-		const rect = canvas?.getBoundingClientRect();
-		if (!rect) return;
-		mouseX = (e.clientX - rect.left) * dpr;
-		mouseY = (e.clientY - rect.top) * dpr;
+		if (!cachedRect) return;
+		mouseX = (e.clientX - cachedRect.left) * dpr;
+		mouseY = (e.clientY - cachedRect.top) * dpr;
 	}
 
 	onMount(() => {
@@ -159,11 +163,21 @@
 
 		initData();
 		updateThemeColor();
+		updateCachedRect();
 
-		window.addEventListener('resize', () => {
-			initData();
-			updateThemeColor();
-		});
+		let resizeTimer: ReturnType<typeof setTimeout>;
+		const handleResize = () => {
+			clearTimeout(resizeTimer);
+			resizeTimer = setTimeout(() => {
+				initData();
+				updateThemeColor();
+				updateCachedRect();
+			}, 150);
+		};
+
+		window.addEventListener('resize', handleResize);
+		window.addEventListener('scroll', updateCachedRect, { passive: true });
+
 		const observer = new MutationObserver(updateThemeColor);
 		observer.observe(document.documentElement, {
 			attributes: true,
@@ -174,6 +188,9 @@
 
 		return () => {
 			cancelAnimationFrame(animationId);
+			clearTimeout(resizeTimer);
+			window.removeEventListener('resize', handleResize);
+			window.removeEventListener('scroll', updateCachedRect);
 			observer.disconnect();
 		};
 	});

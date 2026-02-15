@@ -47,10 +47,14 @@
 	}
 
 	$effect(() => {
-		const update = () => requestAnimationFrame(updateHeadings);
-		update();
-		const observer = new MutationObserver(update);
-		observer.observe(document.body, { childList: true, subtree: true });
+		updateHeadings();
+
+		// Only observe the .prose container instead of the entire document
+		const prose = document.querySelector('.prose');
+		if (!prose) return;
+
+		const observer = new MutationObserver(() => requestAnimationFrame(updateHeadings));
+		observer.observe(prose, { childList: true, subtree: true });
 		return () => observer.disconnect();
 	});
 
