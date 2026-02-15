@@ -9,6 +9,5 @@ highlights:
   - Intensive 12-week training in Java, Python, and Computer Science fundamentals
   - Developed a Java application using Spring Boot, making use of Svelte 5 for the frontend
   - Hands-on projects and real-world problem solving
-  - Obtained certifications in W3 SQL
 skills: [Java, Python, SQL, CompSci]
 ---

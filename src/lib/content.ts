@@ -3,6 +3,7 @@ const postFiles = import.meta.glob('/src/lib/posts/**/index.md', { eager: true }
 const projectFiles = import.meta.glob('/src/lib/projects/**/index.md', { eager: true });
 const experienceFiles = import.meta.glob('/src/lib/experience/*.md', { eager: true });
 const educationFiles = import.meta.glob('/src/lib/education/*.md', { eager: true });
+const certificationFiles = import.meta.glob('/src/lib/certifications/*.md', { eager: true });
 
 export interface ContentMetadata {
 	slug: string;
@@ -25,7 +26,7 @@ export interface ContentMetadata {
 	readTime?: string;
 }
 
-export type ContentType = 'posts' | 'projects' | 'experience' | 'education';
+export type ContentType = 'posts' | 'projects' | 'experience' | 'education' | 'certifications';
 
 export function getItemTags(item: ContentMetadata): string[] {
 	return [...(item.tags ?? []), ...(item.tech ?? [])];
@@ -53,6 +54,9 @@ export function getContentList(type: ContentType): ContentMetadata[] {
 			break;
 		case 'education':
 			files = educationFiles;
+			break;
+		case 'certifications':
+			files = certificationFiles;
 			break;
 		default:
 			return [];

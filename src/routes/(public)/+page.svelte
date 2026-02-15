@@ -11,6 +11,10 @@
 <LandingHero />
 <TechStack />
 <FeaturedWork projects={data.projects} posts={data.posts} />
-<Experience experience={data.experience} education={data.education} />
+<Experience
+	experience={data.experience}
+	education={data.education}
+	certifications={data.certifications}
+/>
 
 <AboutSummary />

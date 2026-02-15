@@ -6,11 +6,13 @@ export const load: PageServerLoad = async () => {
 	const projects = getContentList('projects').slice(0, 6);
 	const experience = getContentList('experience');
 	const education = getContentList('education');
+	const certifications = getContentList('certifications');
 
 	return {
 		posts,
 		projects,
 		experience,
-		education
+		education,
+		certifications
 	};
 };

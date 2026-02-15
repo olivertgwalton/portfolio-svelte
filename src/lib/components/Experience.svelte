@@ -4,6 +4,7 @@
 	import TabGroup from '$lib/components/TabGroup.svelte';
 	import BriefcaseIcon from 'phosphor-svelte/lib/BriefcaseIcon';
 	import GraduationCapIcon from 'phosphor-svelte/lib/GraduationCapIcon';
+	import CertificateIcon from 'phosphor-svelte/lib/CertificateIcon';
 	import ArrowSquareOutIcon from 'phosphor-svelte/lib/ArrowSquareOutIcon';
 	import type { Component } from 'svelte';
 	import type { IconWeight } from 'phosphor-svelte';
@@ -11,14 +12,15 @@
 	import type { ContentMetadata } from '$lib/content';
 
 	type RoutePath = Parameters<typeof resolve>[0];
-	type Category = 'experience' | 'education';
+	type Category = 'experience' | 'education' | 'certifications';
 
 	interface Props {
 		experience?: ContentMetadata[];
 		education?: ContentMetadata[];
+		certifications?: ContentMetadata[];
 	}
 
-	let { experience = [], education = [] }: Props = $props();
+	let { experience = [], education = [], certifications = [] }: Props = $props();
 
 	let activeTab = $state<Category>('experience');
 
@@ -39,7 +41,8 @@
 
 	const categories: Record<Category, CategoryConfig> = {
 		experience: { label: 'Experience', icon: BriefcaseIcon },
-		education: { label: 'Education', icon: GraduationCapIcon }
+		education: { label: 'Education', icon: GraduationCapIcon },
+		certifications: { label: 'Certifications', icon: CertificateIcon }
 	};
 
 	function mapContentToTimeline(items: ContentMetadata[]): TimelineItem[] {
@@ -74,7 +77,8 @@
 
 	const data = $derived<Record<Category, TimelineItem[]>>({
 		experience: mapContentToTimeline(experience),
-		education: mapContentToTimeline(education)
+		education: mapContentToTimeline(education),
+		certifications: mapContentToTimeline(certifications)
 	});
 
 	const activeItems = $derived(data[activeTab]);
@@ -85,7 +89,7 @@
 	<div class="container mx-auto max-w-7xl px-6">
 		<SectionHeader title="Background." class="mb-12">
 			{#snippet subtitle()}
-				Professional journey, <br>education, and projects.
+				Professional journey, education, <br>and certifications.
 			{/snippet}
 		</SectionHeader>
 
