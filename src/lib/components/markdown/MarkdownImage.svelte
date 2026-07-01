@@ -2,8 +2,20 @@
 	import XIcon from 'phosphor-svelte/lib/XIcon';
 	import { fade } from 'svelte/transition';
 
-	let { src, alt, class: className } = $props<{ src: string; alt: string; class?: string }>();
+	let {
+		src,
+		alt,
+		class: className,
+		size
+	} = $props<{ src: string; alt: string; class?: string; size?: 'sm' | 'md' | 'lg' }>();
 	let zoomed = $state(false);
+
+	const sizeClasses: Record<string, string> = {
+		sm: 'max-w-sm mx-auto',
+		md: 'max-w-xl mx-auto',
+		lg: 'max-w-3xl mx-auto'
+	};
+	const wrapperClass = $derived(size ? sizeClasses[size] : '');
 
 	function close(e?: Event) {
 		e?.stopPropagation();
@@ -51,7 +63,7 @@
 	</div>
 {/if}
 
-<figure>
+<figure class={wrapperClass}>
 	<button
 		onclick={open}
 		class="image-card group block w-full cursor-zoom-in overflow-hidden rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"

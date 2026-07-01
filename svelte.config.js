@@ -73,7 +73,7 @@ function remarkEnhancedImages() {
 				flushPara(); // Flush any text preceding the images
 
 				const tags = currentGroup.map((img) => {
-					const { url, alt } = img;
+					const { url, alt, title } = img;
 					let importName = `enhanced_image_${count++}`;
 					let importPath = url;
 					if (url.startsWith('/assets/')) {
@@ -82,7 +82,8 @@ function remarkEnhancedImages() {
 						importPath = path.resolve(path.dirname(file.filename), url);
 					}
 					imports.push(`import ${importName} from '${importPath}?enhanced';`);
-					return `<MarkdownImage src={${importName}} alt="${alt || ''}" />`;
+					const sizeAttr = title ? ` size="${title}"` : '';
+					return `<MarkdownImage src={${importName}} alt="${alt || ''}"${sizeAttr} />`;
 				});
 
 				// If grouped (more than 1), use a grid.
