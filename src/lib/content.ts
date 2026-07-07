@@ -1,3 +1,8 @@
+import { getItemTags, type ContentMetadata, type ContentType } from './content-types';
+
+export type { ContentMetadata, ContentType };
+export { getItemTags };
+
 // Hoist globs to top level for static analysis
 
 const postFiles = import.meta.glob('/src/lib/posts/**/index.md', {
@@ -20,33 +25,6 @@ const certificationFiles = import.meta.glob('/src/lib/certifications/*.md', {
 	eager: true,
 	import: 'metadata'
 });
-
-export interface ContentMetadata {
-	slug: string;
-	title: string;
-	description: string;
-	date: string;
-	image?: string;
-	tags?: string[];
-	tech?: string[];
-	type?: string;
-	github?: string;
-	demo?: string;
-	source?: string;
-	link_type?: 'demo' | 'source';
-	organization?: string;
-	period?: string;
-	current?: boolean;
-	highlights?: string[];
-	skills?: string[];
-	readTime?: string;
-}
-
-export type ContentType = 'posts' | 'projects' | 'experience' | 'education' | 'certifications';
-
-export function getItemTags(item: ContentMetadata): string[] {
-	return [...(item.tags ?? []), ...(item.tech ?? [])];
-}
 
 function resolveImage(slug: string, type: ContentType, image?: string) {
 	if (!image?.startsWith('./')) return image;
