@@ -74,11 +74,11 @@
                         >
                             {meta.type}
                         </span>
-                    {:else if !isProject}
+                    {:else}
                         <span
                             class="mb-4 block font-mono text-sm font-bold tracking-widest text-(--color-primary-500-text) uppercase"
                         >
-                            Blog Post
+                            {isProject ? "Project" : "Blog Post"}
                         </span>
                     {/if}
                     <h1
