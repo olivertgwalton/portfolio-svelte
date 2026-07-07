@@ -26,57 +26,18 @@
 
     let {
         meta,
-        slug,
         type,
         related = [],
+        Content,
     }: {
         meta: ContentMetadata;
-        slug: string;
         type: ContentType;
         related?: ContentMetadata[];
+        Content: Component | null;
     } = $props();
 
-    let ContentComponent = $state<Component | null>(null);
-    // Unified directory-based structure: src/lib/posts/[slug]/index.md
-    const postModules = import.meta.glob("/src/lib/posts/**/index.md");
-    const projectModules = import.meta.glob("/src/lib/projects/**/index.md");
-
-    $effect(() => {
-        const modules = type === "posts" ? postModules : projectModules;
-        const baseDir = `/src/lib/${type === "posts" ? "posts" : "projects"}`;
-
-        const path = `${baseDir}/${slug}/index.md`;
-        modules[path]
-            ?.()
-            .then((m) => (ContentComponent = (m as { default: Component }).default))
-            .catch((error: unknown) => console.error("Failed to load content module:", error));
-    });
-
     const isProject = $derived(type === "projects");
-    let featuredImage =
-        $state<Awaited<ReturnType<typeof getEnhancedImage>>>(null);
-
-    $effect(() => {
-        if (!meta.image) {
-            featuredImage = null;
-            return;
-        }
-
-        let cancelled = false;
-        featuredImage = null;
-
-        getEnhancedImage(meta.image)
-            .then((result) => {
-                if (!cancelled) featuredImage = result;
-            })
-            .catch(() => {
-                if (!cancelled) featuredImage = null;
-            });
-
-        return () => {
-            cancelled = true;
-        };
-    });
+    let featuredImage = $derived(getEnhancedImage(meta.image));
     const ogImage = $derived(
         `/api/og?title=${encodeURIComponent(meta.title)}&description=${encodeURIComponent(meta.description)}`,
     );
@@ -228,15 +189,15 @@
                             onNavigate={toc.scrollToHeading}
                         />
                     </div>
-                    {#if ContentComponent}
-                        <ContentComponent />
+                    {#if Content}
+                        <Content />
                     {:else}
                         <p class="animate-pulse font-bold text-surface-400">
                             Loading...
                         </p>
                     {/if}
                 </div>
-                {#if ContentComponent}
+                {#if Content}
                     <ShareWidget title={meta.title} />
                 {/if}
             </div>

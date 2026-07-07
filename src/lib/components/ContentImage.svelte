@@ -15,25 +15,7 @@
 		overlay?: boolean;
 	} = $props();
 
-	let img = $state<Awaited<ReturnType<typeof getEnhancedImage>>>(null);
-
-	$effect(() => {
-		let cancelled = false;
-
-		getEnhancedImage(image)
-			.then((result) => {
-				if (!cancelled) img = result;
-			})
-			.catch(() => {
-				if (!cancelled) {
-					img = null;
-				}
-			});
-
-		return () => {
-			cancelled = true;
-		};
-	});
+	let img = $derived(getEnhancedImage(image));
 </script>
 
 {#if img}
