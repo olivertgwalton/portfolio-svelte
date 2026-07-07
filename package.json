@@ -17,8 +17,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.0",
-		"@eslint/compat": "^2.1.0",
-		"@eslint/js": "^10.0.1",
+		"@eslint/config-helpers": "^0.6.0",
 		"@sveltejs/enhanced-img": "^0.10.4",
 		"@sveltejs/kit": "^2.65.1",
 		"@sveltejs/vite-plugin-svelte": "^7.1.2",
