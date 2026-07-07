@@ -7,8 +7,9 @@
     import BackToTop from "$lib/components/BackToTop.svelte";
     import { setThemeContext } from "$lib/theme.svelte";
     import { untrack } from "svelte";
+    import type { LayoutProps } from "./$types";
 
-    let { children, data } = $props();
+    let { children, data }: LayoutProps = $props();
 
     const theme = untrack(() => setThemeContext(data.theme, data.mode));
     theme.initClient();
