@@ -14,6 +14,7 @@
 		"lint": "bun biome check . && bun eslint .",
 		"test:e2e": "playwright test",
 		"test:e2e:ui": "playwright test --ui",
+		"test:e2e:perf": "playwright test --project=performance",
 		"test:e2e:update-snapshots": "playwright test --update-snapshots",
 		"format": "bun biome format --write .",
 		"build:wasm": "mkdir -p static/wasm && cd rust-grid && RUSTFLAGS='-C target-feature=+simd128' wasm-pack build --target web --out-dir ../src/lib/wasm && mv ../src/lib/wasm/rust_grid_bg.wasm ../static/wasm/"
@@ -34,8 +35,10 @@
 		"eslint-plugin-svelte": "^3.20.0",
 		"globals": "^17.7.0",
 		"katex": "^0.17.0",
+		"lighthouse": "^13.4.0",
 		"mdast-util-to-string": "^4.0.0",
 		"mdsvex": "^0.12.7",
+		"playwright-lighthouse": "^4.0.0",
 		"reading-time": "^1.5.0",
 		"rehype-autolink-headings": "^7.1.0",
 		"rehype-katex": "7.0.1",

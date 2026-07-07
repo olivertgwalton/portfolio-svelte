@@ -21,14 +21,29 @@ export default defineConfig({
 	projects: [
 		{
 			name: 'chromium',
-			use: { ...devices['Desktop Chrome'] }
+			use: { ...devices['Desktop Chrome'] },
+			testIgnore: /performance\.spec\.ts/
 		},
 		// Visual snapshots are pinned to chromium only — cross-browser pixel
 		// diffs are noisy to maintain and functional coverage matters more here.
 		{
 			name: 'webkit',
 			use: { ...devices['Desktop Safari'] },
-			testIgnore: /visual\.spec\.ts/
+			testIgnore: [/visual\.spec\.ts/, /performance\.spec\.ts/]
+		},
+		// Lighthouse audits attach over CDP, so this project needs its own
+		// fixed debugging port and must run serially — scores get noisy if
+		// other tests are hammering the same preview server concurrently.
+		{
+			name: 'performance',
+			testMatch: /performance\.spec\.ts/,
+			fullyParallel: false,
+			// Lighthouse audits alone can take 20-30s per page on top of navigation.
+			timeout: 90_000,
+			use: {
+				...devices['Desktop Chrome'],
+				launchOptions: { args: ['--remote-debugging-port=9222'] }
+			}
 		}
 	],
 	webServer: {
