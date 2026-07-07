@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import type * as WasmGrid from "../../wasm/rust_grid.js";
+	import type { PhysicsWorkerResponse } from "../../workers/physics.worker.ts";
 
 	// Svelte 5 Runes
 	let canvas = $state<HTMLCanvasElement>();
@@ -143,9 +144,9 @@
 		}
 
 		// Worker Setup
-		const Worker = await import("../../workers/physics.worker.js?worker");
+		const Worker = await import("../../workers/physics.worker.ts?worker");
 		jsWorker = new Worker.default();
-		jsWorker.onmessage = (e) => {
+		jsWorker.onmessage = (e: MessageEvent<PhysicsWorkerResponse>) => {
 			const { particles, duration } = e.data;
 			workerParticles = particles;
 			jsParticles.set(workerParticles);
@@ -265,7 +266,7 @@
 	function handleCountChange(e: Event) {
 		const val = parseInt((e.target as HTMLInputElement).value);
 		particleCount = val;
-		initComparison();
+		void initComparison();
 	}
 
 	function togglePause() {
@@ -276,16 +277,17 @@
 		if (!canvas) return;
 		ctx = canvas.getContext("2d", { alpha: true });
 
-		initData();
+		void initData();
 
-		window.addEventListener("resize", initData);
+		const handleResize = () => void initData();
+		window.addEventListener("resize", handleResize);
 
 		metricsStart = performance.now();
 		animationId = requestAnimationFrame(animate);
 
 		return () => {
 			cancelAnimationFrame(animationId);
-			window.removeEventListener("resize", initData);
+			window.removeEventListener("resize", handleResize);
 		};
 	});
 </script>

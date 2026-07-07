@@ -175,7 +175,7 @@
 		if (!canvas) return;
 		ctx = canvas.getContext("2d", { alpha: true });
 
-		initData();
+		void initData();
 		updateThemeColor();
 		updateCachedRect();
 
@@ -183,7 +183,7 @@
 		const handleResize = () => {
 			clearTimeout(resizeTimer);
 			resizeTimer = setTimeout(() => {
-				initData();
+				void initData();
 				updateThemeColor();
 				updateCachedRect();
 			}, 150);

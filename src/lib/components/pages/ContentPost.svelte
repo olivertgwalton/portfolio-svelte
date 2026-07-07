@@ -42,9 +42,10 @@
         const baseDir = `/src/lib/${type === "posts" ? "posts" : "projects"}`;
 
         const path = `${baseDir}/${slug}/index.md`;
-        modules[path]?.().then(
-            (m) => (ContentComponent = (m as { default: Component }).default),
-        );
+        modules[path]
+            ?.()
+            .then((m) => (ContentComponent = (m as { default: Component }).default))
+            .catch((error: unknown) => console.error("Failed to load content module:", error));
     });
 
     const isProject = $derived(type === "projects");
