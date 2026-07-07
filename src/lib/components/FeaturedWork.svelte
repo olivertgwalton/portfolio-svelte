@@ -13,8 +13,8 @@
     let activeTab = $state<"projects" | "posts">("projects");
 
     const items = $derived(activeTab === "projects" ? projects : posts);
-    const collection = $derived<"projects" | "blog">(
-        activeTab === "projects" ? "projects" : "blog",
+    const collection = $derived<"projects" | "blogs">(
+        activeTab === "projects" ? "projects" : "blogs",
     );
 </script>
 

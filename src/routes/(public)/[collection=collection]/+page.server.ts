@@ -8,7 +8,7 @@ export const config = {
 };
 
 export const load: PageServerLoad = ({ params }) => {
-	const type: ContentType = params.collection === 'blog' ? 'posts' : 'projects';
+	const type: ContentType = params.collection === 'blogs' ? 'posts' : 'projects';
 	const content = getContentList(type);
 	return { content, type };
 };

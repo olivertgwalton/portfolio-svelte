@@ -11,7 +11,7 @@ export const GET: RequestHandler = () => {
 		{ path: '/', priority: '1.0' },
 		{ path: '/about', priority: '0.8' },
 		{ path: '/contact', priority: '0.7' },
-		{ path: '/blog', priority: '0.9' },
+		{ path: '/blogs', priority: '0.9' },
 		{ path: '/projects', priority: '0.9' }
 	];
 
@@ -28,7 +28,7 @@ ${staticPages
 ${posts
 	.map(
 		(post) => `  <url>
-    <loc>${SITE_URL}/blog/${post.slug}</loc>
+    <loc>${SITE_URL}/blogs/${post.slug}</loc>
     <lastmod>${new Date(post.date).toISOString().split('T')[0]}</lastmod>
     <priority>0.7</priority>
   </url>`

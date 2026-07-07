@@ -10,7 +10,7 @@
 	let { items, type }: { items: ContentMetadata[]; type: ContentType } = $props();
 
 	const isPosts = $derived(type === 'posts');
-	const collection = $derived<'projects' | 'blog'>(isPosts ? 'blog' : 'projects');
+	const collection = $derived<'projects' | 'blogs'>(isPosts ? 'blogs' : 'projects');
 	let query = $state('');
 	let selectedTags = $state<string[]>([]);
 
@@ -42,9 +42,17 @@
 			: [...selectedTags, t]);
 </script>
 
-<svelte:head><title>{isPosts ? 'Blog' : 'Projects'} | Oliver Walton</title></svelte:head>
+<svelte:head>
+	<title>{isPosts ? 'Blogs' : 'Projects'} | Oliver Walton</title>
+	<meta
+		name="description"
+		content={isPosts
+			? 'Archive of thoughts, deep-dives, and experiments.'
+			: 'A collection of tools, published work, and ad-hoc documentation.'}
+	/>
+</svelte:head>
 
-<PageHero title={isPosts ? 'Blog.' : 'Projects.'} large>
+<PageHero title={isPosts ? 'Blogs.' : 'Projects.'} large>
 	{#snippet subtitle()}
 		{#if isPosts}
 			Archive of thoughts, <br>deep-dives, and experiments.
