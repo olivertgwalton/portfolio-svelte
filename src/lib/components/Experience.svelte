@@ -11,7 +11,6 @@
 	import { resolve } from '$app/paths';
 	import type { ContentMetadata } from '$lib/content';
 
-	type RoutePath = Parameters<typeof resolve>[0];
 	type Category = 'experience' | 'education' | 'certifications';
 
 	interface Props {
@@ -31,7 +30,7 @@
 		current?: boolean;
 		bullets: string[];
 		skills: string[];
-		link?: RoutePath | string | { collection: string; slug: string };
+		link?: string | { collection: string; slug: string };
 	}
 
 	interface CategoryConfig {
