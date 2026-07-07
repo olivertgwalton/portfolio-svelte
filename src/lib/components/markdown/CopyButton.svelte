@@ -3,7 +3,7 @@
 	import CheckIcon from "phosphor-svelte/lib/CheckIcon";
 	import { fade } from "svelte/transition";
 
-	let { text } = $props();
+	let { text }: { text: string } = $props();
 	let copied = $state(false);
 
 	async function copyToClipboard() {
