@@ -22,6 +22,14 @@
 	let { data }: PageProps = $props();
 </script>
 
+<svelte:head>
+	<title>Oliver Walton | Software Engineer</title>
+	<meta
+		name="description"
+		content="Software engineer specialising in systems architecture, homelabbing, and embedded projects."
+	/>
+</svelte:head>
+
 <LandingHero />
 <TechStack />
 {#await FeaturedWork then FeaturedWork}
