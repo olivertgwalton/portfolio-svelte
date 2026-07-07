@@ -12,7 +12,8 @@
 			"!drizzle/**",
 			"!src/lib/wasm/**",
 			"!rust-grid/**",
-			"!.svelte-kit/**"
+			"!.svelte-kit/**",
+			"!build/**"
 		]
 	},
 	"formatter": {
