@@ -36,3 +36,9 @@ static/uploads/
 rust-grid/target/
 rust-grid/pkg/
 
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+

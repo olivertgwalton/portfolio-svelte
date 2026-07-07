@@ -21,7 +21,12 @@ export default defineConfig(
 			parserOptions: {
 				tsconfigRootDir: import.meta.dirname,
 				projectService: {
-					allowDefaultProject: ['eslint.config.ts', 'svelte.config.ts', 'src/lib/workers/*.ts']
+					allowDefaultProject: [
+						'eslint.config.ts',
+						'svelte.config.ts',
+						'playwright.config.ts',
+						'src/lib/workers/*.ts'
+					]
 				}
 			}
 		},

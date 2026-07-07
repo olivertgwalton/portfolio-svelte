@@ -12,12 +12,17 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "bun biome check . && bun eslint .",
+		"test:e2e": "playwright test",
+		"test:e2e:ui": "playwright test --ui",
+		"test:e2e:update-snapshots": "playwright test --update-snapshots",
 		"format": "bun biome format --write .",
 		"build:wasm": "mkdir -p static/wasm && cd rust-grid && RUSTFLAGS='-C target-feature=+simd128' wasm-pack build --target web --out-dir ../src/lib/wasm && mv ../src/lib/wasm/rust_grid_bg.wasm ../static/wasm/"
 	},
 	"devDependencies": {
+		"@axe-core/playwright": "^4.12.1",
 		"@biomejs/biome": "^2.5.2",
 		"@eslint/config-helpers": "^0.6.0",
+		"@playwright/test": "^1.61.1",
 		"@sveltejs/enhanced-img": "^0.11.0",
 		"@sveltejs/kit": "^2.69.1",
 		"@sveltejs/vite-plugin-svelte": "^7.1.4",
