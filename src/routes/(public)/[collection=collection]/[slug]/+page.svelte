@@ -5,4 +5,4 @@
 	let { data }: PageProps = $props();
 </script>
 
-<ContentPost meta={data.meta} slug={data.slug} type={data.type} related={data.related} />
+<ContentPost meta={data.meta} type={data.type} related={data.related} Content={data.Content} />

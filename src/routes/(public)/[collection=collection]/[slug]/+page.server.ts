@@ -2,12 +2,6 @@ import { getContentItem, getRelatedContent, type ContentType } from '$lib/conten
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
-export const config = {
-	isr: {
-		expiration: 3600
-	}
-};
-
 export const load: PageServerLoad = ({ params }) => {
 	const type: ContentType = params.collection === 'blogs' ? 'posts' : 'projects';
 	const content = getContentItem(type, params.slug);

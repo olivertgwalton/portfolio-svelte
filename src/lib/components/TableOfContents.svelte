@@ -28,7 +28,7 @@
 				<div class="absolute top-0 bottom-0 left-0 w-px bg-surface-200 dark:bg-surface-800"></div>
 				<ul class="space-y-3 text-sm">
 					{#each headings as heading (heading.id)}
-						<li class:pl-4={heading.depth === 3} class="relative">
+						<li class={{ relative: true, 'pl-4': heading.depth === 3 }}>
 							<a
 								href="#{heading.id}"
 								class="group flex items-start py-0.5 pl-4 transition-all duration-300 ease-out
@@ -81,7 +81,7 @@
 						></div>
 						<ul class="space-y-4 text-sm">
 							{#each headings as heading (heading.id)}
-								<li class:pl-4={heading.depth === 3} class="relative">
+								<li class={{ relative: true, 'pl-4': heading.depth === 3 }}>
 									<a
 										href="#{heading.id}"
 										class="group flex items-start py-0.5 pl-4 transition-all duration-300 ease-out
