@@ -53,11 +53,13 @@
                     <span class="font-heading text-2xl font-bold text-surface-950-50 md:text-3xl">
                         olivertgwalton03@gmail.com
                     </span>
-                    <ArrowRightIcon
-                        size={24}
-                        weight="bold"
-                        class="shrink-0 text-surface-600-400 transition-transform group-hover:translate-x-1"
-                    />
+                    <span aria-hidden="true">
+                        <ArrowRightIcon
+                            size={24}
+                            weight="bold"
+                            class="shrink-0 text-surface-600-400 transition-transform group-hover:translate-x-1"
+                        />
+                    </span>
                 </a>
             </div>
         </div>

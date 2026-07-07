@@ -30,7 +30,7 @@
             {#each groups as group, gi (group.label)}
                 <div use:reveal={{ delay: 150 + gi * 100 }}>
                     <h3
-                        class="mb-4 font-mono text-[10px] font-bold tracking-widest text-surface-500 uppercase md:mb-5 md:text-xs"
+                        class="mb-4 font-mono text-[10px] font-bold tracking-widest text-surface-600-400 uppercase md:mb-5 md:text-xs"
                     >
                         {group.label}
                     </h3>

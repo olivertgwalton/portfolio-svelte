@@ -25,6 +25,9 @@
 		color-scheme: light;
 		scroll-padding-top: 5rem;
 		scroll-behavior: smooth;
+		/* Text-safe accent color. Themes may override this (see modern.css) when
+		   their own --color-primary-500 doesn't meet contrast as body text. */
+		--color-primary-500-text: var(--color-primary-500);
 	}
 	html.dark {
 		color-scheme: dark;
@@ -69,7 +72,7 @@
 	padding-top: 0;
 }
 .code-block-lang {
-	@apply text-[10px] tracking-widest uppercase opacity-60;
+	@apply text-[10px] tracking-widest uppercase;
 }
 .code-block-wrapper pre[data-language]::before {
 	display: none;

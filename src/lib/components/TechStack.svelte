@@ -89,7 +89,7 @@
             {#each techCategories as category, ci (category.label)}
                 <div use:reveal={{ delay: 100 + ci * 75 }}>
                     <h3
-                        class="mb-4 font-mono text-[10px] font-bold tracking-widest text-surface-500 uppercase md:mb-5 md:text-xs"
+                        class="mb-4 font-mono text-[10px] font-bold tracking-widest text-surface-600-400 uppercase md:mb-5 md:text-xs"
                     >
                         {category.label}
                     </h3>

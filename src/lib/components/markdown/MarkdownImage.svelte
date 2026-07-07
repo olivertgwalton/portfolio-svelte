@@ -76,7 +76,7 @@
 		/>
 	</button>
 	{#if alt}
-		<figcaption class="text-center font-mono text-xs text-surface-500">{alt}</figcaption>
+		<figcaption class="text-center font-mono text-xs text-surface-600-400">{alt}</figcaption>
 	{/if}
 </figure>
 

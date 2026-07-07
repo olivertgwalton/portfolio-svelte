@@ -19,7 +19,7 @@
 			onclick={() => (active = tab.id)}
 			class="rounded-full px-5 py-2.5 font-mono text-xs font-bold tracking-wider uppercase transition-all
 				{active === tab.id
-				? 'bg-primary-500 text-white'
+				? 'preset-filled-primary-500'
 				: 'bg-surface-200-700 hover:bg-surface-300-600 text-surface-600-400 hover:text-surface-950-50'}"
 		>
 			{tab.label}

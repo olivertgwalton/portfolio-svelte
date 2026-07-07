@@ -24,7 +24,9 @@
 				rel="external noopener noreferrer"
 				class="flex items-center gap-{isLarge ? '3' : '2'} transition-colors {isLarge ? 'hover:text-surface-600-400' : 'hover:text-surface-950-50 md:justify-end'}"
 			>
-				<Icon size={isLarge ? 24 : 18} weight={isLarge ? 'bold' : 'regular'} class="shrink-0 text-surface-600-400" />
+				<span aria-hidden="true"
+					><Icon size={isLarge ? 24 : 18} weight={isLarge ? 'bold' : 'regular'} class="shrink-0 text-surface-600-400" /></span
+				>
 				{label}
 				<span aria-hidden="true"><ArrowUpRightIcon size={isLarge ? 18 : 14} weight={isLarge ? 'bold' : 'regular'} class="text-surface-600-400" /></span>
 			</a>

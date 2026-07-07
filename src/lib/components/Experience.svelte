@@ -123,7 +123,9 @@
 						>
 							<div
 								class="mb-3 inline-flex items-center gap-2 rounded-full px-3 py-1 font-mono text-xs font-bold tracking-wider uppercase
-									{item.current ? 'bg-primary-500/10 text-primary-500' : 'bg-surface-200-700 text-surface-500'}"
+									{item.current
+										? 'bg-primary-500/10 text-(--color-primary-500-text)'
+										: 'bg-surface-200-700 text-surface-500'}"
 							>
 								{#if item.current}
 									<span class="size-1.5 animate-pulse rounded-full bg-primary-500"></span>

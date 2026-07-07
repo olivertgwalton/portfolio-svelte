@@ -33,6 +33,9 @@
     */
 	--color-primary-500: light-dark(#ff8ea6, #ff8ea6);
 	--color-primary-contrast-500: #000000;
+	/* Darker variant for use as text (labels, links, badges) — #ff8ea6 fails
+	   WCAG AA contrast at body text sizes against light backgrounds. */
+	--color-primary-500-text: light-dark(#d6002d, #ff8ea6);
 
 	/* 
        Secondary (Pale Blue/Cyan)
