@@ -19,6 +19,10 @@
     import type { ContentMetadata, ContentType } from "$lib/content";
 
     import { getEnhancedImage } from "$lib/images";
+    import { createTableOfContents } from "$lib/toc.svelte";
+
+    const toc = createTableOfContents();
+    toc.init();
 
     let {
         meta,
@@ -93,25 +97,25 @@
             <a
                 use:reveal={{ delay: 0, y: 10 }}
                 href={resolve("/(public)/[collection=collection]", {
-                    collection: isProject ? "projects" : "blog",
+                    collection: isProject ? "projects" : "blogs",
                 })}
                 class="mb-8 inline-flex items-center gap-2 text-sm font-bold text-surface-600-400 hover:text-primary-500"
             >
                 <span aria-hidden="true"><ArrowLeftIcon size={16} /></span> BACK
-                TO {isProject ? "PROJECTS" : "BLOG"}
+                TO {isProject ? "PROJECTS" : "BLOGS"}
             </a>
 
             <div class="grid gap-12 lg:grid-cols-[1fr_auto] lg:items-center">
                 <div class="max-w-3xl">
                     {#if meta.type}
                         <span
-                            class="mb-4 block font-mono text-sm font-bold tracking-widest text-primary-500 uppercase"
+                            class="mb-4 block font-mono text-sm font-bold tracking-widest text-(--color-primary-500-text) uppercase"
                         >
                             {meta.type}
                         </span>
                     {:else if !isProject}
                         <span
-                            class="mb-4 block font-mono text-sm font-bold tracking-widest text-primary-500 uppercase"
+                            class="mb-4 block font-mono text-sm font-bold tracking-widest text-(--color-primary-500-text) uppercase"
                         >
                             Blog Post
                         </span>
@@ -212,24 +216,37 @@
 
     <div class="container mx-auto max-w-7xl px-6 pt-20">
         <div class="grid gap-16 lg:grid-cols-[1fr_240px]">
-            <div
-                class="prose prose-sm min-w-0 w-full max-w-none sm:prose-base md:prose-lg dark:prose-invert prose-headings:font-heading prose-headings:font-black prose-headings:text-surface-950-50 prose-p:text-surface-800-200 prose-a:text-primary-600 dark:prose-a:text-primary-400 prose-strong:text-surface-950-50 prose-code:font-mono prose-code:text-primary-700 dark:prose-code:text-primary-400 prose-li:text-surface-800-200"
-            >
-                <div>
-                    <TableOfContents layout="collapsible" />
+            <div class="min-w-0 w-full">
+                <div
+                    class="prose prose-sm max-w-none sm:prose-base md:prose-lg dark:prose-invert prose-headings:font-heading prose-headings:font-black prose-headings:text-surface-950-50 prose-p:text-surface-800-200 prose-a:text-primary-600 dark:prose-a:text-primary-400 prose-strong:text-surface-950-50 prose-code:font-mono prose-code:text-primary-700 dark:prose-code:text-primary-400 prose-li:text-surface-800-200"
+                >
+                    <div>
+                        <TableOfContents
+                            layout="collapsible"
+                            headings={toc.headings}
+                            activeId={toc.activeId}
+                            onNavigate={toc.scrollToHeading}
+                        />
+                    </div>
+                    {#if ContentComponent}
+                        <ContentComponent />
+                    {:else}
+                        <p class="animate-pulse font-bold text-surface-400">
+                            Loading...
+                        </p>
+                    {/if}
                 </div>
                 {#if ContentComponent}
-                    <ContentComponent />
                     <ShareWidget title={meta.title} />
-                {:else}
-                    <p class="animate-pulse font-bold text-surface-400">
-                        Loading...
-                    </p>
                 {/if}
             </div>
             <aside class="hidden lg:block">
                 <div class="sticky top-8">
-                    <TableOfContents />
+                    <TableOfContents
+                        headings={toc.headings}
+                        activeId={toc.activeId}
+                        onNavigate={toc.scrollToHeading}
+                    />
                 </div>
             </aside>
         </div>
@@ -245,7 +262,7 @@
                     {#each related as item (item.slug)}
                         <ContentCard
                             {item}
-                            collection={isProject ? "projects" : "blog"}
+                            collection={isProject ? "projects" : "blogs"}
                             variant="compact"
                         />
                     {/each}

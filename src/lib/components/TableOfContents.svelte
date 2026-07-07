@@ -1,87 +1,19 @@
 <script lang="ts">
 	import { CaretDownIcon, ListIcon } from 'phosphor-svelte';
-	import { replaceState } from '$app/navigation';
-	import { page } from '$app/state';
-	import { SvelteURL } from 'svelte/reactivity';
+	import type { TocHeading } from '$lib/toc.svelte';
 
-	let { layout = 'sidebar' }: { layout?: 'sidebar' | 'collapsible' } = $props();
-
-	let headings = $state<{ id: string; text: string; depth: number }[]>([]);
-	let activeId = $state<string>('');
-	let scrollY = $state(0);
-	let isManualScroll = false;
-	let scrollTimeout: ReturnType<typeof setTimeout>;
-
-	function onScrollEnd() {
-		isManualScroll = false;
-		window.removeEventListener('scroll', onScrollHandler);
-	}
-
-	function onScrollHandler() {
-		clearTimeout(scrollTimeout);
-		scrollTimeout = setTimeout(onScrollEnd, 100);
-	}
-
-	function scrollToHeading(id: string) {
-		const el = document.getElementById(id);
-		if (!el) return;
-
-		isManualScroll = true;
-		window.addEventListener('scroll', onScrollHandler, { passive: true });
-		el.scrollIntoView({ behavior: 'smooth' });
-
-		activeId = id;
-		const url = new SvelteURL(page.url);
-		url.hash = id;
-		// eslint-disable-next-line svelte/no-navigation-without-resolve
-		replaceState(url, page.state);
-	}
-
-	function updateHeadings() {
-		const elements = Array.from(document.querySelectorAll('.prose h2, .prose h3'));
-		headings = elements.map((elem) => ({
-			id: elem.id,
-			text: elem.textContent || '',
-			depth: Number(elem.tagName.substring(1))
-		}));
-	}
-
-	$effect(() => {
-		updateHeadings();
-
-		// Only observe the .prose container instead of the entire document
-		const prose = document.querySelector('.prose');
-		if (!prose) return;
-
-		const observer = new MutationObserver(() => requestAnimationFrame(updateHeadings));
-		observer.observe(prose, { childList: true, subtree: true });
-		return () => observer.disconnect();
-	});
-
-	$effect(() => {
-		const elements = headings
-			.map((h) => document.getElementById(h.id))
-			.filter(Boolean) as Element[];
-
-		const observer = new IntersectionObserver(
-			(entries) => {
-				if (isManualScroll) return;
-				for (const entry of entries) {
-					if (entry.isIntersecting) {
-						activeId = entry.target.id;
-					}
-				}
-			},
-			{ rootMargin: '-120px 0px -66% 0px' }
-		);
-
-		elements.forEach((elem) => observer.observe(elem));
-
-		return () => observer.disconnect();
-	});
+	let {
+		layout = 'sidebar',
+		headings,
+		activeId,
+		onNavigate
+	}: {
+		layout?: 'sidebar' | 'collapsible';
+		headings: TocHeading[];
+		activeId: string;
+		onNavigate: (id: string) => void;
+	} = $props();
 </script>
-
-<svelte:window bind:scrollY />
 
 {#if headings.length > 0}
 	{#if layout === 'sidebar'}
@@ -101,11 +33,11 @@
 								href="#{heading.id}"
 								class="group flex items-start py-0.5 pl-4 transition-all duration-300 ease-out
                         {activeId === heading.id
-									? 'translate-x-1 font-medium text-primary-500'
+									? 'translate-x-1 font-medium text-(--color-primary-500-text)'
 									: 'text-surface-600-200 hover:translate-x-1 hover:text-surface-950-50'}"
 								onclick={(e) => {
 									e.preventDefault();
-									scrollToHeading(heading.id);
+									onNavigate(heading.id);
 								}}
 							>
 								<!-- Active Indicator Dot -->
@@ -154,12 +86,12 @@
 										href="#{heading.id}"
 										class="group flex items-start py-0.5 pl-4 transition-all duration-300 ease-out
                                     {activeId === heading.id
-											? 'translate-x-1 font-medium text-primary-500'
+											? 'translate-x-1 font-medium text-(--color-primary-500-text)'
 											: 'text-surface-800-200 hover:translate-x-1 hover:text-surface-950-50'}"
 										onclick={(e) => {
 											e.preventDefault();
 											e.currentTarget.closest('details')?.removeAttribute('open');
-											setTimeout(() => scrollToHeading(heading.id), 10);
+											setTimeout(() => onNavigate(heading.id), 10);
 										}}
 									>
 										<!-- Active Indicator Dot -->
