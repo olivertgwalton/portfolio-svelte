@@ -12,7 +12,7 @@
 	>
 </svelte:head>
 
-<PageHero title="Background.">
+<PageHero title="Background." large>
 	{#snippet subtitle()}
 		Breaking Linux installs <br>since age 10.
 	{/snippet}

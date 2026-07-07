@@ -13,7 +13,7 @@
     />
 </svelte:head>
 
-<PageHero title="Say Hello.">
+<PageHero title="Say Hello." large>
     {#snippet subtitle()}
         Open for new projects, <br />and technical discussions.
     {/snippet}
