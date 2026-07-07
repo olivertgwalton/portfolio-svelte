@@ -6,8 +6,8 @@ FROM rust:slim AS wasm-builder
 WORKDIR /app
 
 # Install wasm-pack and essential build tools
-RUN apt-get update && apt-get install -y curl pkg-config libssl-dev && \
-    curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+RUN apt-get update && apt-get install -y pkg-config libssl-dev && \
+    cargo install wasm-pack
 
 # Copy Rust source code
 COPY rust-grid ./rust-grid
