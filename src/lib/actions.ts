@@ -108,7 +108,7 @@ export const enhanceCodeBlocks: Action<HTMLElement> = (node) => {
 
 	return {
 		destroy() {
-			components.forEach((c) => unmount(c));
+			components.forEach((c) => void unmount(c));
 		}
 	};
 };

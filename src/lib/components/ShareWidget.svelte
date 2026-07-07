@@ -6,13 +6,15 @@
 	import CheckIcon from 'phosphor-svelte/lib/CheckIcon';
 	import { fade } from 'svelte/transition';
 
-	let { title } = $props();
+	let { title }: { title: string } = $props();
 
 	let copied = $state(false);
 	const url = $derived(page.url.href);
 
 	function copyLink() {
-		navigator.clipboard.writeText(url);
+		navigator.clipboard
+			.writeText(url)
+			.catch((error: unknown) => console.error('Failed to copy link:', error));
 		copied = true;
 		setTimeout(() => (copied = false), 2000);
 	}

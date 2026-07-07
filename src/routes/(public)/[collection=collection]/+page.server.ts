@@ -7,7 +7,7 @@ export const config = {
 	}
 };
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = ({ params }) => {
 	const type: ContentType = params.collection === 'blog' ? 'posts' : 'projects';
 	const content = getContentList(type);
 	return { content, type };

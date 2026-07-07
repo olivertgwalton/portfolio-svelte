@@ -8,18 +8,30 @@ const INV_TWO_PI = 0.159154943;
 const B = 1.27323954;
 const C = -0.405284735;
 
-function fastSin(x) {
+function fastSin(x: number): number {
 	let q = x * INV_TWO_PI;
 	q = q - Math.floor(q + 0.5);
 	x = q * TWO_PI;
 	return B * x + C * x * Math.abs(x);
 }
 
-function fastCos(x) {
+function fastCos(x: number): number {
 	return fastSin(x + PI / 2.0);
 }
 
-self.onmessage = (e) => {
+export interface PhysicsWorkerRequest {
+	particles: Float32Array;
+	width: number;
+	height: number;
+	time: number;
+}
+
+export interface PhysicsWorkerResponse {
+	particles: Float32Array;
+	duration: number;
+}
+
+self.onmessage = (e: MessageEvent<PhysicsWorkerRequest>) => {
 	const { particles, width, height, time } = e.data;
 
 	// Constants matching Rust BenchmarkEngine
@@ -174,5 +186,6 @@ self.onmessage = (e) => {
 	}
 
 	const duration = performance.now() - start;
-	self.postMessage({ particles, duration }, [particles.buffer]);
+	const response: PhysicsWorkerResponse = { particles, duration };
+	self.postMessage(response, { transfer: [particles.buffer] });
 };

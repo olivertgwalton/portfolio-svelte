@@ -39,13 +39,13 @@ export function setThemeContext(initialTheme: string, initialMode: string) {
 			return currentMode === 'dark' || (currentMode === 'system' && systemDark);
 		},
 		setTheme(id: string, event?: MouseEvent | KeyboardEvent) {
-			performTransition(() => {
+			void performTransition(() => {
 				currentTheme = id;
 				setCookie('theme', id);
 			}, event);
 		},
 		setMode(id: string, event?: MouseEvent | KeyboardEvent) {
-			performTransition(() => {
+			void performTransition(() => {
 				currentMode = id;
 				setCookie('mode', id);
 			}, event);

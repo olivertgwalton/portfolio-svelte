@@ -1,14 +1,15 @@
 <script lang="ts">
     import "./layout.css";
-    import "@fontsource-variable/space-grotesk";
-    import "@fontsource-variable/manrope";
-    import "@fontsource-variable/jetbrains-mono";
+    import "@fontsource-variable/space-grotesk/index.css";
+    import "@fontsource-variable/manrope/index.css";
+    import "@fontsource-variable/jetbrains-mono/index.css";
     import Navbar from "$lib/components/Navbar.svelte";
     import BackToTop from "$lib/components/BackToTop.svelte";
     import { setThemeContext } from "$lib/theme.svelte";
     import { untrack } from "svelte";
+    import type { LayoutProps } from "./$types";
 
-    let { children, data } = $props();
+    let { children, data }: LayoutProps = $props();
 
     const theme = untrack(() => setThemeContext(data.theme, data.mode));
     theme.initClient();

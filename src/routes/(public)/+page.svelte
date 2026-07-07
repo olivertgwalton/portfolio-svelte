@@ -1,6 +1,7 @@
 <script lang="ts">
 	import LandingHero from "$lib/components/LandingHero.svelte";
 	import TechStack from "$lib/components/TechStack.svelte";
+	import type { PageProps } from "./$types";
 
 	const FeaturedWork = import("$lib/components/FeaturedWork.svelte")
 		.then((m) => m.default)
@@ -18,7 +19,7 @@
 			return null;
 		});
 
-	let { data } = $props();
+	let { data }: PageProps = $props();
 </script>
 
 <LandingHero />

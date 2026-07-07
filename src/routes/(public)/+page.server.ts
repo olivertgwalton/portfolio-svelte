@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { getContentList } from '$lib/content';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = () => {
 	const posts = getContentList('posts').slice(0, 6);
 	const projects = getContentList('projects').slice(0, 6);
 	const experience = getContentList('experience');
