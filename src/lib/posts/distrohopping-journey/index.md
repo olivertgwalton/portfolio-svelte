@@ -3,6 +3,7 @@ title: 'Distrohopping Journey'
 description: 'Initial Linux discovery for custom ROMs, to going deeper.'
 date: '2026-07-09'
 tags: ['linux']
+image: './distrohopping-journey.webp'
 ---
 
 ## Ubuntu 16.04
