@@ -11,7 +11,7 @@
 
         const observer = new ResizeObserver(update);
         observer.observe(document.documentElement);
-        return () => observer.disconnect();
+        return () => { observer.disconnect(); };
     });
 
     const progress = $derived(

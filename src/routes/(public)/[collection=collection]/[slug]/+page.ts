@@ -11,7 +11,8 @@ export const load: PageLoad = async ({ data }) => {
 	const modules = data.type === 'posts' ? postModules : projectModules;
 	const path = `/src/lib/${data.type}/${data.slug}/index.md`;
 
-	const module = (await modules[path]?.()) as { default: Component } | undefined;
+	const loader = modules[path] as (() => Promise<unknown>) | undefined;
+	const module = (await loader?.()) as { default: Component } | undefined;
 
 	return {
 		...data,

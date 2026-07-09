@@ -14,7 +14,7 @@ test.describe('basic meta tags on static pages', () => {
 	] as const;
 
 	for (const { path, title } of pages) {
-		test(`${path || 'home'} has a title and description`, async ({ page }) => {
+		test(`${path === '/' ? 'home' : path} has a title and description`, async ({ page }) => {
 			await page.goto(path);
 			await expect(page).toHaveTitle(title);
 			const description = await attr(page, 'meta[name="description"]');

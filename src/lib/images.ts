@@ -1,11 +1,11 @@
-type Picture = {
+interface Picture {
 	sources: Record<string, string>;
 	img: {
 		src: string;
 		w: number;
 		h: number;
 	};
-};
+}
 
 const images = import.meta.glob<{ default: Picture | string }>(
 	[
@@ -29,7 +29,8 @@ const cache = new Map<string, Picture | string>();
 export function getEnhancedImage(path: string | undefined): Picture | string | null {
 	if (!path) return null;
 
-	if (cache.has(path)) return cache.get(path)!;
+	const cached = cache.get(path);
+	if (cached !== undefined) return cached;
 
 	const suffix = path.replace(/^\/assets/, '');
 

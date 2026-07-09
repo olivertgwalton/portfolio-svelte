@@ -21,8 +21,8 @@
 	let dpr = 1;
 	let dotColor = $state("rgb(0, 0, 0)");
 	// Buffers
-	let posX: Float32Array; // Rust View X
-	let posY: Float32Array; // Rust View Y
+	let posX: Float32Array | undefined; // Rust View X
+	let posY: Float32Array | undefined; // Rust View Y
 
 	// Internal
 	let numPoints = $state(0);
@@ -30,8 +30,8 @@
 	let animationId: number;
 
 	// WASM
-	let wasmGlue: typeof WasmGrid;
-	let wasmMemory: WebAssembly.Memory;
+	let wasmGlue: typeof WasmGrid | undefined;
+	let wasmMemory: WebAssembly.Memory | undefined;
 	let engine: WasmGrid.GridEngine | undefined;
 
 	function updateThemeColor() {
@@ -143,19 +143,19 @@
 	}
 
 	function renderGrid() {
-		if (!engine || !posX || !posY) return;
+		if (!ctx || !engine || !posX || !posY) return;
 
 		engine.update(mouseX, mouseY, dpr, 0.02, 0.85);
 
-		ctx!.fillStyle = dotColor;
-		ctx!.globalAlpha = 0.15;
-		ctx!.beginPath();
+		ctx.fillStyle = dotColor;
+		ctx.globalAlpha = 0.15;
+		ctx.beginPath();
 		const dotRadius = BASE_DOT_RADIUS * dpr;
 		for (let i = 0; i < numPoints; i++) {
-			ctx!.moveTo(posX[i] + dotRadius, posY[i]);
-			ctx!.arc(posX[i], posY[i], dotRadius, 0, Math.PI * 2);
+			ctx.moveTo(posX[i] + dotRadius, posY[i]);
+			ctx.arc(posX[i], posY[i], dotRadius, 0, Math.PI * 2);
 		}
-		ctx!.fill();
+		ctx.fill();
 	}
 
 	// Interaction — cache bounding rect to avoid forced reflow on every mousemove

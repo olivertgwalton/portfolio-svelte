@@ -15,7 +15,11 @@ export default defineConfig(
 	},
 
 	{
-		extends: [ts.configs.recommendedTypeChecked, svelte.configs.recommended],
+		extends: [
+			...ts.configs.strictTypeChecked,
+			...ts.configs.stylisticTypeChecked,
+			svelte.configs.recommended
+		],
 		languageOptions: {
 			globals: { ...globals.browser, ...globals.node },
 			parserOptions: {
@@ -33,7 +37,9 @@ export default defineConfig(
 		rules: {
 			// typescript-eslint strongly recommend that you do not use the no-undef lint rule on TypeScript projects.
 			// see: https://typescript-eslint.io/troubleshooting/faqs/eslint/#i-get-errors-from-the-no-undef-rule-about-global-variables-not-being-defined-even-though-there-are-no-typescript-errors
-			'no-undef': 'off'
+			'no-undef': 'off',
+			// Allow interpolating numbers directly in template literals without an explicit String() cast.
+			'@typescript-eslint/restrict-template-expressions': ['error', { allowNumber: true }]
 		}
 	},
 	{
@@ -43,6 +49,12 @@ export default defineConfig(
 				extraFileExtensions: ['.svelte'],
 				parser: ts.parser
 			}
+		},
+		rules: {
+			// Svelte's `$props()` defaults and the `$bindable()` rune look like useless
+			// default assignments to typescript-eslint, but removing them breaks reactivity
+			// and prop binding.
+			'@typescript-eslint/no-useless-default-assignment': 'off'
 		}
 	}
 );

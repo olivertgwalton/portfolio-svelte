@@ -38,8 +38,10 @@
 {#if zoomed}
 	<div
 		class="fixed inset-0 z-50 flex cursor-zoom-out items-center justify-center bg-black/90 p-4 backdrop-blur-sm"
-		onclick={() => close()}
-		onkeydown={(e) => e.key === 'Escape' && close()}
+		onclick={() => { close(); }}
+		onkeydown={(e) => {
+			if (e.key === 'Escape') close();
+		}}
 		role="dialog"
 		aria-modal="true"
 		aria-label="Image zoom view"

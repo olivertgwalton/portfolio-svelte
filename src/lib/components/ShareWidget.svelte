@@ -14,7 +14,7 @@
 	function copyLink() {
 		navigator.clipboard
 			.writeText(url)
-			.catch((error: unknown) => console.error('Failed to copy link:', error));
+			.catch((error: unknown) => { console.error('Failed to copy link:', error); });
 		copied = true;
 		setTimeout(() => (copied = false), 2000);
 	}

@@ -19,20 +19,20 @@
 	let particleCount = $state(100000);
 
 	// Buffers
-	let posX: Float32Array;
-	let posY: Float32Array;
-	let jsParticles: Float32Array;
-	let workerParticles: Float32Array;
+	let posX: Float32Array | undefined;
+	let posY: Float32Array | undefined;
+	let jsParticles: Float32Array | undefined;
+	let workerParticles: Float32Array | undefined;
 
 	// Rendering
-	let imageData: ImageData;
-	let pixelBuffer: Uint32Array;
+	let imageData: ImageData | undefined;
+	let pixelBuffer: Uint32Array | undefined;
 
 	// Internal
 	let ctx: CanvasRenderingContext2D | null = null;
 	let animationId: number;
-	let wasmGlue: typeof WasmGrid;
-	let wasmMemory: WebAssembly.Memory;
+	let wasmGlue: typeof WasmGrid | undefined;
+	let wasmMemory: WebAssembly.Memory | undefined;
 	let engine: WasmGrid.BenchmarkEngine | undefined;
 	let jsWorker: Worker | undefined;
 	let jsWorkerBusy = false;
@@ -85,6 +85,8 @@
 	}
 
 	async function initComparison() {
+		if (!canvas) return;
+
 		if (jsWorker) {
 			jsWorker.terminate();
 			jsWorker = undefined;
@@ -104,7 +106,7 @@
 		}
 
 		engine = new wasmGlue.BenchmarkEngine(particleCount);
-		engine.init(canvas!.width, canvas!.height);
+		engine.init(canvas.width, canvas.height);
 
 		// Map Views
 		posX = new Float32Array(
@@ -122,7 +124,7 @@
 		jsParticles = new Float32Array(particleCount * 4);
 		workerParticles = new Float32Array(particleCount * 4);
 
-		const minDimension = Math.min(canvas!.width, canvas!.height);
+		const minDimension = Math.min(canvas.width, canvas.height);
 		const min_r = minDimension * 0.15;
 		const max_r = minDimension * 0.4;
 
@@ -149,7 +151,7 @@
 		jsWorker.onmessage = (e: MessageEvent<PhysicsWorkerResponse>) => {
 			const { particles, duration } = e.data;
 			workerParticles = particles;
-			jsParticles.set(workerParticles);
+			jsParticles?.set(workerParticles);
 			if (activeEngine === "js") frameTime = duration;
 			jsWorkerBusy = false;
 		};
@@ -181,12 +183,15 @@
 
 	function renderComparison() {
 		if (
+			!ctx ||
 			!engine ||
 			!posX ||
 			!posY ||
 			!jsParticles ||
 			!canvas ||
-			!pixelBuffer
+			!pixelBuffer ||
+			!imageData ||
+			!wasmMemory
 		)
 			return;
 
@@ -214,7 +219,7 @@
 					pixelBytes,
 				);
 				const rustImageData = new ImageData(rustPixels, w, h);
-				ctx!.putImageData(rustImageData, 0, 0);
+				ctx.putImageData(rustImageData, 0, 0);
 			}
 		} else {
 			// JS Engine
@@ -247,7 +252,7 @@
 				}
 			}
 
-			ctx!.putImageData(imageData, 0, 0);
+			ctx.putImageData(imageData, 0, 0);
 		}
 	}
 
@@ -355,7 +360,7 @@
 			class="flex rounded-full border border-white/20 bg-black/80 p-1 backdrop-blur"
 		>
 			<button
-				onclick={() => updateEngine("js")}
+				onclick={() => { updateEngine("js"); }}
 				class="rounded-full px-6 py-2 text-sm font-bold transition-all {activeEngine ===
 				'js'
 					? 'bg-red-500 text-white shadow-lg'
@@ -364,7 +369,7 @@
 				JavaScript
 			</button>
 			<button
-				onclick={() => updateEngine("rust")}
+				onclick={() => { updateEngine("rust"); }}
 				class="rounded-full px-6 py-2 text-sm font-bold transition-all {activeEngine ===
 				'rust'
 					? 'bg-green-500 text-white shadow-lg'

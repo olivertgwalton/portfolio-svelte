@@ -16,7 +16,7 @@
 
 	const allTags = $derived.by(() => {
 		const tags = new SvelteSet<string>();
-		items.forEach((i) => getItemTags(i).forEach((t) => tags.add(t)));
+		items.forEach((i) => { getItemTags(i).forEach((t) => tags.add(t)); });
 		return Array.from(tags).sort();
 	});
 

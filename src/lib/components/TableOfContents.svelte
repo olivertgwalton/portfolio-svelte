@@ -91,7 +91,7 @@
 										onclick={(e) => {
 											e.preventDefault();
 											e.currentTarget.closest('details')?.removeAttribute('open');
-											setTimeout(() => onNavigate(heading.id), 10);
+											setTimeout(() => { onNavigate(heading.id); }, 10);
 										}}
 									>
 										<!-- Active Indicator Dot -->

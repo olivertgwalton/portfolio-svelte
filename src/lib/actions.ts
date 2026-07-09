@@ -16,7 +16,7 @@ function getSharedObserver(): IntersectionObserver {
 	if (sharedObserver) return sharedObserver;
 
 	sharedObserver = new IntersectionObserver(
-		(entries) => {
+		(entries, observer) => {
 			for (const entry of entries) {
 				if (!entry.isIntersecting) continue;
 
@@ -39,7 +39,7 @@ function getSharedObserver(): IntersectionObserver {
 					el.style.transition = '';
 				};
 
-				sharedObserver!.unobserve(el);
+				observer.unobserve(el);
 				revealElements.delete(el);
 			}
 		},
@@ -54,7 +54,7 @@ export const reveal: Action<HTMLElement, RevealParams> = (el, params = {}) => {
 
 	if (el.dataset.revealed === 'true') {
 		el.style.opacity = '1';
-		return { destroy() {} };
+		return;
 	}
 
 	el.style.opacity = '0';
@@ -71,7 +71,7 @@ export const reveal: Action<HTMLElement, RevealParams> = (el, params = {}) => {
 	};
 };
 
-export const enhanceCodeBlocks: Action<HTMLElement> = (node) => {
+export const enhanceCodeBlocks: Action = (node) => {
 	const components: ReturnType<typeof mount>[] = [];
 	const pres = node.querySelectorAll('pre');
 

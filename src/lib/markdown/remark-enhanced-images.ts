@@ -46,7 +46,7 @@ export function remarkEnhancedImages() {
 					}
 					imports.push(`import ${importName} from '${importPath}?enhanced';`);
 					const sizeAttr = title ? ` size="${title}"` : '';
-					return `<MarkdownImage src={${importName}} alt="${alt || ''}"${sizeAttr} />`;
+					return `<MarkdownImage src={${importName}} alt="${alt ?? ''}"${sizeAttr} />`;
 				});
 
 				// If grouped (more than 1), use a grid.

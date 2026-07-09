@@ -61,7 +61,9 @@ export function setThemeContext(initialTheme: string, initialMode: string) {
 				document.documentElement.classList.toggle('dark', isDark);
 				document.documentElement.setAttribute('data-theme', currentTheme);
 
-				return () => media.removeEventListener('change', onChange);
+				return () => {
+					media.removeEventListener('change', onChange);
+				};
 			});
 		}
 	};
@@ -77,7 +79,7 @@ export function getThemeContext(): ThemeContext {
 }
 
 async function performTransition(action: () => void, event?: MouseEvent | KeyboardEvent) {
-	if (!document.startViewTransition || !event || !(event instanceof MouseEvent)) {
+	if (!('startViewTransition' in document) || !event || !(event instanceof MouseEvent)) {
 		action();
 		return;
 	}
@@ -86,8 +88,8 @@ async function performTransition(action: () => void, event?: MouseEvent | Keyboa
 	const y = event.clientY;
 	const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
 
-	document.documentElement.style.setProperty('--x', x + 'px');
-	document.documentElement.style.setProperty('--y', y + 'px');
+	document.documentElement.style.setProperty('--x', `${x}px`);
+	document.documentElement.style.setProperty('--y', `${y}px`);
 
 	const transition = document.startViewTransition(async () => {
 		action();

@@ -1,4 +1,8 @@
-export type TocHeading = { id: string; text: string; depth: number };
+export interface TocHeading {
+	id: string;
+	text: string;
+	depth: number;
+}
 
 export function createTableOfContents() {
 	let headings = $state<TocHeading[]>([]);
@@ -9,7 +13,7 @@ export function createTableOfContents() {
 	function updateHeadings() {
 		headings = Array.from(document.querySelectorAll('.prose h2, .prose h3')).map((elem) => ({
 			id: elem.id,
-			text: elem.textContent ?? '',
+			text: elem.textContent,
 			depth: Number(elem.tagName.substring(1))
 		}));
 	}
@@ -44,7 +48,9 @@ export function createTableOfContents() {
 
 			const observer = new MutationObserver(() => requestAnimationFrame(updateHeadings));
 			observer.observe(prose, { childList: true, subtree: true });
-			return () => observer.disconnect();
+			return () => {
+				observer.disconnect();
+			};
 		});
 
 		$effect(() => {
@@ -62,8 +68,12 @@ export function createTableOfContents() {
 				{ rootMargin: '-120px 0px -66% 0px' }
 			);
 
-			elements.forEach((elem) => observer.observe(elem));
-			return () => observer.disconnect();
+			elements.forEach((elem) => {
+				observer.observe(elem);
+			});
+			return () => {
+				observer.disconnect();
+			};
 		});
 	}
 

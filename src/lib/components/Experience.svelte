@@ -64,11 +64,11 @@
 
 			return {
 				title: item.title,
-				organization: item.organization || item.type || '',
-				period: period || '',
+				organization: item.organization ?? item.type ?? '',
+				period: period ?? '',
 				current: item.current,
-				bullets: item.highlights || (item.description ? [item.description] : []),
-				skills: item.skills || item.tech || [],
+				bullets: item.highlights ?? (item.description ? [item.description] : []),
+				skills: item.skills ?? item.tech ?? [],
 				link
 			};
 		});

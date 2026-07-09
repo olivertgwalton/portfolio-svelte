@@ -27,7 +27,7 @@ export async function createMdsvexHighlighter() {
 			themes: { light: 'github-light', dark: 'github-dark' },
 			defaultColor: false
 		});
-		const titleMatch = meta?.match(/title="([^"]+)"/);
+		const titleMatch = /title="([^"]+)"/.exec(meta);
 		const titleAttr = titleMatch ? ` data-title="${escapeAttr(titleMatch[1])}"` : '';
 		const withLang = html.replace('<pre ', `<pre data-language="${lang}"${titleAttr} `);
 		return `{@html \`${escapeSvelte(withLang)}\`}`;

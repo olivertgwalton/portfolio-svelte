@@ -32,7 +32,7 @@
                 {#each themes as t (t.id)}
                     <Menu.Item
                         value={t.id}
-                        onclick={(e) => theme.setTheme(t.id, e)}
+                        onclick={(e) => { theme.setTheme(t.id, e); }}
                         class="flex cursor-pointer items-center justify-between rounded-container px-3 py-2 text-sm font-medium transition-colors hover:preset-tonal {theme.theme ===
                         t.id
                             ? 'text-primary-500'
@@ -61,7 +61,7 @@
                     {@const Icon = m.icon}
                     <Menu.Item
                         value={m.id}
-                        onclick={(e) => theme.setMode(m.id, e)}
+                        onclick={(e) => { theme.setMode(m.id, e); }}
                         class="flex cursor-pointer items-center justify-between rounded-container px-3 py-2 text-sm font-medium transition-colors hover:preset-tonal {theme.mode ===
                         m.id
                             ? 'text-primary-500'
