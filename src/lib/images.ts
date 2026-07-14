@@ -10,7 +10,7 @@ interface Picture {
 const images = import.meta.glob<{ default: Picture | string }>(
 	[
 		'/src/lib/assets/**/*.{jpg,jpeg,png,webp,avif}',
-		'/src/lib/posts/**/*.{jpg,jpeg,png,webp,avif}',
+		'/src/lib/blogs/**/*.{jpg,jpeg,png,webp,avif}',
 		'/src/lib/projects/**/*.{jpg,jpeg,png,webp,avif}'
 	],
 	{

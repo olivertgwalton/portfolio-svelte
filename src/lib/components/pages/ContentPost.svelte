@@ -17,7 +17,7 @@
         TagIcon,
         ClockIcon,
     } from "phosphor-svelte";
-    import type { ContentMetadata, ContentType } from "$lib/content";
+    import type { Collection, ContentMetadata, ContentType } from "$lib/content";
 
     import { getEnhancedImage } from "$lib/images";
     import { createTableOfContents } from "$lib/toc.svelte";
@@ -43,7 +43,7 @@
     } = $props();
 
     const isProject = $derived(type === "projects");
-    const collection = $derived(isProject ? "projects" : "blogs");
+    const collection = $derived<Collection>(isProject ? "projects" : "blogs");
     const postHref = (item: ContentMetadata) =>
         resolve("/(public)/[collection=collection]/[slug]", {
             collection,
@@ -90,7 +90,7 @@
                         <span
                             class="mb-4 block font-mono text-sm font-bold tracking-widest text-(--color-primary-500-text) uppercase"
                         >
-                            {isProject ? "Project" : "Blog Post"}
+                            {isProject ? "Project" : "Blog"}
                         </span>
                     {/if}
                     <h1
@@ -226,7 +226,7 @@
 
         {#if adjacent.prev ?? adjacent.next}
             <nav
-                aria-label="{isProject ? 'Project' : 'Post'} navigation"
+                aria-label="{isProject ? 'Project' : 'Blog'} navigation"
                 class="mt-16 grid gap-4 border-t border-surface-200-800 pt-12 sm:grid-cols-2"
             >
                 {#if adjacent.prev}
@@ -285,7 +285,7 @@
                 <h2
                     class="font-heading text-2xl font-black tracking-tight text-surface-950-50"
                 >
-                    Related {isProject ? "Projects" : "Posts"}
+                    Related {isProject ? "Projects" : "Blogs"}
                 </h2>
                 <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {#each related as item (item.slug)}

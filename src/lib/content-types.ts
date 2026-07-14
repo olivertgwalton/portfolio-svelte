@@ -19,7 +19,10 @@ export interface ContentMetadata {
 	readTime?: string;
 }
 
-export type ContentType = 'posts' | 'projects' | 'experience' | 'education' | 'certifications';
+// The two collections that have their own public list/detail pages and URLs.
+export type Collection = 'blogs' | 'projects';
+
+export type ContentType = Collection | 'experience' | 'education' | 'certifications';
 
 export function getItemTags(item: ContentMetadata): string[] {
 	return [...(item.tags ?? []), ...(item.tech ?? [])];

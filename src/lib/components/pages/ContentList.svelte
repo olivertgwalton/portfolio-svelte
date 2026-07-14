@@ -5,12 +5,12 @@
 	import PageHero from '$lib/components/PageHero.svelte';
 	import ContentCard from '$lib/components/ContentCard.svelte';
 	import { SvelteSet } from 'svelte/reactivity';
-	import { getItemTags, type ContentMetadata, type ContentType } from '$lib/content';
+	import { getItemTags, type Collection, type ContentMetadata, type ContentType } from '$lib/content';
 
 	let { items, type }: { items: ContentMetadata[]; type: ContentType } = $props();
 
-	const isPosts = $derived(type === 'posts');
-	const collection = $derived<'projects' | 'blogs'>(isPosts ? 'blogs' : 'projects');
+	const isProject = $derived(type === 'projects');
+	const collection = $derived<Collection>(isProject ? 'projects' : 'blogs');
 	let query = $state('');
 	let selectedTags = $state<string[]>([]);
 
@@ -43,21 +43,21 @@
 </script>
 
 <svelte:head>
-	<title>{isPosts ? 'Blogs' : 'Projects'} | Oliver Walton</title>
+	<title>{isProject ? 'Projects' : 'Blogs'} | Oliver Walton</title>
 	<meta
 		name="description"
-		content={isPosts
-			? 'Archive of thoughts, deep-dives, and experiments.'
-			: 'A collection of tools, published work, and ad-hoc documentation.'}
+		content={isProject
+			? 'A collection of tools, published work, and ad-hoc documentation.'
+			: 'Archive of thoughts, deep-dives, and experiments.'}
 	/>
 </svelte:head>
 
-<PageHero title={isPosts ? 'Blogs.' : 'Projects.'} large>
+<PageHero title={isProject ? 'Projects.' : 'Blogs.'} large>
 	{#snippet subtitle()}
-		{#if isPosts}
-			Archive of thoughts, <br>deep-dives, and experiments.
-		{:else}
+		{#if isProject}
 			A collection of tools, <br>published work, and ad-hoc documentation.
+		{:else}
+			Archive of thoughts, <br>deep-dives, and experiments.
 		{/if}
 	{/snippet}
 </PageHero>
@@ -72,7 +72,7 @@
 				<input
 					type="text"
 					bind:value={query}
-					placeholder="Search {isPosts ? 'articles' : 'projects'}..."
+					placeholder="Search {isProject ? 'projects' : 'articles'}..."
 					class="bg-surface-100-800 input w-full rounded-xl border-surface-200-800 py-3 pl-12 font-medium text-surface-950-50 placeholder:text-surface-800-200"
 				/>
 				{#if query}<button

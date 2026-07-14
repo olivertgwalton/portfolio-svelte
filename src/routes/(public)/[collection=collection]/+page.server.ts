@@ -1,8 +1,8 @@
-import { getContentList, type ContentType } from '$lib/content';
+import { getContentList, type Collection } from '$lib/content';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = ({ params }) => {
-	const type: ContentType = params.collection === 'blogs' ? 'posts' : 'projects';
+	const type = params.collection as Collection;
 	const content = getContentList(type);
 	return { content, type };
 };
