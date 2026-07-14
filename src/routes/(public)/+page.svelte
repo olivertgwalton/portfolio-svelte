@@ -34,7 +34,7 @@
 <TechStack />
 {#await FeaturedWork then FeaturedWork}
 	{#if FeaturedWork}
-		<FeaturedWork projects={data.projects} posts={data.posts} />
+		<FeaturedWork projects={data.projects} blogs={data.blogs} />
 	{/if}
 {/await}
 {#await Experience then Experience}

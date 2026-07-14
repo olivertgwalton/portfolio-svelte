@@ -4,7 +4,7 @@ import type { RequestHandler } from './$types';
 const SITE_URL = 'https://oliverwalton.uk';
 
 export const GET: RequestHandler = () => {
-	const posts = getContentList('posts');
+	const blogs = getContentList('blogs');
 	const projects = getContentList('projects');
 
 	const staticPages = [
@@ -25,11 +25,11 @@ ${staticPages
   </url>`
 	)
 	.join('\n')}
-${posts
+${blogs
 	.map(
-		(post) => `  <url>
-    <loc>${SITE_URL}/blogs/${post.slug}</loc>
-    <lastmod>${new Date(post.date).toISOString().split('T')[0]}</lastmod>
+		(blog) => `  <url>
+    <loc>${SITE_URL}/blogs/${blog.slug}</loc>
+    <lastmod>${new Date(blog.date).toISOString().split('T')[0]}</lastmod>
     <priority>0.7</priority>
   </url>`
 	)

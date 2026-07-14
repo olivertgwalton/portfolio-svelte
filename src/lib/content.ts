@@ -1,74 +1,38 @@
-import { getItemTags, type ContentMetadata, type ContentType } from './content-types';
+import {
+	getItemTags,
+	type Collection,
+	type ContentMetadata,
+	type ContentType
+} from './content-types';
 
-export type { ContentMetadata, ContentType };
+export type { Collection, ContentMetadata, ContentType };
 export { getItemTags };
 
-// Hoist globs to top level for static analysis
+// Globs need static string-literal patterns and an inline options object so
+// Vite can analyse them at build time.
+const filesByType: Record<ContentType, Record<string, unknown>> = {
+	blogs: import.meta.glob('/src/lib/blogs/**/index.md', { eager: true, import: 'metadata' }),
+	projects: import.meta.glob('/src/lib/projects/**/index.md', { eager: true, import: 'metadata' }),
+	experience: import.meta.glob('/src/lib/experience/*.md', { eager: true, import: 'metadata' }),
+	education: import.meta.glob('/src/lib/education/*.md', { eager: true, import: 'metadata' }),
+	certifications: import.meta.glob('/src/lib/certifications/*.md', { eager: true, import: 'metadata' })
+};
 
-const postFiles = import.meta.glob('/src/lib/posts/**/index.md', {
-	eager: true,
-	import: 'metadata'
-});
-const projectFiles = import.meta.glob('/src/lib/projects/**/index.md', {
-	eager: true,
-	import: 'metadata'
-});
-const experienceFiles = import.meta.glob('/src/lib/experience/*.md', {
-	eager: true,
-	import: 'metadata'
-});
-const educationFiles = import.meta.glob('/src/lib/education/*.md', {
-	eager: true,
-	import: 'metadata'
-});
-const certificationFiles = import.meta.glob('/src/lib/certifications/*.md', {
-	eager: true,
-	import: 'metadata'
-});
-
-function resolveImage(slug: string, type: ContentType, image?: string) {
+function resolveImage(type: ContentType, slug: string, image?: string) {
 	if (!image?.startsWith('./')) return image;
-	// Resolve relative path ./cover.jpg -> /src/lib/posts/slug/cover.jpg
-	const dir = type === 'posts' ? 'posts' : 'projects';
-	return `/src/lib/${dir}/${slug}/${image.slice(2)}`;
+	return `/src/lib/${type}/${slug}/${image.slice(2)}`;
+}
+
+// The metadata glob omits the slug; fold it (and the resolved image) back in.
+function toMetadata(type: ContentType, slug: string, file: unknown): ContentMetadata {
+	const metadata = file as Omit<ContentMetadata, 'slug'>;
+	return { slug, ...metadata, image: resolveImage(type, slug, metadata.image) };
 }
 
 export function getContentList(type: ContentType): ContentMetadata[] {
-	let files: Record<string, unknown>;
-
-	switch (type) {
-		case 'posts':
-			files = postFiles;
-			break;
-		case 'projects':
-			files = projectFiles;
-			break;
-		case 'experience':
-			files = experienceFiles;
-			break;
-		case 'education':
-			files = educationFiles;
-			break;
-		case 'certifications':
-			files = certificationFiles;
-			break;
-		default:
-			return [];
-	}
-
-	return Object.entries(files)
-		.map(([path, file]) => {
-			// Extract slug from parent directory: /src/lib/posts/hello-world/index.md -> hello-world
-			const parts = path.split('/');
-			const slug = parts[parts.length - 2];
-
-			const metadata = file as Omit<ContentMetadata, 'slug'>;
-			return {
-				slug,
-				...metadata,
-				image: resolveImage(slug, type, metadata.image)
-			};
-		})
+	// Slug is the parent directory of index.md: /src/lib/blogs/hello/index.md -> hello.
+	return Object.entries(filesByType[type])
+		.map(([path, file]) => toMetadata(type, path.split('/').at(-2)!, file))
 		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
@@ -115,19 +79,6 @@ export function getAdjacentContent(
 }
 
 export function getContentItem(type: ContentType, slug: string): ContentMetadata | null {
-	const files = type === 'posts' ? postFiles : projectFiles;
-	const dir = type === 'posts' ? 'posts' : 'projects';
-
-	// Direct lookup for directory based structure
-	const path = `/src/lib/${dir}/${slug}/index.md`;
-	const file = files[path];
-
-	if (!file) return null;
-	const metadata = file as Omit<ContentMetadata, 'slug'>;
-
-	return {
-		slug,
-		...metadata,
-		image: resolveImage(slug, type, metadata.image)
-	};
+	const file = filesByType[type][`/src/lib/${type}/${slug}/index.md`];
+	return file ? toMetadata(type, slug, file) : null;
 }

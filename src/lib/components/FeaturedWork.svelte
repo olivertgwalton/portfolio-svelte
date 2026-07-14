@@ -1,21 +1,18 @@
 <script lang="ts">
     import { resolve } from "$app/paths";
     import { reveal } from "$lib/actions";
-    import type { ContentMetadata } from "$lib/content";
+    import type { Collection, ContentMetadata } from "$lib/content";
     import ContentCard from "$lib/components/ContentCard.svelte";
     import TabGroup from "$lib/components/TabGroup.svelte";
 
-    let { projects = [], posts = [] } = $props<{
+    let { projects = [], blogs = [] } = $props<{
         projects: ContentMetadata[];
-        posts: ContentMetadata[];
+        blogs: ContentMetadata[];
     }>();
 
-    let activeTab = $state<"projects" | "posts">("projects");
+    let collection = $state<Collection>("projects");
 
-    const items = $derived(activeTab === "projects" ? projects : posts);
-    const collection = $derived<"projects" | "blogs">(
-        activeTab === "projects" ? "projects" : "blogs",
-    );
+    const items = $derived(collection === "projects" ? projects : blogs);
 </script>
 
 <section
@@ -37,9 +34,9 @@
                 <TabGroup
                     tabs={[
                         { id: "projects", label: "Projects" },
-                        { id: "posts", label: "Blogs" },
+                        { id: "blogs", label: "Blogs" },
                     ]}
-                    bind:active={activeTab}
+                    bind:active={collection}
                 />
 
                 <a
@@ -48,7 +45,7 @@
                     })}
                     class="shrink-0 text-[10px] font-black tracking-widest text-surface-600-400 uppercase transition-colors hover:text-primary-500"
                 >
-                    View All {activeTab === "projects" ? "Projects" : "Blogs"}
+                    View All {collection === "projects" ? "Projects" : "Blogs"}
                 </a>
             </div>
         </div>
@@ -63,7 +60,7 @@
                     <p
                         class="font-heading text-2xl font-bold text-surface-800-200"
                     >
-                        No {activeTab === "projects" ? "projects" : "posts"} found.
+                        No {collection === "projects" ? "projects" : "blogs"} found.
                     </p>
                 </div>
             {/each}
