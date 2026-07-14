@@ -5,12 +5,11 @@
 	import PageHero from '$lib/components/PageHero.svelte';
 	import ContentCard from '$lib/components/ContentCard.svelte';
 	import { SvelteSet } from 'svelte/reactivity';
-	import { getItemTags, type Collection, type ContentMetadata, type ContentType } from '$lib/content';
+	import { getItemTags, type Collection, type ContentMetadata } from '$lib/content';
 
-	let { items, type }: { items: ContentMetadata[]; type: ContentType } = $props();
+	let { items, type }: { items: ContentMetadata[]; type: Collection } = $props();
 
 	const isProject = $derived(type === 'projects');
-	const collection = $derived<Collection>(isProject ? 'projects' : 'blogs');
 	let query = $state('');
 	let selectedTags = $state<string[]>([]);
 
@@ -107,7 +106,7 @@
 
 		<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
 			{#each filtered as item, idx (item.slug)}
-				<ContentCard {item} {collection} index={idx} />
+				<ContentCard {item} collection={type} index={idx} />
 			{:else}
 				<div class="col-span-full py-32 text-center">
 					<p class="font-heading text-3xl font-bold text-surface-400">Nothing found.</p>

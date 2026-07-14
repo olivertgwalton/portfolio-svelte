@@ -17,7 +17,7 @@
         TagIcon,
         ClockIcon,
     } from "phosphor-svelte";
-    import type { Collection, ContentMetadata, ContentType } from "$lib/content";
+    import type { Collection, ContentMetadata } from "$lib/content";
 
     import { getEnhancedImage } from "$lib/images";
     import { createTableOfContents } from "$lib/toc.svelte";
@@ -33,7 +33,7 @@
         Content,
     }: {
         meta: ContentMetadata;
-        type: ContentType;
+        type: Collection;
         related?: ContentMetadata[];
         adjacent?: {
             prev: ContentMetadata | null;
@@ -43,10 +43,9 @@
     } = $props();
 
     const isProject = $derived(type === "projects");
-    const collection = $derived<Collection>(isProject ? "projects" : "blogs");
     const postHref = (item: ContentMetadata) =>
         resolve("/(public)/[collection=collection]/[slug]", {
-            collection,
+            collection: type,
             slug: item.slug,
         });
     let featuredImage = $derived(getEnhancedImage(meta.image));
@@ -70,7 +69,7 @@
             <a
                 use:reveal={{ delay: 0, y: 10 }}
                 href={resolve("/(public)/[collection=collection]", {
-                    collection: isProject ? "projects" : "blogs",
+                    collection: type,
                 })}
                 class="mb-8 inline-flex items-center gap-2 text-sm font-bold text-surface-600-400 hover:text-primary-500"
             >
@@ -291,7 +290,7 @@
                     {#each related as item (item.slug)}
                         <ContentCard
                             {item}
-                            collection={isProject ? "projects" : "blogs"}
+                            collection={type}
                             variant="compact"
                         />
                     {/each}
