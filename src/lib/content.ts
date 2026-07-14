@@ -98,6 +98,22 @@ export function getRelatedContent(
 		.map(({ item }) => item);
 }
 
+export function getAdjacentContent(
+	type: ContentType,
+	slug: string
+): { prev: ContentMetadata | null; next: ContentMetadata | null } {
+	// getContentList is sorted newest -> oldest, so the neighbour at idx - 1 is
+	// newer ("next") and idx + 1 is older ("prev").
+	const all = getContentList(type);
+	const idx = all.findIndex((item) => item.slug === slug);
+	if (idx === -1) return { prev: null, next: null };
+
+	return {
+		next: idx > 0 ? all[idx - 1] : null,
+		prev: idx < all.length - 1 ? all[idx + 1] : null
+	};
+}
+
 export function getContentItem(type: ContentType, slug: string): ContentMetadata | null {
 	const files = type === 'posts' ? postFiles : projectFiles;
 	const dir = type === 'posts' ? 'posts' : 'projects';

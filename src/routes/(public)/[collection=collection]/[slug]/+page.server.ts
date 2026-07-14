@@ -1,4 +1,9 @@
-import { getContentItem, getRelatedContent, type ContentType } from '$lib/content';
+import {
+	getAdjacentContent,
+	getContentItem,
+	getRelatedContent,
+	type ContentType
+} from '$lib/content';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -11,11 +16,13 @@ export const load: PageServerLoad = ({ params }) => {
 	}
 
 	const related = getRelatedContent(type, params.slug, content.tags ?? content.tech ?? []);
+	const adjacent = getAdjacentContent(type, params.slug);
 
 	return {
 		meta: content,
 		slug: params.slug,
 		type,
-		related
+		related,
+		adjacent
 	};
 };

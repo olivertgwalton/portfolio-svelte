@@ -10,6 +10,7 @@
     import type { Component } from "svelte";
     import {
         ArrowLeftIcon,
+        ArrowRightIcon,
         GithubLogoIcon,
         GlobeIcon,
         CalendarIcon,
@@ -28,15 +29,26 @@
         meta,
         type,
         related = [],
+        adjacent = { prev: null, next: null },
         Content,
     }: {
         meta: ContentMetadata;
         type: ContentType;
         related?: ContentMetadata[];
+        adjacent?: {
+            prev: ContentMetadata | null;
+            next: ContentMetadata | null;
+        };
         Content: Component | null;
     } = $props();
 
     const isProject = $derived(type === "projects");
+    const collection = $derived(isProject ? "projects" : "blogs");
+    const postHref = (item: ContentMetadata) =>
+        resolve("/(public)/[collection=collection]/[slug]", {
+            collection,
+            slug: item.slug,
+        });
     let featuredImage = $derived(getEnhancedImage(meta.image));
     const ogImage = $derived(
         `/api/og?title=${encodeURIComponent(meta.title)}&description=${encodeURIComponent(meta.description)}`,
@@ -211,6 +223,62 @@
                 </div>
             </aside>
         </div>
+
+        {#if adjacent.prev ?? adjacent.next}
+            <nav
+                aria-label="{isProject ? 'Project' : 'Post'} navigation"
+                class="mt-16 grid gap-4 border-t border-surface-200-800 pt-12 sm:grid-cols-2"
+            >
+                {#if adjacent.prev}
+                    <a
+                        href={postHref(adjacent.prev)}
+                        rel="prev"
+                        class="group flex flex-col gap-2 rounded-2xl border border-surface-200-800 p-6 transition-all hover:-translate-y-0.5 hover:border-primary-500/60 hover:bg-surface-100-900"
+                    >
+                        <span
+                            class="flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-surface-600-400 uppercase"
+                        >
+                            <span aria-hidden="true"
+                                ><ArrowLeftIcon size={14} weight="bold" /></span
+                            >
+                            Previous
+                        </span>
+                        <span
+                            class="font-heading text-lg font-bold text-surface-950-50 transition-colors group-hover:text-primary-500"
+                        >
+                            {adjacent.prev.title}
+                        </span>
+                    </a>
+                {:else}
+                    <div class="hidden sm:block"></div>
+                {/if}
+
+                {#if adjacent.next}
+                    <a
+                        href={postHref(adjacent.next)}
+                        rel="next"
+                        class="group flex flex-col gap-2 rounded-2xl border border-surface-200-800 p-6 text-right transition-all hover:-translate-y-0.5 hover:border-primary-500/60 hover:bg-surface-100-900 sm:items-end"
+                    >
+                        <span
+                            class="flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-surface-600-400 uppercase"
+                        >
+                            Next
+                            <span aria-hidden="true"
+                                ><ArrowRightIcon
+                                    size={14}
+                                    weight="bold"
+                                /></span
+                            >
+                        </span>
+                        <span
+                            class="font-heading text-lg font-bold text-surface-950-50 transition-colors group-hover:text-primary-500"
+                        >
+                            {adjacent.next.title}
+                        </span>
+                    </a>
+                {/if}
+            </nav>
+        {/if}
 
         {#if related.length > 0}
             <section class="mt-16 border-t border-surface-200-800 pt-12">
