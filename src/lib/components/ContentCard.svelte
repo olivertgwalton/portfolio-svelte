@@ -25,9 +25,11 @@
 {#if variant === 'compact'}
 	<a
 		href={resolve('/(public)/[collection=collection]/[slug]', { collection, slug: item.slug })}
-		class="group rounded-xl border border-surface-200-800 p-5 transition-colors hover:border-primary-500/50 hover:bg-surface-100-900"
+		class="group rounded-xl border border-surface-200-800 p-5 transition-all hover:-translate-y-1 hover:border-primary-500/50 hover:bg-surface-100-900"
 	>
-		<h3 class="font-heading text-lg font-bold text-surface-950-50 group-hover:text-primary-500">
+		<h3
+			class="font-heading text-lg font-bold text-surface-950-50 transition-colors group-hover:text-primary-500"
+		>
 			{item.title}
 		</h3>
 		<p class="mt-2 line-clamp-2 text-sm text-surface-600-400">{item.description}</p>
