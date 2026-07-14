@@ -15,7 +15,10 @@ const filesByType: Record<ContentType, Record<string, unknown>> = {
 	projects: import.meta.glob('/src/lib/projects/**/index.md', { eager: true, import: 'metadata' }),
 	experience: import.meta.glob('/src/lib/experience/*.md', { eager: true, import: 'metadata' }),
 	education: import.meta.glob('/src/lib/education/*.md', { eager: true, import: 'metadata' }),
-	certifications: import.meta.glob('/src/lib/certifications/*.md', { eager: true, import: 'metadata' })
+	certifications: import.meta.glob('/src/lib/certifications/*.md', {
+		eager: true,
+		import: 'metadata'
+	})
 };
 
 function resolveImage(type: ContentType, slug: string, image?: string) {
@@ -30,9 +33,11 @@ function toMetadata(type: ContentType, slug: string, file: unknown): ContentMeta
 }
 
 export function getContentList(type: ContentType): ContentMetadata[] {
-	// Slug is the parent directory of index.md: /src/lib/blogs/hello/index.md -> hello.
 	return Object.entries(filesByType[type])
-		.map(([path, file]) => toMetadata(type, path.split('/').at(-2)!, file))
+		.map(([path, file]) => {
+			const parts = path.split('/');
+			return toMetadata(type, parts[parts.length - 2], file);
+		})
 		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
