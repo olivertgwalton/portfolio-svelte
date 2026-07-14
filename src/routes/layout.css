@@ -53,6 +53,11 @@
 	}
 }
 
+.prose :is(h1, h2, h3, h4, h5, h6):hover .heading-link,
+.prose .heading-link[data-copied] {
+	@apply opacity-100;
+}
+
 @utility bg-grid-paper {
 	background-color: light-dark(var(--color-surface-50), var(--color-surface-950));
 	background-image: radial-gradient(

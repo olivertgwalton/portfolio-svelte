@@ -1,5 +1,6 @@
 import { mount, unmount } from 'svelte';
 import CopyButton from '$lib/components/markdown/CopyButton.svelte';
+import HeadingLink from '$lib/components/markdown/HeadingLink.svelte';
 import type { Action } from 'svelte/action';
 
 interface RevealParams {
@@ -67,6 +68,29 @@ export const reveal: Action<HTMLElement, RevealParams> = (el, params = {}) => {
 		destroy() {
 			getSharedObserver().unobserve(el);
 			revealElements.delete(el);
+		}
+	};
+};
+
+// Replace the self-links appended to headings by rehype-autolink-headings with
+// a copy-link button (same design as the share widget): a link icon that
+// becomes a green check on copy, and no jump-to-anchor scroll (it's a button).
+export const enhanceHeadings: Action = (node) => {
+	const anchors = node.querySelectorAll<HTMLAnchorElement>('a.heading-anchor');
+	const components: ReturnType<typeof mount>[] = [];
+
+	for (const anchor of anchors) {
+		const heading = anchor.parentElement;
+		const hash = anchor.getAttribute('href') ?? '';
+		anchor.remove();
+		if (!heading) continue;
+
+		components.push(mount(HeadingLink, { target: heading, props: { hash } }));
+	}
+
+	return {
+		destroy() {
+			components.forEach((c) => void unmount(c));
 		}
 	};
 };

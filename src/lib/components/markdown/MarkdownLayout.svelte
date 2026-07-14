@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { enhanceCodeBlocks } from '$lib/actions';
+	import { enhanceCodeBlocks, enhanceHeadings } from '$lib/actions';
 	import 'katex/dist/katex.min.css';
 	import type { Snippet } from 'svelte';
 
@@ -8,6 +8,7 @@
 
 <div
 	use:enhanceCodeBlocks
+	use:enhanceHeadings
 	class="prose max-w-none dark:prose-invert prose-figure:m-0 prose-img:m-0"
 >
 	{@render children?.()}

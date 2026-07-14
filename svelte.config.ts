@@ -15,7 +15,17 @@ const mdsvexOptions: MdsvexOptions = {
 	extensions: ['.md'],
 	highlight: { highlighter: await createMdsvexHighlighter() },
 	remarkPlugins: [remarkEnhancedImages, remarkReadTime, remarkMath],
-	rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings, rehypeKatex],
+	rehypePlugins: [
+		rehypeSlug,
+		[
+			rehypeAutolinkHeadings,
+			{
+				behavior: 'append',
+				properties: { className: ['heading-anchor'], ariaHidden: true, tabIndex: -1 }
+			}
+		],
+		rehypeKatex
+	],
 	layout: {
 		_: path.resolve(import.meta.dirname, './src/lib/components/markdown/MarkdownLayout.svelte')
 	},
