@@ -234,22 +234,17 @@
                         rel="prev"
                         class="group flex flex-col gap-2 rounded-2xl border border-surface-200-800 p-6 transition-all hover:-translate-y-0.5 hover:border-primary-500/60 hover:bg-surface-100-900"
                     >
-                        <span
-                            class="flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-surface-600-400 uppercase"
-                        >
-                            <span aria-hidden="true"
-                                ><ArrowLeftIcon size={14} weight="bold" /></span
-                            >
+                        <span class="flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-surface-600-400 uppercase">
+                            <span aria-hidden="true"><ArrowLeftIcon size={14} weight="bold" /></span>
                             Previous
                         </span>
-                        <span
-                            class="font-heading text-lg font-bold text-surface-950-50 transition-colors group-hover:text-primary-500"
-                        >
+                        <span class="font-heading text-lg font-bold text-surface-950-50 transition-colors group-hover:text-primary-500">
                             {adjacent.prev.title}
                         </span>
+                        <span class="mt-auto flex items-center gap-3 text-xs text-surface-600-400">
+                            {formatDate(adjacent.prev.date)}
+                        </span>
                     </a>
-                {:else}
-                    <div class="hidden sm:block"></div>
                 {/if}
 
                 {#if adjacent.next}
@@ -257,22 +252,17 @@
                         href={postHref(adjacent.next)}
                         rel="next"
                         class="group flex flex-col gap-2 rounded-2xl border border-surface-200-800 p-6 text-right transition-all hover:-translate-y-0.5 hover:border-primary-500/60 hover:bg-surface-100-900 sm:items-end"
+                        class:sm:col-start-2={!adjacent.prev}
                     >
-                        <span
-                            class="flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-surface-600-400 uppercase"
-                        >
+                        <span class="flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-surface-600-400 uppercase">
                             Next
-                            <span aria-hidden="true"
-                                ><ArrowRightIcon
-                                    size={14}
-                                    weight="bold"
-                                /></span
-                            >
+                            <span aria-hidden="true"><ArrowRightIcon size={14} weight="bold" /></span>
                         </span>
-                        <span
-                            class="font-heading text-lg font-bold text-surface-950-50 transition-colors group-hover:text-primary-500"
-                        >
+                        <span class="font-heading text-lg font-bold text-surface-950-50 transition-colors group-hover:text-primary-500">
                             {adjacent.next.title}
+                        </span>
+                        <span class="mt-auto flex items-center gap-3 text-xs text-surface-600-400">
+                            {formatDate(adjacent.next.date)}
                         </span>
                     </a>
                 {/if}
