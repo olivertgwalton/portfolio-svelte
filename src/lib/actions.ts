@@ -19,26 +19,35 @@ function getSharedObserver(): IntersectionObserver {
 	sharedObserver = new IntersectionObserver(
 		(entries, observer) => {
 			for (const entry of entries) {
-				if (!entry.isIntersecting) continue;
-
 				const el = entry.target as HTMLElement;
 				const params = revealElements.get(el) ?? {};
 				const { delay = 0, duration = 600, y = 20 } = params;
 
-				el.dataset.revealed = 'true';
-				el.style.transition = 'none';
+				if (!entry.isIntersecting) {
+					if (el.dataset.revealHidden !== 'true') {
+						el.dataset.revealHidden = 'true';
+						el.style.opacity = '0';
+						el.style.transform = `translateY(${y}px)`;
+					}
+					continue;
+				}
 
-				el.animate(
-					[
-						{ opacity: 0, transform: `translateY(${y}px)` },
-						{ opacity: 1, transform: 'translateY(0)' }
-					],
-					{ duration, delay, easing: 'ease-out', fill: 'forwards' }
-				).onfinish = () => {
-					el.style.opacity = '1';
-					el.style.transform = 'translateY(0)';
-					el.style.transition = '';
-				};
+				el.dataset.revealed = 'true';
+
+				if (el.dataset.revealHidden === 'true') {
+					el.style.transition = 'none';
+					el.animate(
+						[
+							{ opacity: 0, transform: `translateY(${y}px)` },
+							{ opacity: 1, transform: 'translateY(0)' }
+						],
+						{ duration, delay, easing: 'ease-out', fill: 'forwards' }
+					).onfinish = () => {
+						el.style.opacity = '1';
+						el.style.transform = 'translateY(0)';
+						el.style.transition = '';
+					};
+				}
 
 				observer.unobserve(el);
 				revealElements.delete(el);
@@ -51,15 +60,11 @@ function getSharedObserver(): IntersectionObserver {
 }
 
 export const reveal: Action<HTMLElement, RevealParams> = (el, params = {}) => {
-	const { y = 20 } = params;
-
 	if (el.dataset.revealed === 'true') {
 		el.style.opacity = '1';
 		return;
 	}
 
-	el.style.opacity = '0';
-	el.style.transform = `translateY(${y}px)`;
 
 	revealElements.set(el, params);
 	getSharedObserver().observe(el);
