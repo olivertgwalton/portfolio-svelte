@@ -13,8 +13,12 @@ import { createMdsvexHighlighter } from './src/lib/markdown/shiki-highlighter.ts
 
 const mdsvexOptions: MdsvexOptions = {
 	extensions: ['.md'],
-	highlight: { highlighter: await createMdsvexHighlighter() },
-	remarkPlugins: [remarkEnhancedImages, remarkReadTime, remarkMath],
+	highlight: { highlighter: await createMdsvexHighlighter() } as MdsvexOptions['highlight'],
+	remarkPlugins: [
+		remarkEnhancedImages,
+		remarkReadTime,
+		remarkMath
+	] as MdsvexOptions['remarkPlugins'],
 	rehypePlugins: [
 		rehypeSlug,
 		[
@@ -25,7 +29,7 @@ const mdsvexOptions: MdsvexOptions = {
 			}
 		],
 		rehypeKatex
-	],
+	] as unknown as MdsvexOptions['rehypePlugins'],
 	layout: {
 		_: path.resolve(import.meta.dirname, './src/lib/components/markdown/MarkdownLayout.svelte')
 	},
