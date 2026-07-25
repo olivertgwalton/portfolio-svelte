@@ -59,12 +59,9 @@
 	--color-error-500: light-dark(#ef4444, #f87171);
 	--color-error-contrast-500: #ffffff;
 
-	/* 
-       Core Mappings
-       These determine the default body look.
-       Light Mode: Bg=50 (Cream), Text=950 (Black)
-       Dark Mode: Bg=950 (Black), Text=50 (Cream)
-    */
-	--base-font-color: light-dark(var(--color-surface-950), var(--color-surface-50));
-	--body-background-color: light-dark(var(--color-surface-50), var(--color-surface-950));
+	/* Skeleton v5 typography and root background tokens. */
+	--typo-base--color-light: var(--color-surface-950);
+	--typo-base--color-dark: var(--color-surface-50);
+	--color-root-bg-light: var(--color-surface-50);
+	--color-root-bg-dark: var(--color-surface-950);
 }

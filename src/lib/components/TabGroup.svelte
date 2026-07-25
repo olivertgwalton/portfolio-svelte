@@ -1,4 +1,6 @@
 <script lang="ts" generics="T extends string">
+	import { ToggleGroup } from '@skeletonlabs/skeleton-svelte';
+
 	interface Tab {
 		id: T;
 		label: string;
@@ -13,16 +15,23 @@
 	} = $props();
 </script>
 
-<div class="flex flex-wrap gap-2">
+	<ToggleGroup
+		value={[active]}
+		deselectable={false}
+		onValueChange={(details) => {
+			const next = details.value[0];
+			if (next) active = next as T;
+		}}
+		class="flex flex-wrap gap-2"
+	>
 	{#each tabs as tab (tab.id)}
-		<button
-			onclick={() => (active = tab.id)}
+		<ToggleGroup.Item
+			value={tab.id}
 			class="rounded-full px-5 py-2.5 font-mono text-xs font-bold tracking-wider uppercase transition-all
-				{active === tab.id
-				? 'preset-filled-primary-500'
-				: 'bg-surface-200-700 hover:bg-surface-300-600 text-surface-600-400 hover:text-surface-950-50'}"
+				bg-surface-200-700 text-surface-600-400 hover:bg-surface-300-600 hover:text-surface-950-50
+				data-[state=on]:preset-filled-brand"
 		>
 			{tab.label}
-		</button>
+		</ToggleGroup.Item>
 	{/each}
-</div>
+</ToggleGroup>
