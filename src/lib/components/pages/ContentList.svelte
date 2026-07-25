@@ -4,6 +4,7 @@
 	import XIcon from 'phosphor-svelte/lib/XIcon';
 	import PageHero from '$lib/components/PageHero.svelte';
 	import ContentCard from '$lib/components/ContentCard.svelte';
+	import { ToggleGroup } from '@skeletonlabs/skeleton-svelte';
 	import { SvelteSet } from 'svelte/reactivity';
 	import { getItemTags, type Collection, type ContentMetadata } from '$lib/content';
 
@@ -35,10 +36,6 @@
 		return res;
 	});
 
-	const toggle = (t: string) =>
-		(selectedTags = selectedTags.includes(t)
-			? selectedTags.filter((s) => s !== t)
-			: [...selectedTags, t]);
 </script>
 
 <svelte:head>
@@ -82,26 +79,29 @@
 					>{/if}
 			</div>
 
-			<div class="flex flex-wrap gap-2">
+			<ToggleGroup
+				value={selectedTags}
+				multiple
+				onValueChange={(details) => (selectedTags = details.value)}
+				class="flex flex-wrap gap-2"
+			>
 				{#each allTags as tag, i (tag)}
-					<button
-						use:reveal={{ delay: 50 + i * 20, y: 5 }}
-						onclick={() => toggle(tag)}
-						class="badge cursor-pointer px-3 py-1.5 font-mono text-xs font-bold uppercase transition-all {selectedTags.includes(
-							tag
-						)
-							? 'variant-filled-primary'
-							: 'variant-soft-surface'}"
-					>
-						<span class="flex items-center gap-2"
-							>{#if selectedTags.includes(tag)}<span aria-hidden="true"><XIcon
+					<div use:reveal={{ delay: 50 + i * 20, y: 5 }}>
+						<ToggleGroup.Item
+							value={tag}
+							class="badge cursor-pointer px-3 py-1.5 font-mono text-xs font-bold uppercase transition-all
+								preset-tonal data-[state=on]:preset-filled-brand"
+						>
+							<span class="flex items-center gap-2"
+								>{#if selectedTags.includes(tag)}<span aria-hidden="true"><XIcon
 										weight="bold"
 										class="size-3"
 									/></span>{/if}{tag}</span
-						>
-					</button>
+							>
+						</ToggleGroup.Item>
+					</div>
 				{/each}
-			</div>
+			</ToggleGroup>
 		</div>
 
 		<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">

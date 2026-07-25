@@ -70,11 +70,9 @@
 	--color-error-500: light-dark(#ab4347, #301015);
 	--color-error-contrast-500: light-dark(#ffffff, #ffffff);
 
-	/* 
-       Core Settings
-       These must use light-dark() pairings to ensure they pick the correct 
-       color from the surface scale based on the mode.
-    */
-	--base-font-color: light-dark(var(--color-surface-950), var(--color-surface-50));
-	--body-background-color: light-dark(var(--color-surface-50), var(--color-surface-950));
+	/* Skeleton v5 typography and root background tokens. */
+	--typo-base--color-light: var(--color-surface-950);
+	--typo-base--color-dark: var(--color-surface-50);
+	--color-root-bg-light: var(--color-surface-50);
+	--color-root-bg-dark: var(--color-surface-950);
 }

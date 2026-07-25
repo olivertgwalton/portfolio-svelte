@@ -65,7 +65,6 @@ export const reveal: Action<HTMLElement, RevealParams> = (el, params = {}) => {
 		return;
 	}
 
-
 	revealElements.set(el, params);
 	getSharedObserver().observe(el);
 
