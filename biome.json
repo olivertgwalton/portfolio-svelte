@@ -6,18 +6,7 @@
 		"useIgnoreFile": true
 	},
 	"files": {
-		"includes": [
-			"**",
-			"!package-lock.json",
-			"!pnpm-lock.yaml",
-			"!yarn.lock",
-			"!bun.lock",
-			"!bun.lockb",
-			"!static",
-			"!drizzle",
-			"!src/lib/wasm",
-			"!rust-grid"
-		]
+		"includes": ["**", "!bun.lock", "!static", "!src/lib/wasm", "!rust-grid"]
 	},
 	"css": {
 		"parser": {
