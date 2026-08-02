@@ -22,7 +22,12 @@
 	"devDependencies": {
 		"@axe-core/playwright": "^4.12.1",
 		"@biomejs/biome": "^2.5.5",
+		"@fontsource-variable/jetbrains-mono": "^5.3.0",
+		"@fontsource-variable/manrope": "^5.3.0",
+		"@fontsource-variable/space-grotesk": "^5.3.0",
 		"@playwright/test": "^1.62.0",
+		"@skeletonlabs/skeleton": "^5.0.0",
+		"@skeletonlabs/skeleton-svelte": "^5.0.0",
 		"@sveltejs/enhanced-img": "^0.11.0",
 		"@sveltejs/kit": "^2.70.1",
 		"@sveltejs/vite-plugin-svelte": "^7.2.0",
@@ -34,6 +39,7 @@
 		"lighthouse": "^13.4.1",
 		"mdast-util-to-string": "^4.0.0",
 		"mdsvex": "^0.12.8",
+		"phosphor-svelte": "^3.1.0",
 		"playwright-lighthouse": "^4.0.0",
 		"reading-time": "^1.5.0",
 		"rehype-autolink-headings": "^7.1.0",
@@ -51,13 +57,7 @@
 		"vite": "^8.1.5"
 	},
 	"dependencies": {
-		"@fontsource-variable/jetbrains-mono": "^5.3.0",
-		"@fontsource-variable/manrope": "^5.3.0",
-		"@fontsource-variable/space-grotesk": "^5.3.0",
-		"@skeletonlabs/skeleton": "^5.0.0",
-		"@skeletonlabs/skeleton-svelte": "^5.0.0",
 		"@takumi-rs/core": "^2.5.0",
-		"@takumi-rs/helpers": "^2.5.0",
-		"phosphor-svelte": "^3.1.0"
+		"@takumi-rs/helpers": "^2.5.0"
 	}
 }
