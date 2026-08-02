@@ -18,12 +18,11 @@ for (const { name, path } of pages) {
 		});
 	});
 
-	test(`${name} page matches its dark mode snapshot`, async ({ page }) => {
+	test(`${name} page matches its dark mode snapshot`, async ({ page, context, baseURL }) => {
+		// Seed the mode cookie before the first navigation so the server renders dark
+		// straight away — no load-then-reload round trip.
+		await context.addCookies([{ name: 'mode', value: 'dark', url: baseURL }]);
 		await page.goto(path);
-		await page.evaluate(() => {
-			document.cookie = 'mode=dark; path=/';
-		});
-		await page.reload();
 		await settleAnimations(page);
 		await expect(page).toHaveScreenshot(`${name}-dark.png`, {
 			fullPage: true

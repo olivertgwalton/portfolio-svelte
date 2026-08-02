@@ -1,4 +1,14 @@
 @import "tailwindcss";
+@import "@skeletonlabs/skeleton";
+@import "@skeletonlabs/skeleton/themes/rose";
+@import "@skeletonlabs/skeleton/themes/nosh";
+@import "@skeletonlabs/skeleton/themes/mona";
+@import "@skeletonlabs/skeleton/themes/sahara";
+@import "@skeletonlabs/skeleton/themes/vintage";
+@import "@skeletonlabs/skeleton/themes/nouveau";
+@import "../themes/t3-chat.css";
+@import "../themes/modern.css";
+
 @plugin "@tailwindcss/forms";
 @plugin "@tailwindcss/typography";
 
@@ -9,16 +19,6 @@
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
-
-@import "@skeletonlabs/skeleton";
-@import "@skeletonlabs/skeleton/themes/rose";
-@import "@skeletonlabs/skeleton/themes/nosh";
-@import "@skeletonlabs/skeleton/themes/mona";
-@import "@skeletonlabs/skeleton/themes/sahara";
-@import "@skeletonlabs/skeleton/themes/vintage";
-@import "@skeletonlabs/skeleton/themes/nouveau";
-@import "../themes/t3-chat.css";
-@import "../themes/modern.css";
 
 @layer base {
 	:root {

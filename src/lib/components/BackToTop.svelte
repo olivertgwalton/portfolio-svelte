@@ -14,6 +14,7 @@
 
 {#if visible}
 	<button
+		type="button"
 		onclick={scrollToTop}
 		in:fly={{ y: 20, duration: 300 }}
 		out:fade={{ duration: 200 }}

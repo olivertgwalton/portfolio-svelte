@@ -19,8 +19,16 @@ export const modes = [
 	{ id: 'system', name: 'System' }
 ] as const;
 
+const COOKIE_MAX_AGE_MS = 365 * 24 * 60 * 60 * 1000;
+
 function setCookie(name: string, value: string) {
-	document.cookie = `${name}=${value}; max-age=31536000; path=/; SameSite=Lax`;
+	void cookieStore.set({
+		name,
+		value,
+		path: '/',
+		sameSite: 'lax',
+		expires: Date.now() + COOKIE_MAX_AGE_MS
+	});
 }
 
 export function setThemeContext(initialTheme: string, initialMode: string) {

@@ -15,7 +15,7 @@ To recreate this project with the same configuration:
 
 ```sh
 # recreate this project
-bun x sv create --template minimal --types ts --add tailwindcss="plugins:typography,forms" mcp="ide:gemini+setup:remote" eslint drizzle="database:sqlite+sqlite:libsql" prettier --install bun ./
+bun x sv create --template minimal --types ts --add tailwindcss="plugins:typography,forms" mcp="ide:gemini+setup:remote" drizzle="database:sqlite+sqlite:libsql" prettier --install bun ./
 ```
 
 ## Developing
