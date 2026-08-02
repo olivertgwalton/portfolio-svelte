@@ -1,4 +1,4 @@
-import { toString } from 'mdast-util-to-string';
+import { toString as mdastToString } from 'mdast-util-to-string';
 import type { Root } from 'mdast';
 import getReadingTime from 'reading-time';
 import type { VFile } from 'vfile';
@@ -8,7 +8,7 @@ type MdsvexFile = VFile & { data: VFile['data'] & { fm?: Record<string, unknown>
 
 export function remarkReadTime() {
 	return (tree: Root, file: MdsvexFile) => {
-		const readingTime = getReadingTime(toString(tree));
+		const readingTime = getReadingTime(mdastToString(tree));
 		file.data.fm = {
 			...file.data.fm,
 			readTime: `${Math.ceil(readingTime.minutes)} min read`

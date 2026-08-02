@@ -16,7 +16,11 @@
 
 	const allTags = $derived.by(() => {
 		const tags = new SvelteSet<string>();
-		items.forEach((i) => { getItemTags(i).forEach((t) => tags.add(t)); });
+		items.forEach((i) => {
+			getItemTags(i).forEach((t) => {
+				tags.add(t);
+			});
+		});
 		return Array.from(tags).sort();
 	});
 
@@ -72,6 +76,7 @@
 					class="bg-surface-100-800 input w-full rounded-xl border-surface-200-800 py-3 pl-12 font-medium text-surface-950-50 placeholder:text-surface-800-200"
 				/>
 				{#if query}<button
+						type="button"
 						onclick={() => (query = '')}
 						aria-label="Clear search"
 						class="absolute inset-y-0 right-0 pr-4 text-surface-400 hover:text-surface-950-50"

@@ -38,6 +38,7 @@
 	<h3 class="mb-4 font-heading text-lg font-bold text-surface-950-50">Share this post</h3>
 	<div class="flex gap-4">
 		<button
+			type="button"
 			onclick={shareTwitter}
 			class="btn-icon bg-surface-100-900 transition-colors hover:bg-primary-500 hover:text-white"
 			aria-label="Share on Twitter"
@@ -45,6 +46,7 @@
 			<span aria-hidden="true"><TwitterLogoIcon size={20} weight="fill" /></span>
 		</button>
 		<button
+			type="button"
 			onclick={shareLinkedin}
 			class="btn-icon bg-surface-100-900 transition-colors hover:bg-[#0077b5] hover:text-white"
 			aria-label="Share on LinkedIn"
@@ -52,6 +54,7 @@
 			<span aria-hidden="true"><LinkedinLogoIcon size={20} weight="fill" /></span>
 		</button>
 		<button
+			type="button"
 			onclick={copyLink}
 			class="relative btn-icon bg-surface-100-900 transition-colors hover:bg-surface-200-800"
 			aria-label="Copy Link"

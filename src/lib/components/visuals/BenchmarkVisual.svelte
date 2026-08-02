@@ -269,7 +269,7 @@
 	}
 
 	function handleCountChange(e: Event) {
-		const val = parseInt((e.target as HTMLInputElement).value);
+		const val = parseInt((e.target as HTMLInputElement).value, 10);
 		particleCount = val;
 		void initComparison();
 	}
@@ -307,6 +307,7 @@
 
 	<!-- Pause Button -->
 	<button
+		type="button"
 		onclick={togglePause}
 		class="absolute right-4 bottom-4 z-50 rounded-full border border-white/20 bg-black/50 p-2 text-white/50 backdrop-blur transition-all hover:bg-white/10 hover:text-white"
 		aria-label={isPaused ? "Play Animation" : "Pause Animation"}
@@ -317,7 +318,8 @@
 				width="24"
 				height="24"
 				viewBox="0 0 24 24"
-				fill="currentColor"><path d="M8 5v14l11-7z" /></svg
+				fill="currentColor"
+				aria-hidden="true"><path d="M8 5v14l11-7z" /></svg
 			>
 		{:else}
 			<svg
@@ -326,6 +328,7 @@
 				height="24"
 				viewBox="0 0 24 24"
 				fill="currentColor"
+				aria-hidden="true"
 				><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg
 			>
 		{/if}
@@ -360,6 +363,7 @@
 			class="flex rounded-full border border-white/20 bg-black/80 p-1 backdrop-blur"
 		>
 			<button
+				type="button"
 				onclick={() => { updateEngine("js"); }}
 				class="rounded-full px-6 py-2 text-sm font-bold transition-all {activeEngine ===
 				'js'
@@ -369,6 +373,7 @@
 				JavaScript
 			</button>
 			<button
+				type="button"
 				onclick={() => { updateEngine("rust"); }}
 				class="rounded-full px-6 py-2 text-sm font-bold transition-all {activeEngine ===
 				'rust'

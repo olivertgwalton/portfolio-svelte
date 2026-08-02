@@ -46,7 +46,7 @@
 
 	function mapContentToTimeline(items: ContentMetadata[]): TimelineItem[] {
 		return items.map((item) => {
-			let link: TimelineItem['link'] = undefined;
+			let link: TimelineItem['link'];
 
 			// Handle links based on type
 			if (item.github) {
