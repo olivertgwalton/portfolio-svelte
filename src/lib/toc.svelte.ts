@@ -6,15 +6,17 @@ export interface TocHeading {
 
 export function createTableOfContents() {
 	let headings = $state<TocHeading[]>([]);
-	let activeId = $state('');
+	let activeId = $state("");
 	let manualScroll = false;
 	let scrollEndTimeout: ReturnType<typeof setTimeout>;
 
 	function updateHeadings() {
-		headings = Array.from(document.querySelectorAll('.prose h2, .prose h3')).map((elem) => ({
+		headings = Array.from(
+			document.querySelectorAll(".prose h2, .prose h3"),
+		).map((elem) => ({
 			id: elem.id,
 			text: elem.textContent,
-			depth: Number(elem.tagName.substring(1))
+			depth: Number(elem.tagName.substring(1)),
 		}));
 	}
 
@@ -22,7 +24,7 @@ export function createTableOfContents() {
 		clearTimeout(scrollEndTimeout);
 		scrollEndTimeout = setTimeout(() => {
 			manualScroll = false;
-			window.removeEventListener('scroll', onScroll);
+			window.removeEventListener("scroll", onScroll);
 		}, 100);
 	}
 
@@ -31,11 +33,11 @@ export function createTableOfContents() {
 		if (!el) return;
 
 		manualScroll = true;
-		window.addEventListener('scroll', onScroll, { passive: true });
-		el.scrollIntoView({ behavior: 'smooth' });
+		window.addEventListener("scroll", onScroll, { passive: true });
+		el.scrollIntoView({ behavior: "smooth" });
 
 		activeId = id;
-		history.replaceState(history.state, '', `#${id}`);
+		history.replaceState(history.state, "", `#${id}`);
 	}
 
 	function init() {
@@ -43,10 +45,12 @@ export function createTableOfContents() {
 			updateHeadings();
 
 			// Only observe the .prose container instead of the entire document
-			const prose = document.querySelector('.prose');
+			const prose = document.querySelector(".prose");
 			if (!prose) return;
 
-			const observer = new MutationObserver(() => requestAnimationFrame(updateHeadings));
+			const observer = new MutationObserver(() =>
+				requestAnimationFrame(updateHeadings),
+			);
 			observer.observe(prose, { childList: true, subtree: true });
 			return () => {
 				observer.disconnect();
@@ -65,7 +69,7 @@ export function createTableOfContents() {
 						if (entry.isIntersecting) activeId = entry.target.id;
 					}
 				},
-				{ rootMargin: '-120px 0px -66% 0px' }
+				{ rootMargin: "-120px 0px -66% 0px" },
 			);
 
 			elements.forEach((elem) => {
@@ -85,6 +89,6 @@ export function createTableOfContents() {
 			return activeId;
 		},
 		scrollToHeading,
-		init
+		init,
 	};
 }

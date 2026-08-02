@@ -1,22 +1,22 @@
-import { getContext, setContext, tick } from 'svelte';
+import { getContext, setContext, tick } from "svelte";
 
-const THEME_KEY = Symbol('theme');
+const THEME_KEY = Symbol("theme");
 
 export const themes = [
-	{ id: 'modern', name: 'Modern' },
-	{ id: 'rose', name: 'Rose' },
-	{ id: 'nosh', name: 'Nosh' },
-	{ id: 'mona', name: 'Mona' },
-	{ id: 'sahara', name: 'Sahara' },
-	{ id: 'vintage', name: 'Vintage' },
-	{ id: 'nouveau', name: 'Nouveau' },
-	{ id: 't3-chat', name: 'T3 Chat' }
+	{ id: "modern", name: "Modern" },
+	{ id: "rose", name: "Rose" },
+	{ id: "nosh", name: "Nosh" },
+	{ id: "mona", name: "Mona" },
+	{ id: "sahara", name: "Sahara" },
+	{ id: "vintage", name: "Vintage" },
+	{ id: "nouveau", name: "Nouveau" },
+	{ id: "t3-chat", name: "T3 Chat" },
 ] as const;
 
 export const modes = [
-	{ id: 'light', name: 'Light' },
-	{ id: 'dark', name: 'Dark' },
-	{ id: 'system', name: 'System' }
+	{ id: "light", name: "Light" },
+	{ id: "dark", name: "Dark" },
+	{ id: "system", name: "System" },
 ] as const;
 
 const COOKIE_MAX_AGE_MS = 365 * 24 * 60 * 60 * 1000;
@@ -25,9 +25,9 @@ function setCookie(name: string, value: string) {
 	void cookieStore.set({
 		name,
 		value,
-		path: '/',
-		sameSite: 'lax',
-		expires: Date.now() + COOKIE_MAX_AGE_MS
+		path: "/",
+		sameSite: "lax",
+		expires: Date.now() + COOKIE_MAX_AGE_MS,
 	});
 }
 
@@ -44,36 +44,37 @@ export function setThemeContext(initialTheme: string, initialMode: string) {
 			return currentMode;
 		},
 		get isDark() {
-			return currentMode === 'dark' || (currentMode === 'system' && systemDark);
+			return currentMode === "dark" || (currentMode === "system" && systemDark);
 		},
 		setTheme(id: string, event?: MouseEvent | KeyboardEvent) {
 			void performTransition(() => {
 				currentTheme = id;
-				setCookie('theme', id);
+				setCookie("theme", id);
 			}, event);
 		},
 		setMode(id: string, event?: MouseEvent | KeyboardEvent) {
 			void performTransition(() => {
 				currentMode = id;
-				setCookie('mode', id);
+				setCookie("mode", id);
 			}, event);
 		},
 		initClient() {
 			$effect(() => {
-				const media = window.matchMedia('(prefers-color-scheme: dark)');
+				const media = window.matchMedia("(prefers-color-scheme: dark)");
 				systemDark = media.matches;
 				const onChange = (e: MediaQueryListEvent) => (systemDark = e.matches);
-				media.addEventListener('change', onChange);
+				media.addEventListener("change", onChange);
 
-				const isDark = currentMode === 'dark' || (currentMode === 'system' && systemDark);
-				document.documentElement.classList.toggle('dark', isDark);
-				document.documentElement.setAttribute('data-theme', currentTheme);
+				const isDark =
+					currentMode === "dark" || (currentMode === "system" && systemDark);
+				document.documentElement.classList.toggle("dark", isDark);
+				document.documentElement.setAttribute("data-theme", currentTheme);
 
 				return () => {
-					media.removeEventListener('change', onChange);
+					media.removeEventListener("change", onChange);
 				};
 			});
-		}
+		},
 	};
 
 	setContext(THEME_KEY, ctx);
@@ -86,18 +87,28 @@ export function getThemeContext(): ThemeContext {
 	return getContext<ThemeContext>(THEME_KEY);
 }
 
-async function performTransition(action: () => void, event?: MouseEvent | KeyboardEvent) {
-	if (!('startViewTransition' in document) || !event || !(event instanceof MouseEvent)) {
+async function performTransition(
+	action: () => void,
+	event?: MouseEvent | KeyboardEvent,
+) {
+	if (
+		!("startViewTransition" in document) ||
+		!event ||
+		!(event instanceof MouseEvent)
+	) {
 		action();
 		return;
 	}
 
 	const x = event.clientX;
 	const y = event.clientY;
-	const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+	const endRadius = Math.hypot(
+		Math.max(x, innerWidth - x),
+		Math.max(y, innerHeight - y),
+	);
 
-	document.documentElement.style.setProperty('--x', `${x}px`);
-	document.documentElement.style.setProperty('--y', `${y}px`);
+	document.documentElement.style.setProperty("--x", `${x}px`);
+	document.documentElement.style.setProperty("--y", `${y}px`);
 
 	const transition = document.startViewTransition(async () => {
 		action();
@@ -108,13 +119,16 @@ async function performTransition(action: () => void, event?: MouseEvent | Keyboa
 
 	document.documentElement.animate(
 		{
-			clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`]
+			clipPath: [
+				`circle(0px at ${x}px ${y}px)`,
+				`circle(${endRadius}px at ${x}px ${y}px)`,
+			],
 		},
 		{
 			duration: 500,
-			easing: 'ease-in-out',
-			pseudoElement: '::view-transition-new(root)',
-			composite: 'replace'
-		}
+			easing: "ease-in-out",
+			pseudoElement: "::view-transition-new(root)",
+			composite: "replace",
+		},
 	);
 }

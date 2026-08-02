@@ -59,7 +59,10 @@
 }
 
 @utility bg-grid-paper {
-	background-color: light-dark(var(--color-surface-50), var(--color-surface-950));
+	background-color: light-dark(
+		var(--color-surface-50),
+		var(--color-surface-950)
+	);
 	background-image: radial-gradient(
 		light-dark(var(--color-surface-200), var(--color-surface-800)) 1.5px,
 		transparent 1.5px
