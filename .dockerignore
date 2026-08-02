@@ -6,5 +6,11 @@ build
 .gitignore
 *.md
 .DS_Store
-.vscode
-.gemini
+# Tests — not needed to build the app
+e2e
+playwright.config.ts
+playwright-report
+test-results
+blob-report
+
+rust-grid
