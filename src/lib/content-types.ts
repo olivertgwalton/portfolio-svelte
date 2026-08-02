@@ -10,7 +10,7 @@ export interface ContentMetadata {
 	github?: string;
 	demo?: string;
 	source?: string;
-	link_type?: 'demo' | 'source';
+	link_type?: "demo" | "source";
 	organization?: string;
 	period?: string;
 	current?: boolean;
@@ -20,9 +20,13 @@ export interface ContentMetadata {
 }
 
 // The two collections that have their own public list/detail pages and URLs.
-export type Collection = 'blogs' | 'projects';
+export type Collection = "blogs" | "projects";
 
-export type ContentType = Collection | 'experience' | 'education' | 'certifications';
+export type ContentType =
+	| Collection
+	| "experience"
+	| "education"
+	| "certifications";
 
 export function getItemTags(item: ContentMetadata): string[] {
 	return [...(item.tags ?? []), ...(item.tech ?? [])];

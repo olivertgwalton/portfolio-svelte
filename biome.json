@@ -19,16 +19,6 @@
 			"!rust-grid"
 		]
 	},
-	"formatter": {
-		"indentStyle": "tab",
-		"lineWidth": 100
-	},
-	"javascript": {
-		"formatter": {
-			"quoteStyle": "single",
-			"trailingCommas": "none"
-		}
-	},
 	"css": {
 		"parser": {
 			"tailwindDirectives": true
@@ -39,11 +29,5 @@
 	},
 	"assist": {
 		"enabled": false
-	},
-	"linter": {
-		"enabled": true,
-		"rules": {
-			"preset": "recommended"
-		}
 	}
 }
