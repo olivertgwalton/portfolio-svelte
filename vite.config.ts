@@ -12,12 +12,12 @@ import { defineConfig } from "vite";
 import { cspDirectives } from "./src/lib/csp.ts";
 import { remarkEnhancedImages } from "./src/lib/markdown/remark-enhanced-images.ts";
 import { remarkReadTime } from "./src/lib/markdown/remark-read-time.ts";
-import { createMdsvexHighlighter } from "./src/lib/markdown/shiki-highlighter.ts";
+import { mdsvexHighlighter } from "./src/lib/markdown/shiki-highlighter.ts";
 
 const mdsvexOptions: MdsvexOptions = {
 	extensions: [".md"],
 	highlight: {
-		highlighter: await createMdsvexHighlighter(),
+		highlighter: mdsvexHighlighter,
 	} as MdsvexOptions["highlight"],
 	remarkPlugins: [
 		remarkEnhancedImages,
