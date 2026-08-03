@@ -5,7 +5,7 @@ import MoonIcon from "phosphor-svelte/lib/MoonIcon";
 import SunIcon from "phosphor-svelte/lib/SunIcon";
 import MonitorIcon from "phosphor-svelte/lib/MonitorIcon";
 import { Menu } from "@skeletonlabs/skeleton-svelte";
-import { getThemeContext, themes } from "$lib/theme.svelte";
+import { getThemeContext, themes } from "#lib/theme.svelte";
 
 const modeOptions = [
 	{ id: "light", name: "Light", icon: SunIcon },

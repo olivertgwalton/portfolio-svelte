@@ -1,14 +1,17 @@
 import {
+	type Collection,
 	getAdjacentContent,
 	getContentItem,
 	getRelatedContent,
-	type Collection,
-} from "$lib/content";
+} from "#lib/content";
 import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 
+// Annotated rather than cast: SvelteKit's load-return type widens the literal
+// union to string across the data boundary, so it has to be reasserted — but an
+// annotation is checked, where `as Collection` would just be asserted.
 export const load: PageServerLoad = ({ params }) => {
-	const type = params.collection as Collection;
+	const type: Collection = params.collection;
 	const content = getContentItem(type, params.slug);
 
 	if (!content) {

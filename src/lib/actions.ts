@@ -1,6 +1,6 @@
 import { mount, unmount } from "svelte";
-import CopyButton from "$lib/components/markdown/CopyButton.svelte";
-import HeadingLink from "$lib/components/markdown/HeadingLink.svelte";
+import CopyButton from "#lib/components/markdown/CopyButton.svelte";
+import HeadingLink from "#lib/components/markdown/HeadingLink.svelte";
 import type { Action } from "svelte/action";
 
 interface RevealParams {

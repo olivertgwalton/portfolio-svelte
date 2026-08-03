@@ -1,6 +1,6 @@
 <script lang="ts">
 import { CaretDownIcon, ListIcon } from "phosphor-svelte";
-import type { TocHeading } from "$lib/toc.svelte";
+import type { TocHeading } from "#lib/toc.svelte";
 
 let {
 	layout = "sidebar",

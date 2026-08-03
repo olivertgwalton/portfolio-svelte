@@ -1,5 +1,6 @@
 {
-	"extends": "./.svelte-kit/tsconfig.json",
+	"extends": "$app/tsconfig",
+	"include": ["src"],
 	"compilerOptions": {
 		"rewriteRelativeImportExtensions": true,
 		"allowJs": true,
@@ -11,11 +12,13 @@
 		"sourceMap": true,
 		"strict": true,
 		"moduleResolution": "bundler",
-		"types": ["bun"]
+		"types": ["bun", "$app/types"]
 	},
-	"exclude": ["src/lib/workers"]
+	// `$app/tsconfig` turns on checkJs and Kit 3 requires include: ["src"], which
+	// drags in the generated wasm-bindgen glue. It isn't ours to fix.
+	"exclude": ["src/lib/workers", "src/lib/wasm"]
 	// Path aliases are handled by https://svelte.dev/docs/kit/configuration#alias
-	// except $lib which is handled by https://svelte.dev/docs/kit/configuration#files
+	// except #lib, which Kit 3 maps via the `imports` field in package.json
 	//
 	// To make changes to top-level options such as include and exclude, we recommend extending
 	// the generated config; see https://svelte.dev/docs/kit/configuration#typescript

@@ -1,7 +1,7 @@
 <script lang="ts">
 import ArrowUpRightIcon from "phosphor-svelte/lib/ArrowUpRightIcon";
-import { socialLinks } from "$lib/site.config";
-import { reveal } from "$lib/actions";
+import { socialLinks } from "#lib/site.config";
+import { reveal } from "#lib/actions";
 
 let {
 	size = "base",

@@ -1,9 +1,9 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
-import me from "$lib/assets/me.jpg?enhanced";
+import me from "#lib/assets/me.jpg?enhanced";
 import ArrowDownIcon from "phosphor-svelte/lib/ArrowDownIcon";
-import InteractiveGrid from "$lib/components/visuals/InteractiveGrid.svelte";
-import { reveal } from "$lib/actions";
+import InteractiveGrid from "#lib/components/visuals/InteractiveGrid.svelte";
+import { reveal } from "#lib/actions";
 </script>
 
 <section
@@ -61,7 +61,7 @@ import { reveal } from "$lib/actions";
 				<!-- Buttons -->
 				<div use:reveal={{ delay: 300 }} class="mt-10 flex flex-wrap gap-5">
 					<a
-						href={resolve('/contact')}
+						href={resolve('/(public)/contact')}
 						class="btn preset-filled-primary-500 px-8 py-4 text-sm font-bold tracking-wider uppercase"
 					>
 						Contact

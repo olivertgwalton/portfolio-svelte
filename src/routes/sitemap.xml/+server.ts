@@ -1,4 +1,4 @@
-import { getContentList } from "$lib/content";
+import { getContentList } from "#lib/content";
 import type { RequestHandler } from "./$types";
 
 const SITE_URL = "https://oliverwalton.uk";

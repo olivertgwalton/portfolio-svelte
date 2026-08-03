@@ -1,9 +1,9 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
-import { reveal } from "$lib/actions";
-import type { Collection, ContentMetadata } from "$lib/content";
-import ContentCard from "$lib/components/ContentCard.svelte";
-import TabGroup from "$lib/components/TabGroup.svelte";
+import { reveal } from "#lib/actions";
+import type { Collection, ContentMetadata } from "#lib/content";
+import ContentCard from "#lib/components/ContentCard.svelte";
+import TabGroup from "#lib/components/TabGroup.svelte";
 
 let { projects = [], blogs = [] } = $props<{
 	projects: ContentMetadata[];

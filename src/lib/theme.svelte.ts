@@ -21,12 +21,14 @@ export const modes = [
 
 const COOKIE_MAX_AGE_MS = 365 * 24 * 60 * 60 * 1000;
 
+// Keep DEFAULT_THEME in sync with the `data-theme` baked into src/app.html —
+// that attribute is what the prerendered HTML paints with before hydration.
 const DEFAULT_THEME = "modern";
 const DEFAULT_MODE = "system";
 
 // The site is prerendered, so there is no server-side cookie read. Prerendered
-// HTML is built with the defaults; on the client we pick the real values up
-// from the cookie, matching the pre-paint script in app.html.
+// HTML ships the defaults above; on the client we pick the real values up from
+// the cookie, which is what swaps the theme in on hydration.
 function readCookie(name: string) {
 	if (typeof document === "undefined") return undefined;
 	return document.cookie

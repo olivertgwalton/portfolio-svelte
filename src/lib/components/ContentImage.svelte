@@ -1,6 +1,6 @@
 <script lang="ts">
-import { getHSL } from "$lib/utils";
-import { getEnhancedImage } from "$lib/images";
+import { getHSL } from "#lib/utils";
+import { getEnhancedImage } from "#lib/images";
 import CodeIcon from "phosphor-svelte/lib/CodeIcon";
 
 let {

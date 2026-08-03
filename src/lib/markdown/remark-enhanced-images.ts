@@ -43,7 +43,7 @@ export function remarkEnhancedImages() {
 					const importName = `enhanced_image_${count++}`;
 					let importPath = url;
 					if (url.startsWith("/assets/")) {
-						importPath = url.replace("/assets/", "$lib/assets/");
+						importPath = url.replace("/assets/", "#lib/assets/");
 					} else if (url.startsWith("./") && file.filename) {
 						importPath = path.resolve(path.dirname(file.filename), url);
 					}
@@ -94,7 +94,7 @@ export function remarkEnhancedImages() {
 		if (imports.length === 0) return;
 
 		imports.unshift(
-			`import MarkdownImage from '$lib/components/markdown/MarkdownImage.svelte';`,
+			`import MarkdownImage from '#lib/components/markdown/MarkdownImage.svelte';`,
 		);
 		const importContent = imports.join("\n");
 		const scriptNodeRef: { current: Html | null } = { current: null };

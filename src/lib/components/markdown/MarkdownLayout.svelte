@@ -1,5 +1,5 @@
 <script lang="ts">
-import { enhanceCodeBlocks, enhanceHeadings } from "$lib/actions";
+import { enhanceCodeBlocks, enhanceHeadings } from "#lib/actions";
 import "katex/dist/katex.min.css";
 import type { Snippet } from "svelte";
 

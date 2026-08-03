@@ -1,6 +1,6 @@
 <script lang="ts">
-import PageHero from "$lib/components/PageHero.svelte";
-import StatCard from "$lib/components/StatCard.svelte";
+import PageHero from "#lib/components/PageHero.svelte";
+import StatCard from "#lib/components/StatCard.svelte";
 import { fly } from "svelte/transition";
 </script>
 
