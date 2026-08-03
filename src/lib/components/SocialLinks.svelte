@@ -24,7 +24,9 @@ const isLarge = $derived(size === "lg");
 				target="_blank"
 				title="{label} (opens in new window)"
 				rel="external noopener noreferrer"
-				class="flex items-center gap-{isLarge ? '3' : '2'} transition-colors {isLarge ? 'hover:text-surface-600-400' : 'hover:text-surface-950-50 md:justify-end'}"
+				class="flex items-center transition-colors {isLarge
+					? 'gap-3 hover:text-surface-600-400'
+					: 'gap-2 hover:text-surface-950-50 md:justify-end'}"
 			>
 				<span aria-hidden="true"
 					><Icon

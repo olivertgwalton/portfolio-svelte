@@ -1,6 +1,9 @@
 <script lang="ts">
 import { onMount } from "svelte";
-import type * as WasmGrid from "../../wasm/rust_grid.js";
+import PlayIcon from "phosphor-svelte/lib/PlayIcon";
+import PauseIcon from "phosphor-svelte/lib/PauseIcon";
+import type * as WasmGrid from "#lib/wasm/rust_grid.js";
+import { loadWasm } from "#lib/wasm-loader";
 import type { PhysicsWorkerResponse } from "../../workers/physics.worker.ts";
 
 // Svelte 5 Runes
@@ -31,7 +34,6 @@ let pixelBuffer: Uint32Array | undefined;
 // Internal
 let ctx: CanvasRenderingContext2D | null = null;
 let animationId: number;
-let wasmGlue: typeof WasmGrid | undefined;
 let wasmMemory: WebAssembly.Memory | undefined;
 let engine: WasmGrid.BenchmarkEngine | undefined;
 let jsWorker: Worker | undefined;
@@ -43,22 +45,6 @@ let fps = $derived(frameTime > 0 ? 1000 / frameTime : 0);
 let metricsStart = 0;
 let metricsFrames = 0;
 let frameTimeAccum = 0;
-
-async function initWasm() {
-	try {
-		if (!wasmGlue) {
-			const wasmPkg = await import("../../wasm/rust_grid.js");
-
-			const wasmExports = await wasmPkg.default({
-				module_or_path: "/wasm/rust_grid_bg.wasm",
-			});
-			wasmGlue = wasmPkg;
-			wasmMemory = wasmExports.memory;
-		}
-	} catch {
-		// Silently fail WASM init
-	}
-}
 
 async function initData() {
 	if (!canvas) return;
@@ -93,8 +79,10 @@ async function initComparison() {
 		jsWorkerBusy = false;
 	}
 
-	await initWasm();
-	if (!wasmGlue || !wasmMemory) return;
+	const wasm = await loadWasm();
+	if (!wasm) return;
+	// renderComparison reads this to bounds-check the pixel pointer each frame.
+	wasmMemory = wasm.memory;
 
 	if (engine) {
 		try {
@@ -105,12 +93,20 @@ async function initComparison() {
 		engine = undefined;
 	}
 
-	engine = new wasmGlue.BenchmarkEngine(particleCount);
+	engine = new wasm.glue.BenchmarkEngine(particleCount);
 	engine.init(canvas.width, canvas.height);
 
 	// Map Views
-	posX = new Float32Array(wasmMemory.buffer, engine.pos_x_ptr(), particleCount);
-	posY = new Float32Array(wasmMemory.buffer, engine.pos_y_ptr(), particleCount);
+	posX = new Float32Array(
+		wasm.memory.buffer,
+		engine.pos_x_ptr(),
+		particleCount,
+	);
+	posY = new Float32Array(
+		wasm.memory.buffer,
+		engine.pos_y_ptr(),
+		particleCount,
+	);
 
 	// Setup JS
 	jsParticles = new Float32Array(particleCount * 4);
@@ -301,29 +297,13 @@ onMount(() => {
 		class="absolute right-4 bottom-4 z-50 rounded-full border border-white/20 bg-black/50 p-2 text-white/50 backdrop-blur transition-all hover:bg-white/10 hover:text-white"
 		aria-label={isPaused ? "Play Animation" : "Pause Animation"}
 	>
-		{#if isPaused}
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				width="24"
-				height="24"
-				viewBox="0 0 24 24"
-				fill="currentColor"
-				aria-hidden="true"
-			>
-				<path d="M8 5v14l11-7z" />
-			</svg>
-		{:else}
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				width="24"
-				height="24"
-				viewBox="0 0 24 24"
-				fill="currentColor"
-				aria-hidden="true"
-			>
-				<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-			</svg>
-		{/if}
+		<span aria-hidden="true">
+			{#if isPaused}
+				<PlayIcon size={24} weight="fill" />
+			{:else}
+				<PauseIcon size={24} weight="fill" />
+			{/if}
+		</span>
 	</button>
 
 	<!-- HUD -->

@@ -3,21 +3,12 @@ import LandingHero from "#lib/components/LandingHero.svelte";
 import TechStack from "#lib/components/TechStack.svelte";
 import type { PageProps } from "./$types";
 
-const FeaturedWork = import("#lib/components/FeaturedWork.svelte")
-	.then((m) => m.default)
-	.catch(() => {
-		return null;
-	});
-const Experience = import("#lib/components/Experience.svelte")
-	.then((m) => m.default)
-	.catch(() => {
-		return null;
-	});
-const AboutSummary = import("#lib/components/AboutSummary.svelte")
-	.then((m) => m.default)
-	.catch(() => {
-		return null;
-	});
+const lazy = <T>(module: Promise<{ default: T }>) =>
+	module.then((m) => m.default).catch(() => null);
+
+const FeaturedWork = lazy(import("#lib/components/FeaturedWork.svelte"));
+const Experience = lazy(import("#lib/components/Experience.svelte"));
+const AboutSummary = lazy(import("#lib/components/AboutSummary.svelte"));
 
 let { data }: PageProps = $props();
 </script>

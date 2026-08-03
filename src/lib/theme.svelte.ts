@@ -13,12 +13,6 @@ export const themes = [
 	{ id: "t3-chat", name: "T3 Chat" },
 ] as const;
 
-export const modes = [
-	{ id: "light", name: "Light" },
-	{ id: "dark", name: "Dark" },
-	{ id: "system", name: "System" },
-] as const;
-
 const COOKIE_MAX_AGE_MS = 365 * 24 * 60 * 60 * 1000;
 
 // Keep DEFAULT_THEME in sync with the `data-theme` baked into src/app.html —

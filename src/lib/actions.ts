@@ -1,6 +1,7 @@
 import { mount, unmount } from "svelte";
-import CopyButton from "#lib/components/markdown/CopyButton.svelte";
-import HeadingLink from "#lib/components/markdown/HeadingLink.svelte";
+import CopyButton from "#lib/components/CopyButton.svelte";
+import CopyIcon from "phosphor-svelte/lib/CopyIcon";
+import LinkIcon from "phosphor-svelte/lib/LinkIcon";
 import type { Action } from "svelte/action";
 
 interface RevealParams {
@@ -89,7 +90,19 @@ export const enhanceHeadings: Action = (node) => {
 		anchor.remove();
 		if (!heading) continue;
 
-		components.push(mount(HeadingLink, { target: heading, props: { hash } }));
+		components.push(
+			mount(CopyButton, {
+				target: heading,
+				props: {
+					text: () => `${location.origin}${location.pathname}${hash}`,
+					label: "Copy link to this section",
+					icon: LinkIcon,
+					size: 18,
+					class:
+						"heading-link relative ml-2 inline-flex align-middle text-surface-600-400 opacity-0 transition-opacity hover:text-primary-500",
+				},
+			}),
+		);
 	}
 
 	return {
@@ -129,7 +142,15 @@ export const enhanceCodeBlocks: Action = (node) => {
 
 		const component = mount(CopyButton, {
 			target: pre,
-			props: { text: pre.innerText },
+			props: {
+				text: pre.innerText,
+				label: "Copy code to clipboard",
+				icon: CopyIcon,
+				size: 16,
+				iconClass: "text-surface-600-400",
+				class:
+					"absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-lg border border-surface-200-800 bg-surface-50-950 opacity-0 transition-all group-hover:opacity-100 hover:bg-surface-100-900 focus:opacity-100 focus:ring-2 focus:ring-primary-500 focus:outline-none",
+			},
 		});
 		components.push(component);
 	}

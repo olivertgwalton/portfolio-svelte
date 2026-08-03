@@ -176,31 +176,24 @@ const ActiveIcon = $derived(categories[activeTab].icon);
 							</div>
 
 							{#if item.link}
+								{@const isExternal = typeof item.link === 'string'}
 								<div class="mt-6">
-									{#if typeof item.link === 'string'}
-										<a
-											href={item.link}
-											target="_blank"
-											title="View Project (opens in new window)"
-											rel="external noopener noreferrer"
-											class="inline-flex items-center gap-2 text-sm font-bold text-primary-500 transition-colors hover:text-primary-600"
+									<a
+										href={typeof item.link === 'string'
+											? item.link
+											: resolve('/(public)/[collection=collection]/[slug]', item.link)}
+										target={isExternal ? '_blank' : undefined}
+										title={isExternal
+											? 'View Project (opens in new window)'
+											: undefined}
+										rel={isExternal ? 'external noopener noreferrer' : undefined}
+										class="inline-flex items-center gap-2 text-sm font-bold text-primary-500 transition-colors hover:text-primary-600"
+									>
+										<span>View Project</span>
+										<span aria-hidden="true"
+											><ArrowSquareOutIcon size={16} weight="bold" /></span
 										>
-											<span>View Project</span>
-											<span aria-hidden="true"
-												><ArrowSquareOutIcon size={16} weight="bold" /></span
-											>
-										</a>
-									{:else}
-										<a
-											href={resolve('/(public)/[collection=collection]/[slug]', item.link)}
-											class="inline-flex items-center gap-2 text-sm font-bold text-primary-500 transition-colors hover:text-primary-600"
-										>
-											<span>View Project</span>
-											<span aria-hidden="true"
-												><ArrowSquareOutIcon size={16} weight="bold" /></span
-											>
-										</a>
-									{/if}
+									</a>
 								</div>
 							{/if}
 						</div>
