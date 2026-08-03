@@ -1,45 +1,50 @@
 <script lang="ts">
-	import { reveal } from '$lib/actions';
-	import MagnifyingGlassIcon from 'phosphor-svelte/lib/MagnifyingGlassIcon';
-	import XIcon from 'phosphor-svelte/lib/XIcon';
-	import PageHero from '$lib/components/PageHero.svelte';
-	import ContentCard from '$lib/components/ContentCard.svelte';
-	import { ToggleGroup } from '@skeletonlabs/skeleton-svelte';
-	import { SvelteSet } from 'svelte/reactivity';
-	import { getItemTags, type Collection, type ContentMetadata } from '$lib/content';
+import { reveal } from "$lib/actions";
+import MagnifyingGlassIcon from "phosphor-svelte/lib/MagnifyingGlassIcon";
+import XIcon from "phosphor-svelte/lib/XIcon";
+import PageHero from "$lib/components/PageHero.svelte";
+import ContentCard from "$lib/components/ContentCard.svelte";
+import { ToggleGroup } from "@skeletonlabs/skeleton-svelte";
+import { SvelteSet } from "svelte/reactivity";
+import {
+	getItemTags,
+	type Collection,
+	type ContentMetadata,
+} from "$lib/content";
 
-	let { items, type }: { items: ContentMetadata[]; type: Collection } = $props();
+let { items, type }: { items: ContentMetadata[]; type: Collection } = $props();
 
-	const isProject = $derived(type === 'projects');
-	let query = $state('');
-	let selectedTags = $state<string[]>([]);
+const isProject = $derived(type === "projects");
+let query = $state("");
+let selectedTags = $state<string[]>([]);
 
-	const allTags = $derived.by(() => {
-		const tags = new SvelteSet<string>();
-		items.forEach((i) => {
-			getItemTags(i).forEach((t) => {
-				tags.add(t);
-			});
+const allTags = $derived.by(() => {
+	const tags = new SvelteSet<string>();
+	items.forEach((i) => {
+		getItemTags(i).forEach((t) => {
+			tags.add(t);
 		});
-		return Array.from(tags).sort();
 	});
+	return Array.from(tags).sort();
+});
 
-	const filtered = $derived.by(() => {
-		let res = items;
-		if (query) {
-			const q = query.toLowerCase();
-			res = res.filter(
-				(i) =>
-					i.title.toLowerCase().includes(q) ||
-					i.description.toLowerCase().includes(q) ||
-					getItemTags(i).some((t) => t.toLowerCase().includes(q))
-			);
-		}
-		if (selectedTags.length > 0)
-			res = res.filter((i) => selectedTags.every((t) => getItemTags(i).includes(t)));
-		return res;
-	});
-
+const filtered = $derived.by(() => {
+	let res = items;
+	if (query) {
+		const q = query.toLowerCase();
+		res = res.filter(
+			(i) =>
+				i.title.toLowerCase().includes(q) ||
+				i.description.toLowerCase().includes(q) ||
+				getItemTags(i).some((t) => t.toLowerCase().includes(q)),
+		);
+	}
+	if (selectedTags.length > 0)
+		res = res.filter((i) =>
+			selectedTags.every((t) => getItemTags(i).includes(t)),
+		);
+	return res;
+});
 </script>
 
 <svelte:head>
@@ -49,7 +54,7 @@
 		content={isProject
 			? 'A collection of tools, published work, and ad-hoc documentation.'
 			: 'Archive of thoughts, deep-dives, and experiments.'}
-	/>
+	>
 </svelte:head>
 
 <PageHero title={isProject ? 'Projects.' : 'Blogs.'} large>
@@ -66,22 +71,29 @@
 	<div class="container mx-auto max-w-7xl px-6">
 		<div class="mb-16 space-y-8">
 			<div class="relative max-w-xl">
-				<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-					<span aria-hidden="true"><MagnifyingGlassIcon class="size-5 text-surface-400" /></span>
+				<div
+					class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4"
+				>
+					<span aria-hidden="true"
+						><MagnifyingGlassIcon class="size-5 text-surface-400" /></span
+					>
 				</div>
 				<input
 					type="text"
 					bind:value={query}
 					placeholder="Search {isProject ? 'projects' : 'articles'}..."
 					class="bg-surface-100-800 input w-full rounded-xl border-surface-200-800 py-3 pl-12 font-medium text-surface-950-50 placeholder:text-surface-800-200"
-				/>
-				{#if query}<button
+				>
+				{#if query}
+					<button
 						type="button"
 						onclick={() => (query = '')}
 						aria-label="Clear search"
 						class="absolute inset-y-0 right-0 pr-4 text-surface-400 hover:text-surface-950-50"
-					><span aria-hidden="true"><XIcon class="size-4" /></span></button
-					>{/if}
+					>
+						<span aria-hidden="true"><XIcon class="size-4" /></span>
+					</button>
+				{/if}
 			</div>
 
 			<ToggleGroup
@@ -98,10 +110,12 @@
 								preset-tonal data-[state=on]:preset-filled-brand"
 						>
 							<span class="flex items-center gap-2"
-								>{#if selectedTags.includes(tag)}<span aria-hidden="true"><XIcon
-										weight="bold"
-										class="size-3"
-									/></span>{/if}{tag}</span
+								>{#if selectedTags.includes(tag)}
+									<span aria-hidden="true"
+										><XIcon weight="bold" class="size-3" /></span
+									>
+								{/if}
+								{tag}</span
 							>
 						</ToggleGroup.Item>
 					</div>
@@ -114,7 +128,9 @@
 				<ContentCard {item} collection={type} index={idx} />
 			{:else}
 				<div class="col-span-full py-32 text-center">
-					<p class="font-heading text-3xl font-bold text-surface-400">Nothing found.</p>
+					<p class="font-heading text-3xl font-bold text-surface-400">
+						Nothing found.
+					</p>
 				</div>
 			{/each}
 		</div>

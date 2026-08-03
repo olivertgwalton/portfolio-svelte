@@ -1,8 +1,13 @@
 <script lang="ts">
-	let { class: className = '' }: { class?: string } = $props();
+let { class: className = "" }: { class?: string } = $props();
 </script>
 
-<svg viewBox="0.21 -0.077 110 110" xmlns="http://www.w3.org/2000/svg" class={className} aria-hidden="true">
+<svg
+	viewBox="0.21 -0.077 110 110"
+	xmlns="http://www.w3.org/2000/svg"
+	class={className}
+	aria-hidden="true"
+>
 	<!-- Top Snake (Blue) -->
 	<path
 		d="M55.023-0.077c-25.971,0-26.25,10.081-26.25,12.156c0,3.148,0,12.594,0,12.594h26.75v3.781 c0,0-27.852,0-37.375,0c-7.949,0-17.938,4.833-17.938,26.25c0,19.673,7.792,27.281,15.656,27.281c2.335,0,9.344,0,9.344,0 s0-9.765,0-13.125c0-5.491,2.721-15.656,15.406-15.656c15.91,0,19.971,0,26.531,0c3.902,0,14.906-1.696,14.906-14.406 c0-13.452,0-17.89,0-24.219C82.054,11.426,81.515-0.077,55.023-0.077z M40.273,8.392c2.662,0,4.813,2.15,4.813,4.813 c0,2.661-2.151,4.813-4.813,4.813s-4.813-2.151-4.813-4.813C35.46,10.542,37.611,8.392,40.273,8.392z"
@@ -18,16 +23,16 @@
 </svg>
 
 <style>
-	.snake-blue,
-	.snake-yellow {
-		transition: fill 0.3s ease;
-	}
+.snake-blue,
+.snake-yellow {
+	transition: fill 0.3s ease;
+}
 
-	:global(.group:hover) .snake-blue {
-		fill: #7ba3c4;
-	}
+:global(.group:hover) .snake-blue {
+	fill: #7ba3c4;
+}
 
-	:global(.group:hover) .snake-yellow {
-		fill: #d4c4a8;
-	}
+:global(.group:hover) .snake-yellow {
+	fill: #d4c4a8;
+}
 </style>

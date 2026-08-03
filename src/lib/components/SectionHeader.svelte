@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { reveal } from '$lib/actions';
-	import type { Snippet } from 'svelte';
+import { reveal } from "$lib/actions";
+import type { Snippet } from "svelte";
 
-	let {
-		title,
-		subtitle,
-		class: className = 'mb-16'
-	}: {
-		title: string;
-		subtitle?: Snippet;
-		class?: string;
-	} = $props();
+let {
+	title,
+	subtitle,
+	class: className = "mb-16",
+}: {
+	title: string;
+	subtitle?: Snippet;
+	class?: string;
+} = $props();
 </script>
 
 <div class="grid gap-8 md:grid-cols-[1fr_auto] md:items-end {className}">

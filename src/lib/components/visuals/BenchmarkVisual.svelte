@@ -1,300 +1,289 @@
 <script lang="ts">
-	import { onMount } from "svelte";
-	import type * as WasmGrid from "../../wasm/rust_grid.js";
-	import type { PhysicsWorkerResponse } from "../../workers/physics.worker.ts";
+import { onMount } from "svelte";
+import type * as WasmGrid from "../../wasm/rust_grid.js";
+import type { PhysicsWorkerResponse } from "../../workers/physics.worker.ts";
 
-	// Svelte 5 Runes
-	let canvas = $state<HTMLCanvasElement>();
+// Svelte 5 Runes
+let canvas = $state<HTMLCanvasElement>();
 
-	// This component is dedicated to the benchmark visualization
+// This component is dedicated to the benchmark visualization
 
-	// State
-	let width = 0;
-	let height = 0;
-	let dpr = 1;
+// State
+let width = 0;
+let height = 0;
+let dpr = 1;
 
-	// Benchmark State
-	let isPaused = $state(true);
-	let activeEngine = $state<"rust" | "js">("rust");
-	let particleCount = $state(100000);
+// Benchmark State
+let isPaused = $state(true);
+let activeEngine = $state<"rust" | "js">("rust");
+let particleCount = $state(100000);
 
-	// Buffers
-	let posX: Float32Array | undefined;
-	let posY: Float32Array | undefined;
-	let jsParticles: Float32Array | undefined;
-	let workerParticles: Float32Array | undefined;
+// Buffers
+let posX: Float32Array | undefined;
+let posY: Float32Array | undefined;
+let jsParticles: Float32Array | undefined;
+let workerParticles: Float32Array | undefined;
 
-	// Rendering
-	let imageData: ImageData | undefined;
-	let pixelBuffer: Uint32Array | undefined;
+// Rendering
+let imageData: ImageData | undefined;
+let pixelBuffer: Uint32Array | undefined;
 
-	// Internal
-	let ctx: CanvasRenderingContext2D | null = null;
-	let animationId: number;
-	let wasmGlue: typeof WasmGrid | undefined;
-	let wasmMemory: WebAssembly.Memory | undefined;
-	let engine: WasmGrid.BenchmarkEngine | undefined;
-	let jsWorker: Worker | undefined;
-	let jsWorkerBusy = false;
+// Internal
+let ctx: CanvasRenderingContext2D | null = null;
+let animationId: number;
+let wasmGlue: typeof WasmGrid | undefined;
+let wasmMemory: WebAssembly.Memory | undefined;
+let engine: WasmGrid.BenchmarkEngine | undefined;
+let jsWorker: Worker | undefined;
+let jsWorkerBusy = false;
 
-	// Metrics
-	let frameTime = $state(0);
-	let fps = $derived(frameTime > 0 ? 1000 / frameTime : 0);
-	let metricsStart = 0;
-	let metricsFrames = 0;
-	let frameTimeAccum = 0;
+// Metrics
+let frameTime = $state(0);
+let fps = $derived(frameTime > 0 ? 1000 / frameTime : 0);
+let metricsStart = 0;
+let metricsFrames = 0;
+let frameTimeAccum = 0;
 
-	async function initWasm() {
+async function initWasm() {
+	try {
+		if (!wasmGlue) {
+			const wasmPkg = await import("../../wasm/rust_grid.js");
+
+			const wasmExports = await wasmPkg.default({
+				module_or_path: "/wasm/rust_grid_bg.wasm",
+			});
+			wasmGlue = wasmPkg;
+			wasmMemory = wasmExports.memory;
+		}
+	} catch {
+		// Silently fail WASM init
+	}
+}
+
+async function initData() {
+	if (!canvas) return;
+
+	dpr = window.devicePixelRatio || 1;
+	const rect = canvas.getBoundingClientRect();
+	width = rect.width;
+	height = rect.height;
+
+	const displayWidth = Math.ceil(width * dpr);
+	const displayHeight = Math.ceil(height * dpr);
+
+	canvas.width = displayWidth;
+	canvas.height = displayHeight;
+
+	if (ctx) ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+	if (ctx) {
+		imageData = ctx.createImageData(displayWidth, displayHeight);
+		pixelBuffer = new Uint32Array(imageData.data.buffer);
+	}
+
+	await initComparison();
+}
+
+async function initComparison() {
+	if (!canvas) return;
+
+	if (jsWorker) {
+		jsWorker.terminate();
+		jsWorker = undefined;
+		jsWorkerBusy = false;
+	}
+
+	await initWasm();
+	if (!wasmGlue || !wasmMemory) return;
+
+	if (engine) {
 		try {
-			if (!wasmGlue) {
-				const wasmPkg = await import("../../wasm/rust_grid.js");
-
-				const wasmExports = await wasmPkg.default({
-					module_or_path: "/wasm/rust_grid_bg.wasm",
-				});
-				wasmGlue = wasmPkg;
-				wasmMemory = wasmExports.memory;
-			}
+			engine.free();
 		} catch {
-			// Silently fail WASM init
+			/* WASM object already freed */
 		}
+		engine = undefined;
 	}
 
-	async function initData() {
-		if (!canvas) return;
+	engine = new wasmGlue.BenchmarkEngine(particleCount);
+	engine.init(canvas.width, canvas.height);
 
-		dpr = window.devicePixelRatio || 1;
-		const rect = canvas.getBoundingClientRect();
-		width = rect.width;
-		height = rect.height;
+	// Map Views
+	posX = new Float32Array(wasmMemory.buffer, engine.pos_x_ptr(), particleCount);
+	posY = new Float32Array(wasmMemory.buffer, engine.pos_y_ptr(), particleCount);
 
-		const displayWidth = Math.ceil(width * dpr);
-		const displayHeight = Math.ceil(height * dpr);
+	// Setup JS
+	jsParticles = new Float32Array(particleCount * 4);
+	workerParticles = new Float32Array(particleCount * 4);
 
-		canvas.width = displayWidth;
-		canvas.height = displayHeight;
+	const minDimension = Math.min(canvas.width, canvas.height);
+	const min_r = minDimension * 0.15;
+	const max_r = minDimension * 0.4;
 
-		if (ctx) ctx.setTransform(1, 0, 0, 1, 0, 0);
+	// Seed both engines with same data
+	for (let i = 0; i < particleCount; i++) {
+		const t = i / particleCount;
+		const angle = t * Math.PI * 2 * 50;
 
-		if (ctx) {
-			imageData = ctx.createImageData(displayWidth, displayHeight);
-			pixelBuffer = new Uint32Array(imageData.data.buffer);
-		}
+		const r_t = (i % 100) / 100;
+		const radius = min_r + (max_r - min_r) * r_t;
 
-		await initComparison();
+		const idx = i * 4;
+		jsParticles[idx] = 0;
+		jsParticles[idx + 1] = 0;
+		jsParticles[idx + 2] = angle;
+		jsParticles[idx + 3] = radius;
+
+		workerParticles.set(jsParticles.subarray(idx, idx + 4), idx);
 	}
 
-	async function initComparison() {
-		if (!canvas) return;
+	// Worker Setup
+	const Worker = await import("../../workers/physics.worker.ts?worker");
+	jsWorker = new Worker.default();
+	jsWorker.onmessage = (e: MessageEvent<PhysicsWorkerResponse>) => {
+		const { particles, duration } = e.data;
+		workerParticles = particles;
+		jsParticles?.set(workerParticles);
+		if (activeEngine === "js") frameTime = duration;
+		jsWorkerBusy = false;
+	};
+}
 
-		if (jsWorker) {
-			jsWorker.terminate();
-			jsWorker = undefined;
-			jsWorkerBusy = false;
+function animate() {
+	animationId = requestAnimationFrame(animate);
+
+	if (!ctx || !canvas) return;
+	ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+	const workStart = performance.now();
+	renderComparison();
+	const workTime = performance.now() - workStart;
+
+	if (!isPaused) {
+		// Update metrics every 500ms
+		frameTimeAccum += workTime;
+		metricsFrames++;
+		const elapsed = performance.now() - metricsStart;
+		if (elapsed >= 500) {
+			frameTime = frameTimeAccum / metricsFrames;
+			metricsStart = performance.now();
+			metricsFrames = 0;
+			frameTimeAccum = 0;
+		}
+	}
+}
+
+function renderComparison() {
+	if (
+		!ctx ||
+		!engine ||
+		!posX ||
+		!posY ||
+		!jsParticles ||
+		!canvas ||
+		!pixelBuffer ||
+		!imageData ||
+		!wasmMemory
+	)
+		return;
+
+	if (isPaused) return;
+
+	const time = performance.now();
+	const isRust = activeEngine === "rust";
+	const w = canvas.width;
+	const h = canvas.height;
+
+	if (isRust) {
+		engine.update(time, w, h);
+
+		const renderPtr = engine.render();
+
+		const pixelBytes = w * h * 4;
+
+		if (renderPtr && wasmMemory.buffer.byteLength >= renderPtr + pixelBytes) {
+			const rustPixels = new Uint8ClampedArray(
+				wasmMemory.buffer,
+				renderPtr,
+				pixelBytes,
+			);
+			const rustImageData = new ImageData(rustPixels, w, h);
+			ctx.putImageData(rustImageData, 0, 0);
+		}
+	} else {
+		// JS Engine
+		if (!jsWorkerBusy && jsWorker && workerParticles) {
+			jsWorkerBusy = true;
+			jsWorker.postMessage(
+				{
+					particles: workerParticles,
+					width: w,
+					height: h,
+					time: time,
+				},
+				[workerParticles.buffer],
+			);
 		}
 
-		await initWasm();
-		if (!wasmGlue || !wasmMemory) return;
+		const buffer = jsParticles;
+		pixelBuffer.fill(0);
+		const color = 0xff7171f8;
 
-		if (engine) {
-			try {
-				engine.free();
-			} catch {
-				/* WASM object already freed */
-			}
-			engine = undefined;
-		}
-
-		engine = new wasmGlue.BenchmarkEngine(particleCount);
-		engine.init(canvas.width, canvas.height);
-
-		// Map Views
-		posX = new Float32Array(
-			wasmMemory.buffer,
-			engine.pos_x_ptr(),
-			particleCount,
-		);
-		posY = new Float32Array(
-			wasmMemory.buffer,
-			engine.pos_y_ptr(),
-			particleCount,
-		);
-
-		// Setup JS
-		jsParticles = new Float32Array(particleCount * 4);
-		workerParticles = new Float32Array(particleCount * 4);
-
-		const minDimension = Math.min(canvas.width, canvas.height);
-		const min_r = minDimension * 0.15;
-		const max_r = minDimension * 0.4;
-
-		// Seed both engines with same data
 		for (let i = 0; i < particleCount; i++) {
-			const t = i / particleCount;
-			const angle = t * Math.PI * 2 * 50;
+			const x = buffer[i * 4];
+			const y = buffer[i * 4 + 1];
 
-			const r_t = (i % 100) / 100;
-			const radius = min_r + (max_r - min_r) * r_t;
+			const ix = x | 0;
+			const iy = y | 0;
 
-			const idx = i * 4;
-			jsParticles[idx] = 0;
-			jsParticles[idx + 1] = 0;
-			jsParticles[idx + 2] = angle;
-			jsParticles[idx + 3] = radius;
-
-			workerParticles.set(jsParticles.subarray(idx, idx + 4), idx);
-		}
-
-		// Worker Setup
-		const Worker = await import("../../workers/physics.worker.ts?worker");
-		jsWorker = new Worker.default();
-		jsWorker.onmessage = (e: MessageEvent<PhysicsWorkerResponse>) => {
-			const { particles, duration } = e.data;
-			workerParticles = particles;
-			jsParticles?.set(workerParticles);
-			if (activeEngine === "js") frameTime = duration;
-			jsWorkerBusy = false;
-		};
-	}
-
-	function animate() {
-		animationId = requestAnimationFrame(animate);
-
-		if (!ctx || !canvas) return;
-		ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-		const workStart = performance.now();
-		renderComparison();
-		const workTime = performance.now() - workStart;
-
-		if (!isPaused) {
-			// Update metrics every 500ms
-			frameTimeAccum += workTime;
-			metricsFrames++;
-			const elapsed = performance.now() - metricsStart;
-			if (elapsed >= 500) {
-				frameTime = frameTimeAccum / metricsFrames;
-				metricsStart = performance.now();
-				metricsFrames = 0;
-				frameTimeAccum = 0;
+			if (ix >= 0 && ix < w && iy >= 0 && iy < h) {
+				pixelBuffer[iy * w + ix] = color;
 			}
 		}
+
+		ctx.putImageData(imageData, 0, 0);
 	}
+}
 
-	function renderComparison() {
-		if (
-			!ctx ||
-			!engine ||
-			!posX ||
-			!posY ||
-			!jsParticles ||
-			!canvas ||
-			!pixelBuffer ||
-			!imageData ||
-			!wasmMemory
-		)
-			return;
+function resetMetrics() {
+	metricsStart = performance.now();
+	metricsFrames = 0;
+	frameTimeAccum = 0;
+	frameTime = 0;
+}
 
-		if (isPaused) return;
+function updateEngine(eng: "rust" | "js") {
+	activeEngine = eng;
+	resetMetrics();
+}
 
-		const time = performance.now();
-		const isRust = activeEngine === "rust";
-		const w = canvas.width;
-		const h = canvas.height;
+function handleCountChange(e: Event) {
+	const val = parseInt((e.target as HTMLInputElement).value, 10);
+	particleCount = val;
+	void initComparison();
+}
 
-		if (isRust) {
-			engine.update(time, w, h);
+function togglePause() {
+	isPaused = !isPaused;
+}
 
-			const renderPtr = engine.render();
+onMount(() => {
+	if (!canvas) return;
+	ctx = canvas.getContext("2d", { alpha: true });
 
-			const pixelBytes = w * h * 4;
+	void initData();
 
-			if (
-				renderPtr &&
-				wasmMemory.buffer.byteLength >= renderPtr + pixelBytes
-			) {
-				const rustPixels = new Uint8ClampedArray(
-					wasmMemory.buffer,
-					renderPtr,
-					pixelBytes,
-				);
-				const rustImageData = new ImageData(rustPixels, w, h);
-				ctx.putImageData(rustImageData, 0, 0);
-			}
-		} else {
-			// JS Engine
-			if (!jsWorkerBusy && jsWorker && workerParticles) {
-				jsWorkerBusy = true;
-				jsWorker.postMessage(
-					{
-						particles: workerParticles,
-						width: w,
-						height: h,
-						time: time,
-					},
-					[workerParticles.buffer],
-				);
-			}
+	const handleResize = () => void initData();
+	window.addEventListener("resize", handleResize);
 
-			const buffer = jsParticles;
-			pixelBuffer.fill(0);
-			const color = 0xff7171f8;
+	metricsStart = performance.now();
+	animationId = requestAnimationFrame(animate);
 
-			for (let i = 0; i < particleCount; i++) {
-				const x = buffer[i * 4];
-				const y = buffer[i * 4 + 1];
-
-				const ix = x | 0;
-				const iy = y | 0;
-
-				if (ix >= 0 && ix < w && iy >= 0 && iy < h) {
-					pixelBuffer[iy * w + ix] = color;
-				}
-			}
-
-			ctx.putImageData(imageData, 0, 0);
-		}
-	}
-
-	function resetMetrics() {
-		metricsStart = performance.now();
-		metricsFrames = 0;
-		frameTimeAccum = 0;
-		frameTime = 0;
-	}
-
-	function updateEngine(eng: "rust" | "js") {
-		activeEngine = eng;
-		resetMetrics();
-	}
-
-	function handleCountChange(e: Event) {
-		const val = parseInt((e.target as HTMLInputElement).value, 10);
-		particleCount = val;
-		void initComparison();
-	}
-
-	function togglePause() {
-		isPaused = !isPaused;
-	}
-
-	onMount(() => {
-		if (!canvas) return;
-		ctx = canvas.getContext("2d", { alpha: true });
-
-		void initData();
-
-		const handleResize = () => void initData();
-		window.addEventListener("resize", handleResize);
-
-		metricsStart = performance.now();
-		animationId = requestAnimationFrame(animate);
-
-		return () => {
-			cancelAnimationFrame(animationId);
-			window.removeEventListener("resize", handleResize);
-		};
-	});
+	return () => {
+		cancelAnimationFrame(animationId);
+		window.removeEventListener("resize", handleResize);
+	};
+});
 </script>
 
 <div
@@ -319,8 +308,10 @@
 				height="24"
 				viewBox="0 0 24 24"
 				fill="currentColor"
-				aria-hidden="true"><path d="M8 5v14l11-7z" /></svg
+				aria-hidden="true"
 			>
+				<path d="M8 5v14l11-7z" />
+			</svg>
 		{:else}
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -329,8 +320,9 @@
 				viewBox="0 0 24 24"
 				fill="currentColor"
 				aria-hidden="true"
-				><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" /></svg
 			>
+				<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+			</svg>
 		{/if}
 	</button>
 
@@ -397,7 +389,7 @@
 				value={particleCount}
 				onchange={handleCountChange}
 				class="h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-white/20 accent-white"
-			/>
+			>
 			<span class="text-xs font-bold text-white/50">1M</span>
 		</div>
 	</div>

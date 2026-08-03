@@ -1,29 +1,31 @@
 <script lang="ts">
-	import { page } from '$app/state';
-	import { siteConfig } from '$lib/site.config';
+import { page } from "$app/state";
+import { siteConfig } from "$lib/site.config";
 
-	interface Props {
-		title?: string;
-		description?: string;
-		image?: string;
-		type?: string;
-	}
+interface Props {
+	title?: string;
+	description?: string;
+	image?: string;
+	type?: string;
+}
 
-	let {
-		title = siteConfig.title,
-		description = siteConfig.description,
-		image = siteConfig.ogImage,
-		type = 'website'
-	}: Props = $props();
+let {
+	title = siteConfig.title,
+	description = siteConfig.description,
+	image = siteConfig.ogImage,
+	type = "website",
+}: Props = $props();
 
-	// Use the actual current URL from SvelteKit's state for deployment
-	const url = $derived(page.url.href);
+// Use the actual current URL from SvelteKit's state for deployment
+const url = $derived(page.url.href);
 
-	// Ensure the image URL is absolute (required by most social platforms)
-	// Robust slash handling: remove trailing slash from base and leading from path
-	const baseUrl = siteConfig.url.replace(/\/$/, '');
-	const imagePath = $derived(image.startsWith('/') ? image.substring(1) : image);
-	const absoluteImage = $derived(image.startsWith('http') ? image : `${baseUrl}/${imagePath}`);
+// Ensure the image URL is absolute (required by most social platforms)
+// Robust slash handling: remove trailing slash from base and leading from path
+const baseUrl = siteConfig.url.replace(/\/$/, "");
+const imagePath = $derived(image.startsWith("/") ? image.substring(1) : image);
+const absoluteImage = $derived(
+	image.startsWith("http") ? image : `${baseUrl}/${imagePath}`,
+);
 </script>
 
 <svelte:head>

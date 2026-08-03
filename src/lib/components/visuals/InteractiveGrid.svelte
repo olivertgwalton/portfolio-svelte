@@ -1,213 +1,205 @@
 <script lang="ts">
-	import { onMount } from "svelte";
-	import type * as WasmGrid from "../../wasm/rust_grid.js";
+import { onMount } from "svelte";
+import type * as WasmGrid from "../../wasm/rust_grid.js";
 
-	// Svelte 5 Runes for element binding
-	let canvas = $state<HTMLCanvasElement>();
+// Svelte 5 Runes for element binding
+let canvas = $state<HTMLCanvasElement>();
 
-	let { fixed = false, spacing = 40 } = $props<{
-		fixed?: boolean;
-		spacing?: number;
-	}>();
+let { fixed = false, spacing = 40 } = $props<{
+	fixed?: boolean;
+	spacing?: number;
+}>();
 
-	// Config
-	const BASE_DOT_RADIUS = 1.5;
+// Config
+const BASE_DOT_RADIUS = 1.5;
 
-	// State
-	let mouseX = -1000;
-	let mouseY = -1000;
-	let width = 0;
-	let height = 0;
-	let dpr = 1;
-	let dotColor = $state("rgb(0, 0, 0)");
-	// Buffers
-	let posX: Float32Array | undefined; // Rust View X
-	let posY: Float32Array | undefined; // Rust View Y
+// State
+let mouseX = -1000;
+let mouseY = -1000;
+let width = 0;
+let height = 0;
+let dpr = 1;
+let dotColor = $state("rgb(0, 0, 0)");
+// Buffers
+let posX: Float32Array | undefined; // Rust View X
+let posY: Float32Array | undefined; // Rust View Y
 
-	// Internal
-	let numPoints = $state(0);
-	let ctx: CanvasRenderingContext2D | null = null;
-	let animationId: number;
+// Internal
+let numPoints = $state(0);
+let ctx: CanvasRenderingContext2D | null = null;
+let animationId: number;
 
-	// WASM
-	let wasmGlue: typeof WasmGrid | undefined;
-	let wasmMemory: WebAssembly.Memory | undefined;
-	let engine: WasmGrid.GridEngine | undefined;
+// WASM
+let wasmGlue: typeof WasmGrid | undefined;
+let wasmMemory: WebAssembly.Memory | undefined;
+let engine: WasmGrid.GridEngine | undefined;
 
-	function updateThemeColor() {
-		if (typeof window === "undefined") return;
-		const style = getComputedStyle(document.body);
-		let color = style.color || "rgb(0, 0, 0)";
+function updateThemeColor() {
+	if (typeof window === "undefined") return;
+	const style = getComputedStyle(document.body);
+	let color = style.color || "rgb(0, 0, 0)";
 
-		if (color.includes("rgba") || color.includes("hsla")) {
-			color = color
-				.replace(/rgba?\(/, "rgb(")
-				.replace(/hsla?\(/, "hsl(")
-				.replace(/[,/]\s*[\d.]+\)$/, ")");
-		}
-
-		if (
-			color.includes("0, 0, 0") ||
-			color === "black" ||
-			color === "rgb(0, 0, 0)"
-		) {
-			dotColor = "rgb(255, 255, 255)";
-		} else {
-			dotColor = color;
-		}
+	if (color.includes("rgba") || color.includes("hsla")) {
+		color = color
+			.replace(/rgba?\(/, "rgb(")
+			.replace(/hsla?\(/, "hsl(")
+			.replace(/[,/]\s*[\d.]+\)$/, ")");
 	}
 
-	async function initWasm() {
+	if (
+		color.includes("0, 0, 0") ||
+		color === "black" ||
+		color === "rgb(0, 0, 0)"
+	) {
+		dotColor = "rgb(255, 255, 255)";
+	} else {
+		dotColor = color;
+	}
+}
+
+async function initWasm() {
+	try {
+		if (!wasmGlue) {
+			// With target: web, we import the default as an initializer
+			// and the wasm file as a URL.
+			const wasmPkg = await import("../../wasm/rust_grid.js");
+
+			// Initialize with path to static asset
+
+			const wasmExports = await wasmPkg.default({
+				module_or_path: "/wasm/rust_grid_bg.wasm",
+			});
+
+			wasmGlue = wasmPkg;
+			wasmMemory = wasmExports.memory;
+		}
+	} catch {
+		// Silently fail WASM init
+	}
+}
+async function initData() {
+	if (!canvas) return;
+
+	dpr = window.devicePixelRatio || 1;
+	const rect = canvas.getBoundingClientRect();
+	width = rect.width;
+	height = rect.height;
+
+	// Ensure integer dimensions for pixel-perfect rendering
+	const displayWidth = Math.ceil(width * dpr);
+	const displayHeight = Math.ceil(height * dpr);
+
+	canvas.width = displayWidth;
+	canvas.height = displayHeight;
+
+	// Work in physical pixels
+	if (ctx) ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+	await initGrid();
+}
+
+async function initGrid() {
+	await initWasm();
+	if (!wasmGlue || !wasmMemory) return;
+
+	const cols = Math.ceil(width / spacing) + 2;
+	const rows = Math.ceil(height / spacing) + 2;
+	numPoints = cols * rows;
+
+	if (engine) {
 		try {
-			if (!wasmGlue) {
-				// With target: web, we import the default as an initializer
-				// and the wasm file as a URL.
-				const wasmPkg = await import("../../wasm/rust_grid.js");
-
-				// Initialize with path to static asset
-
-				const wasmExports = await wasmPkg.default({
-					module_or_path: "/wasm/rust_grid_bg.wasm",
-				});
-
-				wasmGlue = wasmPkg;
-				wasmMemory = wasmExports.memory;
-			}
+			engine.free();
 		} catch {
-			// Silently fail WASM init
+			/* ignore */
 		}
-	}
-	async function initData() {
-		if (!canvas) return;
-
-		dpr = window.devicePixelRatio || 1;
-		const rect = canvas.getBoundingClientRect();
-		width = rect.width;
-		height = rect.height;
-
-		// Ensure integer dimensions for pixel-perfect rendering
-		const displayWidth = Math.ceil(width * dpr);
-		const displayHeight = Math.ceil(height * dpr);
-
-		canvas.width = displayWidth;
-		canvas.height = displayHeight;
-
-		// Work in physical pixels
-		if (ctx) ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-		await initGrid();
+		engine = undefined;
 	}
 
-	async function initGrid() {
-		await initWasm();
-		if (!wasmGlue || !wasmMemory) return;
+	engine = new wasmGlue.GridEngine(numPoints);
+	engine.init(width, height, spacing, dpr);
 
-		const cols = Math.ceil(width / spacing) + 2;
-		const rows = Math.ceil(height / spacing) + 2;
-		numPoints = cols * rows;
+	posX = new Float32Array(wasmMemory.buffer, engine.pos_x_ptr(), numPoints);
+	posY = new Float32Array(wasmMemory.buffer, engine.pos_y_ptr(), numPoints);
+}
 
-		if (engine) {
-			try {
-				engine.free();
-			} catch {
-				/* ignore */
-			}
-			engine = undefined;
-		}
+function animate() {
+	animationId = requestAnimationFrame(animate);
 
-		engine = new wasmGlue.GridEngine(numPoints);
-		engine.init(width, height, spacing, dpr);
+	if (!ctx || !canvas) return;
 
-		posX = new Float32Array(
-			wasmMemory.buffer,
-			engine.pos_x_ptr(),
-			numPoints,
-		);
-		posY = new Float32Array(
-			wasmMemory.buffer,
-			engine.pos_y_ptr(),
-			numPoints,
-		);
+	// Ensure identity transform for physical pixel drawing
+	ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	renderGrid();
+}
+
+function renderGrid() {
+	if (!ctx || !engine || !posX || !posY) return;
+
+	engine.update(mouseX, mouseY, dpr, 0.02, 0.85);
+
+	ctx.fillStyle = dotColor;
+	ctx.globalAlpha = 0.15;
+	ctx.beginPath();
+	const dotRadius = BASE_DOT_RADIUS * dpr;
+	for (let i = 0; i < numPoints; i++) {
+		ctx.moveTo(posX[i] + dotRadius, posY[i]);
+		ctx.arc(posX[i], posY[i], dotRadius, 0, Math.PI * 2);
 	}
+	ctx.fill();
+}
 
-	function animate() {
-		animationId = requestAnimationFrame(animate);
+// Interaction — cache bounding rect to avoid forced reflow on every mousemove
+let cachedRect: DOMRect | null = null;
 
-		if (!ctx || !canvas) return;
+function updateCachedRect() {
+	cachedRect = canvas?.getBoundingClientRect() ?? null;
+}
 
-		// Ensure identity transform for physical pixel drawing
-		ctx.setTransform(1, 0, 0, 1, 0, 0);
+function handleMouseMove(e: MouseEvent) {
+	if (!cachedRect) return;
+	mouseX = (e.clientX - cachedRect.left) * dpr;
+	mouseY = (e.clientY - cachedRect.top) * dpr;
+}
 
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		renderGrid();
-	}
+onMount(() => {
+	if (!canvas) return;
+	ctx = canvas.getContext("2d", { alpha: true });
 
-	function renderGrid() {
-		if (!ctx || !engine || !posX || !posY) return;
+	void initData();
+	updateThemeColor();
+	updateCachedRect();
 
-		engine.update(mouseX, mouseY, dpr, 0.02, 0.85);
+	let resizeTimer: ReturnType<typeof setTimeout>;
+	const handleResize = () => {
+		clearTimeout(resizeTimer);
+		resizeTimer = setTimeout(() => {
+			void initData();
+			updateThemeColor();
+			updateCachedRect();
+		}, 150);
+	};
 
-		ctx.fillStyle = dotColor;
-		ctx.globalAlpha = 0.15;
-		ctx.beginPath();
-		const dotRadius = BASE_DOT_RADIUS * dpr;
-		for (let i = 0; i < numPoints; i++) {
-			ctx.moveTo(posX[i] + dotRadius, posY[i]);
-			ctx.arc(posX[i], posY[i], dotRadius, 0, Math.PI * 2);
-		}
-		ctx.fill();
-	}
+	window.addEventListener("resize", handleResize);
+	window.addEventListener("scroll", updateCachedRect, { passive: true });
 
-	// Interaction — cache bounding rect to avoid forced reflow on every mousemove
-	let cachedRect: DOMRect | null = null;
-
-	function updateCachedRect() {
-		cachedRect = canvas?.getBoundingClientRect() ?? null;
-	}
-
-	function handleMouseMove(e: MouseEvent) {
-		if (!cachedRect) return;
-		mouseX = (e.clientX - cachedRect.left) * dpr;
-		mouseY = (e.clientY - cachedRect.top) * dpr;
-	}
-
-	onMount(() => {
-		if (!canvas) return;
-		ctx = canvas.getContext("2d", { alpha: true });
-
-		void initData();
-		updateThemeColor();
-		updateCachedRect();
-
-		let resizeTimer: ReturnType<typeof setTimeout>;
-		const handleResize = () => {
-			clearTimeout(resizeTimer);
-			resizeTimer = setTimeout(() => {
-				void initData();
-				updateThemeColor();
-				updateCachedRect();
-			}, 150);
-		};
-
-		window.addEventListener("resize", handleResize);
-		window.addEventListener("scroll", updateCachedRect, { passive: true });
-
-		const observer = new MutationObserver(updateThemeColor);
-		observer.observe(document.documentElement, {
-			attributes: true,
-			attributeFilter: ["class", "data-theme"],
-		});
-
-		animationId = requestAnimationFrame(animate);
-
-		return () => {
-			cancelAnimationFrame(animationId);
-			clearTimeout(resizeTimer);
-			window.removeEventListener("resize", handleResize);
-			window.removeEventListener("scroll", updateCachedRect);
-			observer.disconnect();
-		};
+	const observer = new MutationObserver(updateThemeColor);
+	observer.observe(document.documentElement, {
+		attributes: true,
+		attributeFilter: ["class", "data-theme"],
 	});
+
+	animationId = requestAnimationFrame(animate);
+
+	return () => {
+		cancelAnimationFrame(animationId);
+		clearTimeout(resizeTimer);
+		window.removeEventListener("resize", handleResize);
+		window.removeEventListener("scroll", updateCachedRect);
+		observer.disconnect();
+	};
+});
 </script>
 
 <svelte:window onmousemove={handleMouseMove} />

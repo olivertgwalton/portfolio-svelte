@@ -1,20 +1,20 @@
 <script lang="ts">
-	import LinkIcon from 'phosphor-svelte/lib/LinkIcon';
-	import CheckIcon from 'phosphor-svelte/lib/CheckIcon';
-	import { fade } from 'svelte/transition';
+import LinkIcon from "phosphor-svelte/lib/LinkIcon";
+import CheckIcon from "phosphor-svelte/lib/CheckIcon";
+import { fade } from "svelte/transition";
 
-	let { hash }: { hash: string } = $props();
-	let copied = $state(false);
+let { hash }: { hash: string } = $props();
+let copied = $state(false);
 
-	function copyLink() {
-		navigator.clipboard
-			.writeText(`${location.origin}${location.pathname}${hash}`)
-			.catch((error: unknown) => {
-				console.error('Failed to copy link:', error);
-			});
-		copied = true;
-		setTimeout(() => (copied = false), 2000);
-	}
+function copyLink() {
+	navigator.clipboard
+		.writeText(`${location.origin}${location.pathname}${hash}`)
+		.catch((error: unknown) => {
+			console.error("Failed to copy link:", error);
+		});
+	copied = true;
+	setTimeout(() => (copied = false), 2000);
+}
 </script>
 
 <button

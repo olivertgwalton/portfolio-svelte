@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
-	import me from '$lib/assets/me.jpg?enhanced';
-	import ArrowDownIcon from 'phosphor-svelte/lib/ArrowDownIcon';
-	import InteractiveGrid from '$lib/components/visuals/InteractiveGrid.svelte';
-	import { reveal } from '$lib/actions';
+import { resolve } from "$app/paths";
+import me from "$lib/assets/me.jpg?enhanced";
+import ArrowDownIcon from "phosphor-svelte/lib/ArrowDownIcon";
+import InteractiveGrid from "$lib/components/visuals/InteractiveGrid.svelte";
+import { reveal } from "$lib/actions";
 </script>
 
 <section
@@ -20,7 +20,8 @@
 					class="mb-8 inline-flex items-center gap-2 rounded-full border border-surface-200-800 bg-surface-50-950/80 px-4 py-1.5 shadow-sm backdrop-blur-sm"
 				>
 					<span class="text-xs font-bold tracking-widest text-surface-950-50">
-						<span role="img" aria-label="United Kingdom">🇬🇧</span> Based in the UK
+						<span role="img" aria-label="United Kingdom">🇬🇧</span>
+						Based in the UK
 					</span>
 				</div>
 
@@ -30,7 +31,9 @@
 					class="mb-8 font-heading leading-[0.9] font-black tracking-tighter text-surface-950-50"
 				>
 					<span class="block text-5xl md:text-8xl"> Oliver Walton. </span>
-					<span class="mt-2 block text-2xl font-bold text-surface-600-400 md:text-4xl">
+					<span
+						class="mt-2 block text-2xl font-bold text-surface-600-400 md:text-4xl"
+					>
 						Software Engineer.
 					</span>
 				</h1>
@@ -40,13 +43,19 @@
 					use:reveal={{ delay: 200 }}
 					class="max-w-xl font-sans text-lg leading-relaxed font-medium text-surface-600-400"
 				>
-					British developer with a focus on design and performance. Specialising in
-					<strong
-						class="font-extrabold text-surface-950-50"
-						><span class="border-b-4 border-primary-500 pb-0.5">Frontend Architecture</span></strong
+					British developer with a focus on design and performance. Specialising
+					in
+					<strong class="font-extrabold text-surface-950-50"
+						><span class="border-b-4 border-primary-500 pb-0.5"
+							>Frontend Architecture</span
+						></strong
 					>,
-					<strong class="font-extrabold text-surface-950-50">Linux Systems</strong>, and
-					<strong class="font-extrabold text-surface-950-50">Embedded Development</strong>.
+					<strong class="font-extrabold text-surface-950-50"
+						>Linux Systems</strong
+					>, and
+					<strong class="font-extrabold text-surface-950-50"
+						>Embedded Development</strong
+					>.
 				</p>
 
 				<!-- Buttons -->
@@ -62,7 +71,10 @@
 
 			<!-- Visual Column -->
 			<div class="relative hidden lg:col-span-5 lg:block">
-				<div use:reveal={{ delay: 400 }} class="group relative mx-auto aspect-3/4 w-full max-w-sm">
+				<div
+					use:reveal={{ delay: 400 }}
+					class="group relative mx-auto aspect-3/4 w-full max-w-sm"
+				>
 					<!-- Glass Background/Frame -->
 					<div
 						class="/30 absolute -inset-4 rounded-3xl border border-surface-200-800/80 bg-surface-50-950/30 backdrop-blur-xl transition-all duration-500 group-hover:-inset-6 group-hover:bg-surface-50-950/40"

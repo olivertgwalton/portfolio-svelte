@@ -1,8 +1,8 @@
 <script lang="ts">
-	import ContentPost from '$lib/components/pages/ContentPost.svelte';
-	import type { PageProps } from './$types';
+import ContentPost from "$lib/components/pages/ContentPost.svelte";
+import type { PageProps } from "./$types";
 
-	let { data }: PageProps = $props();
+let { data }: PageProps = $props();
 </script>
 
 <ContentPost

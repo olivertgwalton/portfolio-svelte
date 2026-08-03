@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { enhanceCodeBlocks, enhanceHeadings } from '$lib/actions';
-	import 'katex/dist/katex.min.css';
-	import type { Snippet } from 'svelte';
+import { enhanceCodeBlocks, enhanceHeadings } from "$lib/actions";
+import "katex/dist/katex.min.css";
+import type { Snippet } from "svelte";
 
-	let { children }: { children?: Snippet } = $props();
+let { children }: { children?: Snippet } = $props();
 </script>
 
 <div

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
-	import ArrowRightIcon from 'phosphor-svelte/lib/ArrowRightIcon';
-	import { reveal } from '$lib/actions';
-	import SectionHeader from '$lib/components/SectionHeader.svelte';
-	import SocialLinks from '$lib/components/SocialLinks.svelte';
+import { resolve } from "$app/paths";
+import ArrowRightIcon from "phosphor-svelte/lib/ArrowRightIcon";
+import { reveal } from "$lib/actions";
+import SectionHeader from "$lib/components/SectionHeader.svelte";
+import SocialLinks from "$lib/components/SocialLinks.svelte";
 </script>
 
 <section class="border-t border-surface-200-800/80 bg-surface-50-950 py-32">
@@ -22,13 +22,15 @@
 					class="max-w-xl space-y-8 text-lg leading-relaxed font-medium text-surface-600-400"
 				>
 					<p>
-						I'm a developer who likes building software that works well and looks good. I believe
-						good engineering should always serve the people using it.
+						I'm a developer who likes building software that works well and
+						looks good. I believe good engineering should always serve the
+						people using it.
 					</p>
 					<p>
-						When I'm not working, I'm usually with my family. I also follow Formula 1 closely and
-						have a real interest in architecture—basically, I just enjoy seeing how complex things
-						are put together, whether it's a race car or a building.
+						When I'm not working, I'm usually with my family. I also follow
+						Formula 1 closely and have a real interest in
+						architecture—basically, I just enjoy seeing how complex things are
+						put together, whether it's a race car or a building.
 					</p>
 				</div>
 				<div use:reveal={{ delay: 300 }}>
@@ -36,7 +38,10 @@
 						href={resolve('/about')}
 						class="inline-flex items-center gap-3 border-b-2 border-surface-950-50 pb-1 text-lg font-bold text-surface-950-50 hover:border-surface-800-200 hover:text-surface-800-200"
 					>
-						Read full bio <span aria-hidden="true"><ArrowRightIcon size={16} weight="bold" /></span>
+						Read full bio
+						<span aria-hidden="true"
+							><ArrowRightIcon size={16} weight="bold" /></span
+						>
 					</a>
 				</div>
 			</div>
@@ -53,10 +58,16 @@
 					<SocialLinks animated />
 				</div>
 
-				<div use:reveal={{ delay: 700 }} class="flex flex-col gap-2 md:items-end">
-					<div class="font-heading text-2xl font-bold text-surface-950-50">Oliver.</div>
+				<div
+					use:reveal={{ delay: 700 }}
+					class="flex flex-col gap-2 md:items-end"
+				>
+					<div class="font-heading text-2xl font-bold text-surface-950-50">
+						Oliver.
+					</div>
 					<div class="text-xs font-medium text-surface-800-200 sm:text-base">
-						&copy; {new Date().getFullYear()} Oliver Walton. All rights reserved.
+						&copy; {new Date().getFullYear()} Oliver Walton. All rights
+						reserved.
 					</div>
 				</div>
 			</div>

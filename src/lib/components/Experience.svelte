@@ -1,87 +1,87 @@
 <script lang="ts">
-	import { reveal } from '$lib/actions';
-	import SectionHeader from '$lib/components/SectionHeader.svelte';
-	import TabGroup from '$lib/components/TabGroup.svelte';
-	import BriefcaseIcon from 'phosphor-svelte/lib/BriefcaseIcon';
-	import GraduationCapIcon from 'phosphor-svelte/lib/GraduationCapIcon';
-	import CertificateIcon from 'phosphor-svelte/lib/CertificateIcon';
-	import ArrowSquareOutIcon from 'phosphor-svelte/lib/ArrowSquareOutIcon';
-	import type { Component } from 'svelte';
-	import type { IconWeight } from 'phosphor-svelte';
-	import { resolve } from '$app/paths';
-	import type { ContentMetadata } from '$lib/content';
+import { reveal } from "$lib/actions";
+import SectionHeader from "$lib/components/SectionHeader.svelte";
+import TabGroup from "$lib/components/TabGroup.svelte";
+import BriefcaseIcon from "phosphor-svelte/lib/BriefcaseIcon";
+import GraduationCapIcon from "phosphor-svelte/lib/GraduationCapIcon";
+import CertificateIcon from "phosphor-svelte/lib/CertificateIcon";
+import ArrowSquareOutIcon from "phosphor-svelte/lib/ArrowSquareOutIcon";
+import type { Component } from "svelte";
+import type { IconWeight } from "phosphor-svelte";
+import { resolve } from "$app/paths";
+import type { ContentMetadata } from "$lib/content";
 
-	type Category = 'experience' | 'education' | 'certifications';
+type Category = "experience" | "education" | "certifications";
 
-	interface Props {
-		experience?: ContentMetadata[];
-		education?: ContentMetadata[];
-		certifications?: ContentMetadata[];
-	}
+interface Props {
+	experience?: ContentMetadata[];
+	education?: ContentMetadata[];
+	certifications?: ContentMetadata[];
+}
 
-	let { experience = [], education = [], certifications = [] }: Props = $props();
+let { experience = [], education = [], certifications = [] }: Props = $props();
 
-	let activeTab = $state<Category>('experience');
+let activeTab = $state<Category>("experience");
 
-	interface TimelineItem {
-		title: string;
-		organization: string;
-		period: string;
-		current?: boolean;
-		bullets: string[];
-		skills: string[];
-		link?: string | { collection: string; slug: string };
-	}
+interface TimelineItem {
+	title: string;
+	organization: string;
+	period: string;
+	current?: boolean;
+	bullets: string[];
+	skills: string[];
+	link?: string | { collection: string; slug: string };
+}
 
-	interface CategoryConfig {
-		label: string;
-		icon: Component<{ size?: number; weight?: IconWeight }>;
-	}
+interface CategoryConfig {
+	label: string;
+	icon: Component<{ size?: number; weight?: IconWeight }>;
+}
 
-	const categories: Record<Category, CategoryConfig> = {
-		experience: { label: 'Experience', icon: BriefcaseIcon },
-		education: { label: 'Education', icon: GraduationCapIcon },
-		certifications: { label: 'Certifications', icon: CertificateIcon }
-	};
+const categories: Record<Category, CategoryConfig> = {
+	experience: { label: "Experience", icon: BriefcaseIcon },
+	education: { label: "Education", icon: GraduationCapIcon },
+	certifications: { label: "Certifications", icon: CertificateIcon },
+};
 
-	function mapContentToTimeline(items: ContentMetadata[]): TimelineItem[] {
-		return items.map((item) => {
-			let link: TimelineItem['link'];
+function mapContentToTimeline(items: ContentMetadata[]): TimelineItem[] {
+	return items.map((item) => {
+		let link: TimelineItem["link"];
 
-			// Handle links based on type
-			if (item.github) {
-				link = item.github;
-			} else if (item.demo) {
-				link = item.demo;
-			}
+		// Handle links based on type
+		if (item.github) {
+			link = item.github;
+		} else if (item.demo) {
+			link = item.demo;
+		}
 
-			// Format period from date if not explicitly provided
-			let period = item.period;
-			if (!period && item.date) {
-				const year = new Date(item.date).getFullYear();
-				period = item.current ? `${year} - Present` : `${year}`;
-			}
+		// Format period from date if not explicitly provided
+		let period = item.period;
+		if (!period && item.date) {
+			const year = new Date(item.date).getFullYear();
+			period = item.current ? `${year} - Present` : `${year}`;
+		}
 
-			return {
-				title: item.title,
-				organization: item.organization ?? item.type ?? '',
-				period: period ?? '',
-				current: item.current,
-				bullets: item.highlights ?? (item.description ? [item.description] : []),
-				skills: item.skills ?? item.tech ?? [],
-				link
-			};
-		});
-	}
-
-	const data = $derived<Record<Category, TimelineItem[]>>({
-		experience: mapContentToTimeline(experience),
-		education: mapContentToTimeline(education),
-		certifications: mapContentToTimeline(certifications)
+		return {
+			title: item.title,
+			organization: item.organization ?? item.type ?? "",
+			period: period ?? "",
+			current: item.current,
+			bullets: item.highlights ?? (item.description ? [item.description] : []),
+			skills: item.skills ?? item.tech ?? [],
+			link,
+		};
 	});
+}
 
-	const activeItems = $derived(data[activeTab]);
-	const ActiveIcon = $derived(categories[activeTab].icon);
+const data = $derived<Record<Category, TimelineItem[]>>({
+	experience: mapContentToTimeline(experience),
+	education: mapContentToTimeline(education),
+	certifications: mapContentToTimeline(certifications),
+});
+
+const activeItems = $derived(data[activeTab]);
+const ActiveIcon = $derived(categories[activeTab].icon);
 </script>
 
 <section class="border-t border-surface-200-800/80 bg-surface-50-950 py-32">
@@ -101,11 +101,16 @@
 
 		<!-- Timeline -->
 		<div class="relative">
-			<div class="absolute top-0 left-4 h-full w-px bg-surface-200-800 md:left-8"></div>
+			<div
+				class="absolute top-0 left-4 h-full w-px bg-surface-200-800 md:left-8"
+			></div>
 
 			<div class="space-y-8">
 				{#each activeItems as item, i (item.title + item.organization)}
-					<div use:reveal={{ delay: 200 + i * 75 }} class="relative pl-16 md:pl-20">
+					<div
+						use:reveal={{ delay: 200 + i * 75 }}
+						class="relative pl-16 md:pl-20"
+					>
 						<!-- Timeline Node -->
 						<div
 							class="absolute top-0 left-4 z-10 flex size-8 -translate-x-1/2 items-center justify-center rounded-full border-2 md:left-8
@@ -128,18 +133,30 @@
 										: 'bg-surface-200-700 text-surface-500'}"
 							>
 								{#if item.current}
-									<span class="size-1.5 animate-pulse rounded-full bg-primary-500"></span>
+									<span
+										class="size-1.5 animate-pulse rounded-full bg-primary-500"
+									></span>
 								{/if}
 								{item.period}
 							</div>
 
-							<h3 class="mb-1 font-heading text-xl font-bold text-surface-950-50">{item.title}</h3>
-							<p class="mb-4 text-sm font-semibold text-surface-600-400">{item.organization}</p>
+							<h3
+								class="mb-1 font-heading text-xl font-bold text-surface-950-50"
+							>
+								{item.title}
+							</h3>
+							<p class="mb-4 text-sm font-semibold text-surface-600-400">
+								{item.organization}
+							</p>
 
-							<ul class="mb-4 space-y-2 text-sm leading-relaxed text-surface-600-400">
+							<ul
+								class="mb-4 space-y-2 text-sm leading-relaxed text-surface-600-400"
+							>
 								{#each item.bullets as bullet (bullet)}
 									<li class="flex items-start gap-2">
-										<span class="mt-2.5 size-1 shrink-0 rounded-full bg-surface-400"></span>
+										<span
+											class="mt-2.5 size-1 shrink-0 rounded-full bg-surface-400"
+										></span>
 										<span>{bullet}</span>
 									</li>
 								{/each}
@@ -166,7 +183,9 @@
 											class="inline-flex items-center gap-2 text-sm font-bold text-primary-500 transition-colors hover:text-primary-600"
 										>
 											<span>View Project</span>
-											<span aria-hidden="true"><ArrowSquareOutIcon size={16} weight="bold" /></span>
+											<span aria-hidden="true"
+												><ArrowSquareOutIcon size={16} weight="bold" /></span
+											>
 										</a>
 									{:else}
 										<a
@@ -174,7 +193,9 @@
 											class="inline-flex items-center gap-2 text-sm font-bold text-primary-500 transition-colors hover:text-primary-600"
 										>
 											<span>View Project</span>
-											<span aria-hidden="true"><ArrowSquareOutIcon size={16} weight="bold" /></span>
+											<span aria-hidden="true"
+												><ArrowSquareOutIcon size={16} weight="bold" /></span
+											>
 										</a>
 									{/if}
 								</div>

@@ -1,25 +1,27 @@
 <script lang="ts">
-	import { page } from '$app/state';
-	import { resolve, asset } from '$app/paths';
-	import ListIcon from 'phosphor-svelte/lib/ListIcon';
-	import { Menu, Portal } from '@skeletonlabs/skeleton-svelte';
-	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
-	import { reveal } from '$lib/actions';
+import { page } from "$app/state";
+import { resolve, asset } from "$app/paths";
+import ListIcon from "phosphor-svelte/lib/ListIcon";
+import { Menu, Portal } from "@skeletonlabs/skeleton-svelte";
+import ThemeSwitcher from "$lib/components/ThemeSwitcher.svelte";
+import { reveal } from "$lib/actions";
 
-	const links = [
-		{ href: '/', label: 'Home' },
-		{ href: '/projects', label: 'Projects' },
-		{ href: '/blogs', label: 'Blogs' },
-		{ href: '/about', label: 'About' },
-		{ href: '/contact', label: 'Contact' }
-	] as const;
+const links = [
+	{ href: "/", label: "Home" },
+	{ href: "/projects", label: "Projects" },
+	{ href: "/blogs", label: "Blogs" },
+	{ href: "/about", label: "About" },
+	{ href: "/contact", label: "Contact" },
+] as const;
 </script>
 
 <nav
 	style:view-transition-name="navbar"
 	class="sticky top-0 z-50 w-full border-b border-surface-200-800/80 bg-surface-50-950/90 backdrop-blur-md transition-all duration-300"
 >
-	<div class="container mx-auto flex max-w-7xl items-center justify-between px-6 pt-3 pb-4">
+	<div
+		class="container mx-auto flex max-w-7xl items-center justify-between px-6 pt-3 pb-4"
+	>
 		<!-- Logo -->
 		<a
 			use:reveal={{ delay: 0, y: -10 }}
@@ -68,8 +70,13 @@
 				<!-- Mobile Menu Button -->
 				<div class="md:hidden">
 					<Menu>
-						<Menu.Trigger class="rounded-md p-2 text-surface-950-50" aria-label="Open Menu">
-							<span aria-hidden="true"><ListIcon size={24} weight="bold" /></span>
+						<Menu.Trigger
+							class="rounded-md p-2 text-surface-950-50"
+							aria-label="Open Menu"
+						>
+							<span aria-hidden="true"
+								><ListIcon size={24} weight="bold" /></span
+							>
 						</Menu.Trigger>
 						<Portal>
 							<Menu.Positioner>

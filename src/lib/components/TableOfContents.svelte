@@ -1,18 +1,18 @@
 <script lang="ts">
-	import { CaretDownIcon, ListIcon } from 'phosphor-svelte';
-	import type { TocHeading } from '$lib/toc.svelte';
+import { CaretDownIcon, ListIcon } from "phosphor-svelte";
+import type { TocHeading } from "$lib/toc.svelte";
 
-	let {
-		layout = 'sidebar',
-		headings,
-		activeId,
-		onNavigate
-	}: {
-		layout?: 'sidebar' | 'collapsible';
-		headings: TocHeading[];
-		activeId: string;
-		onNavigate: (id: string) => void;
-	} = $props();
+let {
+	layout = "sidebar",
+	headings,
+	activeId,
+	onNavigate,
+}: {
+	layout?: "sidebar" | "collapsible";
+	headings: TocHeading[];
+	activeId: string;
+	onNavigate: (id: string) => void;
+} = $props();
 </script>
 
 {#if headings.length > 0}
@@ -20,12 +20,16 @@
 		<nav
 			class="no-scrollbar sticky top-32 hidden max-h-[calc(100vh-8rem)] overflow-y-auto lg:block"
 		>
-			<h2 class="text-surface-600-200 mb-6 text-xs font-bold tracking-[0.2em] uppercase">
+			<h2
+				class="text-surface-600-200 mb-6 text-xs font-bold tracking-[0.2em] uppercase"
+			>
 				Contents
 			</h2>
 			<div class="relative">
 				<!-- Decorative timeline line -->
-				<div class="absolute top-0 bottom-0 left-0 w-px bg-surface-200 dark:bg-surface-800"></div>
+				<div
+					class="absolute top-0 bottom-0 left-0 w-px bg-surface-200 dark:bg-surface-800"
+				></div>
 				<ul class="space-y-3 text-sm">
 					{#each headings as heading (heading.id)}
 						<li class={{ relative: true, 'pl-4': heading.depth === 3 }}>
@@ -64,16 +68,23 @@
 					class="flex cursor-pointer items-center justify-between p-4 font-heading text-sm font-bold tracking-tight text-surface-950-50 select-none hover:bg-surface-100-900 focus:outline-none"
 				>
 					<div class="flex items-center gap-3">
-						<span aria-hidden="true"><ListIcon class="size-4 text-primary-500" /></span>
-						<span class="text-xs font-bold tracking-[0.2em] text-surface-400 uppercase"
+						<span aria-hidden="true"
+							><ListIcon class="size-4 text-primary-500" /></span
+						>
+						<span
+							class="text-xs font-bold tracking-[0.2em] text-surface-400 uppercase"
 							>Contents</span
 						>
 					</div>
-					<span aria-hidden="true"><CaretDownIcon
-						class="size-4 text-surface-500 transition-transform duration-300 group-open:-rotate-180"
-					/></span>
+					<span aria-hidden="true"
+						><CaretDownIcon
+							class="size-4 text-surface-500 transition-transform duration-300 group-open:-rotate-180"
+						/></span
+					>
 				</summary>
-				<nav class="border-t border-surface-200-800 bg-surface-100-900/80 px-6 py-6">
+				<nav
+					class="border-t border-surface-200-800 bg-surface-100-900/80 px-6 py-6"
+				>
 					<div class="relative">
 						<!-- Decorative timeline line -->
 						<div
@@ -114,14 +125,14 @@
 {/if}
 
 <style>
-	/* Hide scrollbar for Chrome, Safari and Opera */
-	.no-scrollbar::-webkit-scrollbar {
-		display: none;
-	}
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+	display: none;
+}
 
-	/* Hide scrollbar for IE, Edge and Firefox */
-	.no-scrollbar {
-		-ms-overflow-style: none; /* IE and Edge */
-		scrollbar-width: none; /* Firefox */
-	}
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
 </style>

@@ -1,25 +1,25 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
-	import { formatDate } from '$lib/utils';
-	import { reveal } from '$lib/actions';
-	import { getItemTags, type ContentMetadata } from '$lib/content-types';
-	import ContentImage from '$lib/components/ContentImage.svelte';
-	import ArrowRightIcon from 'phosphor-svelte/lib/ArrowRightIcon';
+import { resolve } from "$app/paths";
+import { formatDate } from "$lib/utils";
+import { reveal } from "$lib/actions";
+import { getItemTags, type ContentMetadata } from "$lib/content-types";
+import ContentImage from "$lib/components/ContentImage.svelte";
+import ArrowRightIcon from "phosphor-svelte/lib/ArrowRightIcon";
 
-	let {
-		item,
-		collection,
-		index = 0,
-		variant = 'full'
-	}: {
-		item: ContentMetadata;
-		collection: 'projects' | 'blogs';
-		index?: number;
-		variant?: 'full' | 'compact';
-	} = $props();
+let {
+	item,
+	collection,
+	index = 0,
+	variant = "full",
+}: {
+	item: ContentMetadata;
+	collection: "projects" | "blogs";
+	index?: number;
+	variant?: "full" | "compact";
+} = $props();
 
-	const isProject = $derived(collection === 'projects');
-	const tags = $derived(getItemTags(item));
+const isProject = $derived(collection === "projects");
+const tags = $derived(getItemTags(item));
 </script>
 
 {#if variant === 'compact'}
@@ -32,7 +32,9 @@
 		>
 			{item.title}
 		</h3>
-		<p class="mt-2 line-clamp-2 text-sm text-surface-600-400">{item.description}</p>
+		<p class="mt-2 line-clamp-2 text-sm text-surface-600-400">
+			{item.description}
+		</p>
 		<div class="mt-3 flex items-center gap-3 text-xs text-surface-600-400">
 			<span>{formatDate(item.date)}</span>
 			{#if tags.length}
@@ -73,19 +75,26 @@
 					>{formatDate(item.date)}</time
 				>
 				{#if isProject && item.type}
-					<span class="font-mono text-xs font-bold text-primary-500 uppercase">{item.type}</span>
+					<span class="font-mono text-xs font-bold text-primary-500 uppercase"
+						>{item.type}</span
+					>
 				{/if}
 			</div>
 
-			<div class="flex items-center justify-between border-t border-surface-200-800 pt-6">
+			<div
+				class="flex items-center justify-between border-t border-surface-200-800 pt-6"
+			>
 				<div class="flex flex-wrap gap-2">
 					{#each tags.slice(0, 3) as t (t)}
-						<span class="text-xs font-bold tracking-wide text-surface-600-400 uppercase"
+						<span
+							class="text-xs font-bold tracking-wide text-surface-600-400 uppercase"
 							>{isProject ? '' : '#'}{t}</span
 						>
 					{/each}
 					{#if tags.length > 3}
-						<span class="text-xs font-bold text-surface-600-400">+ {tags.length - 3}</span>
+						<span class="text-xs font-bold text-surface-600-400"
+							>+ {tags.length - 3}</span
+						>
 					{/if}
 				</div>
 
