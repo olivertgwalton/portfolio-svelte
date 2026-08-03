@@ -62,8 +62,5 @@
 		"format": "bun biome format --write .",
 		"build:wasm": "mkdir -p static/wasm && cd rust-grid && wasm-pack build --target web --out-dir ../src/lib/wasm && mv ../src/lib/wasm/rust_grid_bg.wasm ../static/wasm/"
 	},
-	"type": "module",
-	"patchedDependencies": {
-		"@sveltejs/kit@3.0.0-next.13": "patches/@sveltejs%2Fkit@3.0.0-next.13.patch"
-	}
+	"type": "module"
 }
