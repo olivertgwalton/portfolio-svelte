@@ -9,9 +9,9 @@ import { setThemeContext } from "$lib/theme.svelte";
 import { untrack } from "svelte";
 import type { LayoutProps } from "./$types";
 
-let { children, data }: LayoutProps = $props();
+let { children }: LayoutProps = $props();
 
-const theme = untrack(() => setThemeContext(data.theme, data.mode));
+const theme = untrack(() => setThemeContext());
 theme.initClient();
 </script>
 

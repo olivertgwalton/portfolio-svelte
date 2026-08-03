@@ -3,6 +3,8 @@ import type { RequestHandler } from "./$types";
 
 const SITE_URL = "https://oliverwalton.uk";
 
+export const prerender = true;
+
 export const GET: RequestHandler = () => {
 	const blogs = getContentList("blogs");
 	const projects = getContentList("projects");

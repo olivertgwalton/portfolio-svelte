@@ -5,7 +5,8 @@ test("sitemap.xml is well-formed and lists static pages", async ({
 }) => {
 	const response = await request.get("/sitemap.xml");
 	expect(response.status()).toBe(200);
-	expect(response.headers()["content-type"]).toContain("application/xml");
+	// Exact type is now the static host's call (preview serves text/xml).
+	expect(response.headers()["content-type"]).toMatch(/xml/);
 
 	const body = await response.text();
 	expect(body).toContain("<?xml");
@@ -15,10 +16,14 @@ test("sitemap.xml is well-formed and lists static pages", async ({
 	expect(body).toContain("<loc>https://oliverwalton.uk/projects</loc>");
 });
 
-test("og image endpoint returns an image", async ({ request }) => {
-	const response = await request.get(
-		"/api/og?title=Test%20Title&description=Test%20description",
-	);
+test("default og image is prerendered", async ({ request }) => {
+	const response = await request.get("/og/default.png");
+	expect(response.status()).toBe(200);
+	expect(response.headers()["content-type"]).toMatch(/image\//);
+});
+
+test("each post has its own prerendered og image", async ({ request }) => {
+	const response = await request.get("/og/blogs/distrohopping-journey.png");
 	expect(response.status()).toBe(200);
 	expect(response.headers()["content-type"]).toMatch(/image\//);
 });

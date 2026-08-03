@@ -21,6 +21,20 @@ export const modes = [
 
 const COOKIE_MAX_AGE_MS = 365 * 24 * 60 * 60 * 1000;
 
+const DEFAULT_THEME = "modern";
+const DEFAULT_MODE = "system";
+
+// The site is prerendered, so there is no server-side cookie read. Prerendered
+// HTML is built with the defaults; on the client we pick the real values up
+// from the cookie, matching the pre-paint script in app.html.
+function readCookie(name: string) {
+	if (typeof document === "undefined") return undefined;
+	return document.cookie
+		.split("; ")
+		.find((row) => row.startsWith(`${name}=`))
+		?.split("=")[1];
+}
+
 function setCookie(name: string, value: string) {
 	void cookieStore.set({
 		name,
@@ -31,9 +45,9 @@ function setCookie(name: string, value: string) {
 	});
 }
 
-export function setThemeContext(initialTheme: string, initialMode: string) {
-	let currentTheme = $state(initialTheme);
-	let currentMode = $state(initialMode);
+export function setThemeContext() {
+	let currentTheme = $state(readCookie("theme") ?? DEFAULT_THEME);
+	let currentMode = $state(readCookie("mode") ?? DEFAULT_MODE);
 	let systemDark = $state(false);
 
 	const ctx = {

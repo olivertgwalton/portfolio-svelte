@@ -49,9 +49,7 @@ const postHref = (item: ContentMetadata) =>
 		slug: item.slug,
 	});
 let featuredImage = $derived(getEnhancedImage(meta.image));
-const ogImage = $derived(
-	`/api/og?title=${encodeURIComponent(meta.title)}&description=${encodeURIComponent(meta.description)}`,
-);
+const ogImage = $derived(`/og/${type}/${meta.slug}.png`);
 </script>
 
 <MetaTags
