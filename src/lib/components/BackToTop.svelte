@@ -1,13 +1,13 @@
 <script lang="ts">
-	import ArrowUpIcon from 'phosphor-svelte/lib/ArrowUpIcon';
-	import { fade, fly } from 'svelte/transition';
+import ArrowUpIcon from "phosphor-svelte/lib/ArrowUpIcon";
+import { fade, fly } from "svelte/transition";
 
-	let scrollY = $state(0);
-	const visible = $derived(scrollY > 500);
+let scrollY = $state(0);
+const visible = $derived(scrollY > 500);
 
-	function scrollToTop() {
-		window.scrollTo({ top: 0, behavior: 'smooth' });
-	}
+function scrollToTop() {
+	window.scrollTo({ top: 0, behavior: "smooth" });
+}
 </script>
 
 <svelte:window bind:scrollY />

@@ -1,20 +1,20 @@
 <script lang="ts">
-	import CopyIcon from "phosphor-svelte/lib/CopyIcon";
-	import CheckIcon from "phosphor-svelte/lib/CheckIcon";
-	import { fade } from "svelte/transition";
+import CopyIcon from "phosphor-svelte/lib/CopyIcon";
+import CheckIcon from "phosphor-svelte/lib/CheckIcon";
+import { fade } from "svelte/transition";
 
-	let { text }: { text: string } = $props();
-	let copied = $state(false);
+let { text }: { text: string } = $props();
+let copied = $state(false);
 
-	async function copyToClipboard() {
-		try {
-			await navigator.clipboard.writeText(text);
-			copied = true;
-			setTimeout(() => (copied = false), 2000);
-		} catch {
-			// Silently fail copy
-		}
+async function copyToClipboard() {
+	try {
+		await navigator.clipboard.writeText(text);
+		copied = true;
+		setTimeout(() => (copied = false), 2000);
+	} catch {
+		// Silently fail copy
 	}
+}
 </script>
 
 <button
@@ -26,21 +26,13 @@
 	{#if copied}
 		<div in:fade={{ duration: 150 }}>
 			<span aria-hidden="true"
-				><CheckIcon
-					size={16}
-					weight="bold"
-					class="text-success-500"
-				/></span
+				><CheckIcon size={16} weight="bold" class="text-success-500" /></span
 			>
 		</div>
 	{:else}
 		<div in:fade={{ duration: 150 }}>
 			<span aria-hidden="true"
-				><CopyIcon
-					size={16}
-					weight="bold"
-					class="text-surface-600-400"
-				/></span
+				><CopyIcon size={16} weight="bold" class="text-surface-600-400" /></span
 			>
 		</div>
 	{/if}

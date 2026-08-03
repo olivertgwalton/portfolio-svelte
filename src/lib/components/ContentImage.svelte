@@ -1,21 +1,21 @@
 <script lang="ts">
-	import { getHSL } from "$lib/utils";
-	import { getEnhancedImage } from "$lib/images";
-	import CodeIcon from "phosphor-svelte/lib/CodeIcon";
+import { getHSL } from "$lib/utils";
+import { getEnhancedImage } from "$lib/images";
+import CodeIcon from "phosphor-svelte/lib/CodeIcon";
 
-	let {
-		image,
-		title,
-		showIcon = false,
-		overlay = false,
-	}: {
-		image?: string;
-		title: string;
-		showIcon?: boolean;
-		overlay?: boolean;
-	} = $props();
+let {
+	image,
+	title,
+	showIcon = false,
+	overlay = false,
+}: {
+	image?: string;
+	title: string;
+	showIcon?: boolean;
+	overlay?: boolean;
+} = $props();
 
-	let img = $derived(getEnhancedImage(image));
+let img = $derived(getEnhancedImage(image));
 </script>
 
 {#if img}
