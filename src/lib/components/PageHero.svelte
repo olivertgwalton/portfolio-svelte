@@ -1,5 +1,5 @@
 <script lang="ts">
-import InteractiveGrid from "$lib/components/visuals/InteractiveGrid.svelte";
+import InteractiveGrid from "#lib/components/visuals/InteractiveGrid.svelte";
 import type { Snippet } from "svelte";
 
 let {

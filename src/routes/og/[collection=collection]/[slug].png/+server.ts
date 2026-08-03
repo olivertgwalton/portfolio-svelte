@@ -1,7 +1,6 @@
 import { error } from "@sveltejs/kit";
-import type { Collection } from "$lib/content";
-import { getContentItem, getContentList } from "$lib/content";
-import { renderOgImage } from "$lib/server/og";
+import { getContentItem, getContentList } from "#lib/content";
+import { renderOgImage } from "#lib/server/og";
 import type { EntryGenerator, RequestHandler } from "./$types";
 
 export const prerender = true;
@@ -12,8 +11,9 @@ export const entries: EntryGenerator = () =>
 		getContentList(collection).map(({ slug }) => ({ collection, slug })),
 	);
 
+// No cast needed: defineParams gives `collection` the literal "blogs" | "projects".
 export const GET: RequestHandler = ({ params }) => {
-	const item = getContentItem(params.collection as Collection, params.slug);
+	const item = getContentItem(params.collection, params.slug);
 	if (!item) error(404, `No content at ${params.collection}/${params.slug}`);
 	return renderOgImage(item.title, item.description);
 };

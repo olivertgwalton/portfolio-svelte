@@ -8,7 +8,7 @@ source: 'https://github.com/olivertgwalton/portfolio-svelte'
 ---
 
 <script>
-	import BenchmarkVisual from '$lib/components/visuals/BenchmarkVisual.svelte';
+	import BenchmarkVisual from '#lib/components/visuals/BenchmarkVisual.svelte';
 </script>
 
 ## Introduction

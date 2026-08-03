@@ -1,7 +1,7 @@
 <script lang="ts">
-import PageHero from "$lib/components/PageHero.svelte";
+import PageHero from "#lib/components/PageHero.svelte";
 import { fly } from "svelte/transition";
-import SocialLinks from "$lib/components/SocialLinks.svelte";
+import SocialLinks from "#lib/components/SocialLinks.svelte";
 import ArrowRightIcon from "phosphor-svelte/lib/ArrowRightIcon";
 </script>
 

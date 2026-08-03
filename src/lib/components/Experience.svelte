@@ -1,7 +1,8 @@
 <script lang="ts">
-import { reveal } from "$lib/actions";
-import SectionHeader from "$lib/components/SectionHeader.svelte";
-import TabGroup from "$lib/components/TabGroup.svelte";
+import { reveal } from "#lib/actions";
+import type { Collection } from "#lib/content";
+import SectionHeader from "#lib/components/SectionHeader.svelte";
+import TabGroup from "#lib/components/TabGroup.svelte";
 import BriefcaseIcon from "phosphor-svelte/lib/BriefcaseIcon";
 import GraduationCapIcon from "phosphor-svelte/lib/GraduationCapIcon";
 import CertificateIcon from "phosphor-svelte/lib/CertificateIcon";
@@ -9,7 +10,7 @@ import ArrowSquareOutIcon from "phosphor-svelte/lib/ArrowSquareOutIcon";
 import type { Component } from "svelte";
 import type { IconWeight } from "phosphor-svelte";
 import { resolve } from "$app/paths";
-import type { ContentMetadata } from "$lib/content";
+import type { ContentMetadata } from "#lib/content";
 
 type Category = "experience" | "education" | "certifications";
 
@@ -30,7 +31,9 @@ interface TimelineItem {
 	current?: boolean;
 	bullets: string[];
 	skills: string[];
-	link?: string | { collection: string; slug: string };
+	// Kit 3 derives the param type from the matcher, so this must be the literal
+	// union rather than a plain string.
+	link?: string | { collection: Collection; slug: string };
 }
 
 interface CategoryConfig {

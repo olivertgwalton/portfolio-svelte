@@ -1,16 +1,16 @@
 <script lang="ts">
-import { reveal } from "$lib/actions";
+import { reveal } from "#lib/actions";
 import MagnifyingGlassIcon from "phosphor-svelte/lib/MagnifyingGlassIcon";
 import XIcon from "phosphor-svelte/lib/XIcon";
-import PageHero from "$lib/components/PageHero.svelte";
-import ContentCard from "$lib/components/ContentCard.svelte";
+import PageHero from "#lib/components/PageHero.svelte";
+import ContentCard from "#lib/components/ContentCard.svelte";
 import { ToggleGroup } from "@skeletonlabs/skeleton-svelte";
 import { SvelteSet } from "svelte/reactivity";
 import {
 	getItemTags,
 	type Collection,
 	type ContentMetadata,
-} from "$lib/content";
+} from "#lib/content";
 
 let { items, type }: { items: ContentMetadata[]; type: Collection } = $props();
 

@@ -1,9 +1,9 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
 import ArrowRightIcon from "phosphor-svelte/lib/ArrowRightIcon";
-import { reveal } from "$lib/actions";
-import SectionHeader from "$lib/components/SectionHeader.svelte";
-import SocialLinks from "$lib/components/SocialLinks.svelte";
+import { reveal } from "#lib/actions";
+import SectionHeader from "#lib/components/SectionHeader.svelte";
+import SocialLinks from "#lib/components/SocialLinks.svelte";
 </script>
 
 <section class="border-t border-surface-200-800/80 bg-surface-50-950 py-32">
@@ -35,7 +35,7 @@ import SocialLinks from "$lib/components/SocialLinks.svelte";
 				</div>
 				<div use:reveal={{ delay: 300 }}>
 					<a
-						href={resolve('/about')}
+						href={resolve('/(public)/about')}
 						class="inline-flex items-center gap-3 border-b-2 border-surface-950-50 pb-1 text-lg font-bold text-surface-950-50 hover:border-surface-800-200 hover:text-surface-800-200"
 					>
 						Read full bio

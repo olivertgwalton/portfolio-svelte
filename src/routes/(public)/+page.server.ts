@@ -1,5 +1,5 @@
 import type { PageServerLoad } from "./$types";
-import { getContentList } from "$lib/content";
+import { getContentList } from "#lib/content";
 
 export const load: PageServerLoad = () => {
 	const blogs = getContentList("blogs").slice(0, 6);

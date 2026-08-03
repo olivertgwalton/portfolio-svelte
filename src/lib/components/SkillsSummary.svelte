@@ -1,6 +1,6 @@
 <script lang="ts">
-import { reveal } from "$lib/actions";
-import SectionHeader from "$lib/components/SectionHeader.svelte";
+import { reveal } from "#lib/actions";
+import SectionHeader from "#lib/components/SectionHeader.svelte";
 
 interface SkillGroup {
 	label: string;

@@ -1,12 +1,12 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
-import { formatDate } from "$lib/utils";
-import { reveal } from "$lib/actions";
-import MetaTags from "$lib/components/MetaTags.svelte";
-import TableOfContents from "$lib/components/TableOfContents.svelte";
-import ScrollProgress from "$lib/components/ScrollProgress.svelte";
-import ShareWidget from "$lib/components/ShareWidget.svelte";
-import ContentCard from "$lib/components/ContentCard.svelte";
+import { formatDate } from "#lib/utils";
+import { reveal } from "#lib/actions";
+import MetaTags from "#lib/components/MetaTags.svelte";
+import TableOfContents from "#lib/components/TableOfContents.svelte";
+import ScrollProgress from "#lib/components/ScrollProgress.svelte";
+import ShareWidget from "#lib/components/ShareWidget.svelte";
+import ContentCard from "#lib/components/ContentCard.svelte";
 import type { Component } from "svelte";
 import {
 	ArrowLeftIcon,
@@ -17,10 +17,10 @@ import {
 	TagIcon,
 	ClockIcon,
 } from "phosphor-svelte";
-import type { Collection, ContentMetadata } from "$lib/content";
+import type { Collection, ContentMetadata } from "#lib/content";
 
-import { getEnhancedImage } from "$lib/images";
-import { createTableOfContents } from "$lib/toc.svelte";
+import { getEnhancedImage } from "#lib/images";
+import { createTableOfContents } from "#lib/toc.svelte";
 
 const toc = createTableOfContents();
 toc.init();

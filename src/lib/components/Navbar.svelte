@@ -3,15 +3,26 @@ import { page } from "$app/state";
 import { resolve, asset } from "$app/paths";
 import ListIcon from "phosphor-svelte/lib/ListIcon";
 import { Menu, Portal } from "@skeletonlabs/skeleton-svelte";
-import ThemeSwitcher from "$lib/components/ThemeSwitcher.svelte";
-import { reveal } from "$lib/actions";
+import ThemeSwitcher from "#lib/components/ThemeSwitcher.svelte";
+import { reveal } from "#lib/actions";
 
+// Kit 3 route ids include the layout group, so resolve() can't take a bare
+// pathname. Resolve once here and use the result for both href and the active
+// check, which keeps the two from drifting apart.
 const links = [
-	{ href: "/", label: "Home" },
-	{ href: "/projects", label: "Projects" },
-	{ href: "/blogs", label: "Blogs" },
-	{ href: "/about", label: "About" },
-	{ href: "/contact", label: "Contact" },
+	{ href: resolve("/"), label: "Home" },
+	{
+		href: resolve("/(public)/[collection=collection]", {
+			collection: "projects",
+		}),
+		label: "Projects",
+	},
+	{
+		href: resolve("/(public)/[collection=collection]", { collection: "blogs" }),
+		label: "Blogs",
+	},
+	{ href: resolve("/(public)/about"), label: "About" },
+	{ href: resolve("/(public)/contact"), label: "Contact" },
 ] as const;
 </script>
 
@@ -37,7 +48,7 @@ const links = [
 				{@const isActive = page.url.pathname === link.href}
 				<a
 					use:reveal={{ delay: 100 + i * 30, y: -10 }}
-					href={resolve(link.href)}
+					href={link.href}
 					aria-current={isActive ? 'page' : undefined}
 					class="group relative text-sm leading-none font-semibold tracking-wide text-surface-800-200 transition-colors hover:text-surface-950-50
 							{isActive ? 'text-surface-950-50' : ''}"
@@ -59,7 +70,7 @@ const links = [
 
 				<!-- CTA Button -->
 				<a
-					href={asset('/oliver-walton-cv.pdf')}
+					href={asset('oliver-walton-cv.pdf')}
 					class="btn preset-filled-primary-500 btn-sm px-5 py-2 text-xs"
 					target="_blank"
 					title="Download CV (opens in new window)"
@@ -89,7 +100,7 @@ const links = [
 											{#snippet element(attributes)}
 												<a
 													{...attributes as import('svelte/elements').HTMLAnchorAttributes}
-													href={resolve(link.href)}
+													href={link.href}
 													class="block w-full rounded-lg px-4 py-3 text-sm font-bold {isActive
 														? 'bg-surface-200-800 text-surface-950-50'
 														: 'text-surface-800-200 hover:bg-surface-100-900'}"

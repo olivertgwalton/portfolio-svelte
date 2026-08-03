@@ -1,21 +1,21 @@
 <script lang="ts">
 import type { Component } from "svelte";
-import IconSvelte from "$lib/components/icons/IconSvelte.svelte";
-import IconBun from "$lib/components/icons/IconBun.svelte";
-import IconRust from "$lib/components/icons/IconRust.svelte";
-import IconPython from "$lib/components/icons/IconPython.svelte";
-import IconC from "$lib/components/icons/IconC.svelte";
-import IconTypeScript from "$lib/components/icons/IconTypeScript.svelte";
-import IconTailwind from "$lib/components/icons/IconTailwind.svelte";
-import IconLinux from "$lib/components/icons/IconLinux.svelte";
-import IconDocker from "$lib/components/icons/IconDocker.svelte";
-import IconGit from "$lib/components/icons/IconGit.svelte";
-import IconPostgres from "$lib/components/icons/IconPostgres.svelte";
-import IconSQLite from "$lib/components/icons/IconSQLite.svelte";
-import IconVercel from "$lib/components/icons/IconVercel.svelte";
-import IconGitHub from "$lib/components/icons/IconGitHub.svelte";
-import { reveal } from "$lib/actions";
-import SectionHeader from "$lib/components/SectionHeader.svelte";
+import IconSvelte from "#lib/components/icons/IconSvelte.svelte";
+import IconBun from "#lib/components/icons/IconBun.svelte";
+import IconRust from "#lib/components/icons/IconRust.svelte";
+import IconPython from "#lib/components/icons/IconPython.svelte";
+import IconC from "#lib/components/icons/IconC.svelte";
+import IconTypeScript from "#lib/components/icons/IconTypeScript.svelte";
+import IconTailwind from "#lib/components/icons/IconTailwind.svelte";
+import IconLinux from "#lib/components/icons/IconLinux.svelte";
+import IconDocker from "#lib/components/icons/IconDocker.svelte";
+import IconGit from "#lib/components/icons/IconGit.svelte";
+import IconPostgres from "#lib/components/icons/IconPostgres.svelte";
+import IconSQLite from "#lib/components/icons/IconSQLite.svelte";
+import IconVercel from "#lib/components/icons/IconVercel.svelte";
+import IconGitHub from "#lib/components/icons/IconGitHub.svelte";
+import { reveal } from "#lib/actions";
+import SectionHeader from "#lib/components/SectionHeader.svelte";
 
 interface IconProps {
 	class?: string;

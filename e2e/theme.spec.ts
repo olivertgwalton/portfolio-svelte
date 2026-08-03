@@ -32,3 +32,24 @@ test("switching theme updates the data-theme attribute", async ({ page }) => {
 	const cookies = await page.context().cookies();
 	expect(cookies.find((c) => c.name === "theme")?.value).toBe("rose");
 });
+
+// The 404 page used to be a hand-written static/404.html with hardcoded
+// colours, so it ignored the visitor's theme entirely. It's a real prerendered
+// route now and must pick the theme up like every other page.
+test("404 page respects the selected theme", async ({
+	page,
+	context,
+	baseURL,
+}) => {
+	await context.addCookies([
+		{ name: "theme", value: "rose", url: baseURL },
+		{ name: "mode", value: "dark", url: baseURL },
+	]);
+
+	await page.goto("/404");
+	const html = page.locator("html");
+
+	await expect(html).toHaveAttribute("data-theme", "rose");
+	await expect(html).toHaveClass(/dark/);
+	await expect(page.getByRole("heading", { name: "404" })).toBeVisible();
+});
