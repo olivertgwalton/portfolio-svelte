@@ -18,22 +18,12 @@ ENV NODE_ENV=production
 RUN bun run build
 
 # --- Stage 2: Production Runner ---
-FROM oven/bun:slim AS release
-WORKDIR /app
+# adapter-static emits plain files, so there is no server to run and no runtime
+# dependency to install — nginx just serves the directory. `static/` is already
+# folded into `build/` by the adapter, so it needs no separate COPY.
+FROM nginx:alpine AS release
 
-# Stages don't share a filesystem, so the runtime deps are installed fresh here
-# rather than inherited from the builder. --production keeps the dev toolchain out.
-COPY --from=builder /app/package.json /app/bun.lock ./
-RUN bun install --production --frozen-lockfile
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/build /usr/share/nginx/html
 
-COPY --from=builder /app/build ./build
-COPY --from=builder /app/static ./static
-
-# Security: Run as the built-in 'bun' user
-USER bun
-EXPOSE 3000/tcp
-
-ENV NODE_ENV=production
-ENV PORT=3000
-
-ENTRYPOINT ["bun", "run", "build/index.js"]
+EXPOSE 80/tcp
