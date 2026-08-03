@@ -42,5 +42,5 @@ export const siteConfig = {
 		"Frontend Architecture",
 		"Embedded Development",
 	],
-	ogImage: "/api/og?title=Oliver%20Walton&description=Software%20Engineer",
+	ogImage: "/og/default.png",
 };

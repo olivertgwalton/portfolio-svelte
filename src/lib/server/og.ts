@@ -1,14 +1,28 @@
 import { Renderer } from "@takumi-rs/core";
 import { container, text } from "@takumi-rs/helpers";
-import type { RequestHandler } from "./$types";
 
 const renderer = new Renderer();
 
-export const GET: RequestHandler = async ({ url }) => {
-	const title = url.searchParams.get("title") ?? "Oliver Walton";
-	const description =
-		url.searchParams.get("description") ?? "Software Engineer";
+export const OG_DEFAULT_TITLE = "Oliver Walton";
+export const OG_DEFAULT_DESCRIPTION = "Software Engineer";
 
+function footerItem(label: string, value: string) {
+	return container({
+		tw: "flex flex-col gap-2",
+		children: [
+			text({
+				text: label,
+				tw: "text-[#ff8ea6] text-sm font-bold uppercase",
+			}),
+			text({
+				text: value,
+				tw: "text-[#fffcf5] text-xl font-semibold",
+			}),
+		],
+	});
+}
+
+export async function renderOgImage(title: string, description: string) {
 	const node = container({
 		tw: "flex flex-col justify-between bg-[#0a0a0a] p-[60px] w-full h-full",
 		children: [
@@ -81,21 +95,5 @@ export const GET: RequestHandler = async ({ url }) => {
 			"Content-Type": "image/png",
 			"Cache-Control": "public, max-age=600",
 		},
-	});
-};
-
-function footerItem(label: string, value: string) {
-	return container({
-		tw: "flex flex-col gap-2",
-		children: [
-			text({
-				text: label,
-				tw: "text-[#ff8ea6] text-sm font-bold uppercase",
-			}),
-			text({
-				text: value,
-				tw: "text-[#fffcf5] text-xl font-semibold",
-			}),
-		],
 	});
 }

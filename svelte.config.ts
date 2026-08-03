@@ -5,7 +5,7 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
 import remarkMath from "remark-math";
-import adapter from "svelte-adapter-bun";
+import adapter from "@sveltejs/adapter-static";
 import { cspDirectives } from "./src/lib/csp.ts";
 import { remarkEnhancedImages } from "./src/lib/markdown/remark-enhanced-images.ts";
 import { remarkReadTime } from "./src/lib/markdown/remark-read-time.ts";

@@ -1,7 +1,8 @@
-export const dateFormatter = new Intl.DateTimeFormat("en-GB", {
+const dateFormatter = new Intl.DateTimeFormat("en-GB", {
 	year: "numeric",
 	month: "long",
 	day: "numeric",
+	timeZone: "UTC",
 });
 
 export const formatDate = (date: string) =>

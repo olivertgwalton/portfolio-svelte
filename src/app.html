@@ -1,5 +1,8 @@
 <!doctype html>
-<html lang="en" %sveltekit.html.attributes%>
+<!-- Pages are prerendered, so the default theme is baked in here. Visitors who
+     picked a different theme or mode get it applied on hydration (see
+     initClient in $lib/theme.svelte), which means a brief flash for them. -->
+<html lang="en" data-theme="modern">
 	<head>
 		<meta charset="utf-8">
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -10,5 +13,10 @@
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>
+		<script
+			defer
+			src="https://static.cloudflareinsights.com/beacon.min.js"
+			data-cf-beacon='{"token":"5a5e3c2aba8b40ab9dfd68cba95e3705"}'
+		></script>
 	</body>
 </html>
