@@ -52,6 +52,66 @@ let featuredImage = $derived(getEnhancedImage(meta.image));
 const ogImage = $derived(`/og/${type}/${meta.slug}.png`);
 </script>
 
+{#snippet externalLink(
+	href: string | undefined,
+	label: string,
+	Icon: Component<{ size?: number }>,
+)}
+	{#if href}
+		<a
+			{href}
+			target="_blank"
+			title="{label} (opens in new window)"
+			rel="external noreferrer"
+			class="flex items-center gap-2 font-bold transition-colors hover:text-primary-500"
+		>
+			<span aria-hidden="true"><Icon size={18} /></span>
+			{label}
+		</a>
+	{/if}
+{/snippet}
+
+<!-- The two cards differ only in which side they hang off and which way the
+     arrow points; "next" additionally jumps the grid column when it is alone. -->
+{#snippet adjacentLink(item: ContentMetadata | null, rel: 'prev' | 'next')}
+	{#if item}
+		{@const isNext = rel === 'next'}
+		<a
+			href={postHref(item)}
+			{rel}
+			class="group flex flex-col gap-2 rounded-2xl border border-surface-200-800 p-6 transition-all hover:-translate-y-0.5 hover:border-primary-500/60 hover:bg-surface-100-900
+				{isNext ? 'text-right sm:items-end' : ''}"
+			class:sm:col-start-2={isNext && !adjacent.prev}
+		>
+			<span
+				class="flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-surface-600-400 uppercase"
+			>
+				{#if isNext}
+					Next
+					<span aria-hidden="true"
+						><ArrowRightIcon size={14} weight="bold" /></span
+					>
+				{:else}
+					<span aria-hidden="true"
+						><ArrowLeftIcon size={14} weight="bold" /></span
+					>
+					Previous
+				{/if}
+			</span>
+			<span
+				class="font-heading text-lg font-bold text-surface-950-50 transition-colors group-hover:text-primary-500"
+			>
+				{item.title}
+			</span>
+			<span
+				class="mt-auto flex items-center gap-3 text-xs text-surface-600-400"
+			>
+				{formatDate(item.date)}
+			</span>
+		</a>
+	{/if}
+{/snippet}
+
 <MetaTags
 	title={meta.title}
 	description={meta.description}
@@ -77,19 +137,11 @@ const ogImage = $derived(`/og/${type}/${meta.slug}.png`);
 
 			<div class="grid gap-12 lg:grid-cols-[1fr_auto] lg:items-center">
 				<div class="max-w-3xl">
-					{#if meta.type}
-						<span
-							class="mb-4 block font-mono text-sm font-bold tracking-widest text-(--color-primary-500-text) uppercase"
-						>
-							{meta.type}
-						</span>
-					{:else}
-						<span
-							class="mb-4 block font-mono text-sm font-bold tracking-widest text-(--color-primary-500-text) uppercase"
-						>
-							{isProject ? "Project" : "Blog"}
-						</span>
-					{/if}
+					<span
+						class="mb-4 block font-mono text-sm font-bold tracking-widest text-(--color-primary-500-text) uppercase"
+					>
+						{meta.type ?? (isProject ? 'Project' : 'Blog')}
+					</span>
 					<h1
 						class="font-heading text-5xl font-black tracking-tighter text-surface-950-50 md:text-7xl"
 					>
@@ -127,30 +179,8 @@ const ogImage = $derived(`/og/${type}/${meta.slug}.png`);
 							</div>
 						{/if}
 						{#if isProject}
-							{#if meta.demo}
-								<a
-									href={meta.demo}
-									target="_blank"
-									title="Live Demo (opens in new window)"
-									rel="external noreferrer"
-									class="flex items-center gap-2 font-bold transition-colors hover:text-primary-500"
-								>
-									<span aria-hidden="true"><GlobeIcon size={18} /></span>
-									Live Demo
-								</a>
-							{/if}
-							{#if meta.source}
-								<a
-									href={meta.source}
-									target="_blank"
-									title="Source Code (opens in new window)"
-									rel="external noreferrer"
-									class="flex items-center gap-2 font-bold transition-colors hover:text-primary-500"
-								>
-									<span aria-hidden="true"><GithubLogoIcon size={18} /></span>
-									Source Code
-								</a>
-							{/if}
+							{@render externalLink(meta.demo, 'Live Demo', GlobeIcon)}
+							{@render externalLink(meta.source, 'Source Code', GithubLogoIcon)}
 						{/if}
 					</div>
 				</div>
@@ -212,60 +242,8 @@ const ogImage = $derived(`/og/${type}/${meta.slug}.png`);
 				aria-label="{isProject ? 'Project' : 'Blog'} navigation"
 				class="mt-16 grid gap-4 border-t border-surface-200-800 pt-12 sm:grid-cols-2"
 			>
-				{#if adjacent.prev}
-					<a
-						href={postHref(adjacent.prev)}
-						rel="prev"
-						class="group flex flex-col gap-2 rounded-2xl border border-surface-200-800 p-6 transition-all hover:-translate-y-0.5 hover:border-primary-500/60 hover:bg-surface-100-900"
-					>
-						<span
-							class="flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-surface-600-400 uppercase"
-						>
-							<span aria-hidden="true"
-								><ArrowLeftIcon size={14} weight="bold" /></span
-							>
-							Previous
-						</span>
-						<span
-							class="font-heading text-lg font-bold text-surface-950-50 transition-colors group-hover:text-primary-500"
-						>
-							{adjacent.prev.title}
-						</span>
-						<span
-							class="mt-auto flex items-center gap-3 text-xs text-surface-600-400"
-						>
-							{formatDate(adjacent.prev.date)}
-						</span>
-					</a>
-				{/if}
-
-				{#if adjacent.next}
-					<a
-						href={postHref(adjacent.next)}
-						rel="next"
-						class="group flex flex-col gap-2 rounded-2xl border border-surface-200-800 p-6 text-right transition-all hover:-translate-y-0.5 hover:border-primary-500/60 hover:bg-surface-100-900 sm:items-end"
-						class:sm:col-start-2={!adjacent.prev}
-					>
-						<span
-							class="flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-surface-600-400 uppercase"
-						>
-							Next
-							<span aria-hidden="true"
-								><ArrowRightIcon size={14} weight="bold" /></span
-							>
-						</span>
-						<span
-							class="font-heading text-lg font-bold text-surface-950-50 transition-colors group-hover:text-primary-500"
-						>
-							{adjacent.next.title}
-						</span>
-						<span
-							class="mt-auto flex items-center gap-3 text-xs text-surface-600-400"
-						>
-							{formatDate(adjacent.next.date)}
-						</span>
-					</a>
-				{/if}
+				{@render adjacentLink(adjacent.prev, 'prev')}
+				{@render adjacentLink(adjacent.next, 'next')}
 			</nav>
 		{/if}
 

@@ -13,7 +13,57 @@ let {
 	activeId: string;
 	onNavigate: (id: string) => void;
 } = $props();
+
+// The collapsible layout closes its <details> first, so the smooth scroll isn't
+// fighting the collapse animation for the same frames.
+function navigate(event: MouseEvent & { currentTarget: HTMLAnchorElement }) {
+	event.preventDefault();
+	const id = event.currentTarget.hash.slice(1);
+
+	const details = event.currentTarget.closest("details");
+	if (!details) {
+		onNavigate(id);
+		return;
+	}
+
+	details.removeAttribute("open");
+	setTimeout(() => {
+		onNavigate(id);
+	}, 10);
+}
 </script>
+
+{#snippet list(gap: string, inactive: string)}
+	<div class="relative">
+		<!-- Decorative timeline line -->
+		<div
+			class="absolute top-0 bottom-0 left-0 w-px bg-surface-200 dark:bg-surface-800"
+		></div>
+		<ul class="{gap} text-sm">
+			{#each headings as heading (heading.id)}
+				<li class={{ relative: true, 'pl-4': heading.depth === 3 }}>
+					<a
+						href="#{heading.id}"
+						onclick={navigate}
+						class="group flex items-start py-0.5 pl-4 transition-all duration-300 ease-out
+							{activeId === heading.id
+							? 'translate-x-1 font-medium text-(--color-primary-500-text)'
+							: `${inactive} hover:translate-x-1 hover:text-surface-950-50`}"
+					>
+						<!-- Active Indicator Dot -->
+						{#if activeId === heading.id}
+							<div
+								class="absolute top-1.5 left-[-1.5px] h-3 w-0.5 rounded-full bg-primary-500 transition-all duration-300"
+								style:height="calc(100% - 12px)"
+							></div>
+						{/if}
+						<span class="line-clamp-2">{heading.text}</span>
+					</a>
+				</li>
+			{/each}
+		</ul>
+	</div>
+{/snippet}
 
 {#if headings.length > 0}
 	{#if layout === 'sidebar'}
@@ -25,38 +75,7 @@ let {
 			>
 				Contents
 			</h2>
-			<div class="relative">
-				<!-- Decorative timeline line -->
-				<div
-					class="absolute top-0 bottom-0 left-0 w-px bg-surface-200 dark:bg-surface-800"
-				></div>
-				<ul class="space-y-3 text-sm">
-					{#each headings as heading (heading.id)}
-						<li class={{ relative: true, 'pl-4': heading.depth === 3 }}>
-							<a
-								href="#{heading.id}"
-								class="group flex items-start py-0.5 pl-4 transition-all duration-300 ease-out
-                        {activeId === heading.id
-									? 'translate-x-1 font-medium text-(--color-primary-500-text)'
-									: 'text-surface-600-200 hover:translate-x-1 hover:text-surface-950-50'}"
-								onclick={(e) => {
-									e.preventDefault();
-									onNavigate(heading.id);
-								}}
-							>
-								<!-- Active Indicator Dot -->
-								{#if activeId === heading.id}
-									<div
-										class="absolute top-1.5 left-[-1.5px] h-3 w-0.5 rounded-full bg-primary-500 transition-all duration-300"
-										style:height="calc(100% - 12px)"
-									></div>
-								{/if}
-								<span class="line-clamp-2">{heading.text}</span>
-							</a>
-						</li>
-					{/each}
-				</ul>
-			</div>
+			{@render list('space-y-3', 'text-surface-600-200')}
 		</nav>
 	{:else}
 		<!-- Mobile Collapsible View -->
@@ -85,39 +104,7 @@ let {
 				<nav
 					class="border-t border-surface-200-800 bg-surface-100-900/80 px-6 py-6"
 				>
-					<div class="relative">
-						<!-- Decorative timeline line -->
-						<div
-							class="absolute top-0 bottom-0 left-0 w-px bg-surface-200 dark:bg-surface-800"
-						></div>
-						<ul class="space-y-4 text-sm">
-							{#each headings as heading (heading.id)}
-								<li class={{ relative: true, 'pl-4': heading.depth === 3 }}>
-									<a
-										href="#{heading.id}"
-										class="group flex items-start py-0.5 pl-4 transition-all duration-300 ease-out
-                                    {activeId === heading.id
-											? 'translate-x-1 font-medium text-(--color-primary-500-text)'
-											: 'text-surface-800-200 hover:translate-x-1 hover:text-surface-950-50'}"
-										onclick={(e) => {
-											e.preventDefault();
-											e.currentTarget.closest('details')?.removeAttribute('open');
-											setTimeout(() => { onNavigate(heading.id); }, 10);
-										}}
-									>
-										<!-- Active Indicator Dot -->
-										{#if activeId === heading.id}
-											<div
-												class="absolute top-1.5 left-[-1.5px] h-3 w-0.5 rounded-full bg-primary-500 transition-all duration-300"
-												style:height="calc(100% - 12px)"
-											></div>
-										{/if}
-										<span class="line-clamp-2">{heading.text}</span>
-									</a>
-								</li>
-							{/each}
-						</ul>
-					</div>
+					{@render list('space-y-4', 'text-surface-800-200')}
 				</nav>
 			</details>
 		</div>

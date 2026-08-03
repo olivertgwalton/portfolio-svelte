@@ -77,7 +77,7 @@ import { reveal } from "#lib/actions";
 				>
 					<!-- Glass Background/Frame -->
 					<div
-						class="/30 absolute -inset-4 rounded-3xl border border-surface-200-800/80 bg-surface-50-950/30 backdrop-blur-xl transition-all duration-500 group-hover:-inset-6 group-hover:bg-surface-50-950/40"
+						class="absolute -inset-4 rounded-3xl border border-surface-200-800/80 bg-surface-50-950/30 backdrop-blur-xl transition-all duration-500 group-hover:-inset-6 group-hover:bg-surface-50-950/40"
 					></div>
 
 					<!-- Image Container -->

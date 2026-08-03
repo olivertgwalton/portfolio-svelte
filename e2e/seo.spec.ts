@@ -1,6 +1,6 @@
-import { expect, test } from "@playwright/test";
+import { type Page, expect, test } from "@playwright/test";
 
-function attr(page: import("@playwright/test").Page, selector: string) {
+function attr(page: Page, selector: string) {
 	return page.locator(selector).getAttribute("content");
 }
 
@@ -26,10 +26,7 @@ test.describe("basic meta tags on static pages", () => {
 });
 
 test.describe("open graph and twitter tags on content pages", () => {
-	async function firstCollectionHref(
-		page: import("@playwright/test").Page,
-		path: "/blogs" | "/projects",
-	) {
+	async function firstCollectionHref(page: Page, path: "/blogs" | "/projects") {
 		await page.goto(path);
 		const href = await page
 			.locator(`a[href^="${path}/"]`)
@@ -39,46 +36,36 @@ test.describe("open graph and twitter tags on content pages", () => {
 		return href;
 	}
 
-	test("blog post has complete OG and Twitter tags", async ({ page }) => {
-		const href = await firstCollectionHref(page, "/blogs");
-		await page.goto(href);
+	// Blogs are articles, projects are websites; every other tag is asserted
+	// identically for both.
+	const collections = [
+		{ path: "/blogs", ogType: "article" },
+		{ path: "/projects", ogType: "website" },
+	] as const;
 
-		await expect(page.locator('meta[property="og:type"]')).toHaveAttribute(
-			"content",
-			"article",
-		);
-		expect(await attr(page, 'meta[property="og:title"]')).toBeTruthy();
-		expect(await attr(page, 'meta[property="og:description"]')).toBeTruthy();
+	for (const { path, ogType } of collections) {
+		test(`${path} post has complete OG and Twitter tags`, async ({ page }) => {
+			const href = await firstCollectionHref(page, path);
+			await page.goto(href);
 
-		const ogUrl = await attr(page, 'meta[property="og:url"]');
-		expect(ogUrl).toContain(href);
+			await expect(page.locator('meta[property="og:type"]')).toHaveAttribute(
+				"content",
+				ogType,
+			);
+			expect(await attr(page, 'meta[property="og:title"]')).toBeTruthy();
+			expect(await attr(page, 'meta[property="og:description"]')).toBeTruthy();
+			expect(await attr(page, 'meta[property="og:url"]')).toContain(href);
+			expect(await attr(page, 'meta[property="og:image"]')).toMatch(
+				/^https?:\/\//,
+			);
 
-		const ogImage = await attr(page, 'meta[property="og:image"]');
-		expect(ogImage).toMatch(/^https?:\/\//);
-
-		expect(await attr(page, 'meta[name="twitter:card"]')).toBe(
-			"summary_large_image",
-		);
-		expect(await attr(page, 'meta[name="twitter:title"]')).toBeTruthy();
-		expect(await attr(page, 'meta[name="twitter:image"]')).toMatch(
-			/^https?:\/\//,
-		);
-	});
-
-	test("project post has complete OG and Twitter tags", async ({ page }) => {
-		const href = await firstCollectionHref(page, "/projects");
-		await page.goto(href);
-
-		await expect(page.locator('meta[property="og:type"]')).toHaveAttribute(
-			"content",
-			"website",
-		);
-		expect(await attr(page, 'meta[property="og:title"]')).toBeTruthy();
-		expect(await attr(page, 'meta[property="og:image"]')).toMatch(
-			/^https?:\/\//,
-		);
-		expect(await attr(page, 'meta[name="twitter:card"]')).toBe(
-			"summary_large_image",
-		);
-	});
+			expect(await attr(page, 'meta[name="twitter:card"]')).toBe(
+				"summary_large_image",
+			);
+			expect(await attr(page, 'meta[name="twitter:title"]')).toBeTruthy();
+			expect(await attr(page, 'meta[name="twitter:image"]')).toMatch(
+				/^https?:\/\//,
+			);
+		});
+	}
 });

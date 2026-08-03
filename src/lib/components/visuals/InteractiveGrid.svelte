@@ -1,17 +1,14 @@
 <script lang="ts">
 import { onMount } from "svelte";
-import type * as WasmGrid from "../../wasm/rust_grid.js";
+import type * as WasmGrid from "#lib/wasm/rust_grid.js";
+import { loadWasm } from "#lib/wasm-loader";
 
 // Svelte 5 Runes for element binding
 let canvas = $state<HTMLCanvasElement>();
 
-let { fixed = false, spacing = 40 } = $props<{
-	fixed?: boolean;
-	spacing?: number;
-}>();
-
 // Config
 const BASE_DOT_RADIUS = 1.5;
+const SPACING = 40;
 
 // State
 let mouseX = -1000;
@@ -30,8 +27,6 @@ let ctx: CanvasRenderingContext2D | null = null;
 let animationId: number;
 
 // WASM
-let wasmGlue: typeof WasmGrid | undefined;
-let wasmMemory: WebAssembly.Memory | undefined;
 let engine: WasmGrid.GridEngine | undefined;
 
 function updateThemeColor() {
@@ -57,26 +52,6 @@ function updateThemeColor() {
 	}
 }
 
-async function initWasm() {
-	try {
-		if (!wasmGlue) {
-			// With target: web, we import the default as an initializer
-			// and the wasm file as a URL.
-			const wasmPkg = await import("../../wasm/rust_grid.js");
-
-			// Initialize with path to static asset
-
-			const wasmExports = await wasmPkg.default({
-				module_or_path: "/wasm/rust_grid_bg.wasm",
-			});
-
-			wasmGlue = wasmPkg;
-			wasmMemory = wasmExports.memory;
-		}
-	} catch {
-		// Silently fail WASM init
-	}
-}
 async function initData() {
 	if (!canvas) return;
 
@@ -99,11 +74,11 @@ async function initData() {
 }
 
 async function initGrid() {
-	await initWasm();
-	if (!wasmGlue || !wasmMemory) return;
+	const wasm = await loadWasm();
+	if (!wasm) return;
 
-	const cols = Math.ceil(width / spacing) + 2;
-	const rows = Math.ceil(height / spacing) + 2;
+	const cols = Math.ceil(width / SPACING) + 2;
+	const rows = Math.ceil(height / SPACING) + 2;
 	numPoints = cols * rows;
 
 	if (engine) {
@@ -115,11 +90,11 @@ async function initGrid() {
 		engine = undefined;
 	}
 
-	engine = new wasmGlue.GridEngine(numPoints);
-	engine.init(width, height, spacing, dpr);
+	engine = new wasm.glue.GridEngine(numPoints);
+	engine.init(width, height, SPACING, dpr);
 
-	posX = new Float32Array(wasmMemory.buffer, engine.pos_x_ptr(), numPoints);
-	posY = new Float32Array(wasmMemory.buffer, engine.pos_y_ptr(), numPoints);
+	posX = new Float32Array(wasm.memory.buffer, engine.pos_x_ptr(), numPoints);
+	posY = new Float32Array(wasm.memory.buffer, engine.pos_y_ptr(), numPoints);
 }
 
 function animate() {
@@ -207,8 +182,6 @@ onMount(() => {
 <div class="contents">
 	<canvas
 		bind:this={canvas}
-		class="pointer-events-none inset-0 z-0 h-full w-full {fixed
-			? 'fixed'
-			: 'absolute'}"
+		class="pointer-events-none absolute inset-0 z-0 h-full w-full"
 	></canvas>
 </div>

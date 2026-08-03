@@ -3,21 +3,11 @@ import { page } from "$app/state";
 import TwitterLogoIcon from "phosphor-svelte/lib/TwitterLogoIcon";
 import LinkedinLogoIcon from "phosphor-svelte/lib/LinkedinLogoIcon";
 import LinkIcon from "phosphor-svelte/lib/LinkIcon";
-import CheckIcon from "phosphor-svelte/lib/CheckIcon";
-import { fade } from "svelte/transition";
+import CopyButton from "#lib/components/CopyButton.svelte";
 
 let { title }: { title: string } = $props();
 
-let copied = $state(false);
 const url = $derived(page.url.href);
-
-function copyLink() {
-	navigator.clipboard.writeText(url).catch((error: unknown) => {
-		console.error("Failed to copy link:", error);
-	});
-	copied = true;
-	setTimeout(() => (copied = false), 2000);
-}
 
 function shareTwitter() {
 	window.open(
@@ -59,33 +49,12 @@ function shareLinkedin() {
 				><LinkedinLogoIcon size={20} weight="fill" /></span
 			>
 		</button>
-		<button
-			type="button"
-			onclick={copyLink}
+		<CopyButton
+			text={() => url}
+			label="Copy Link"
+			icon={LinkIcon}
 			class="relative btn-icon bg-surface-100-900 transition-colors hover:bg-surface-200-800"
-			aria-label="Copy Link"
-		>
-			{#if copied}
-				<div
-					in:fade={{ duration: 150 }}
-					class="absolute inset-0 flex items-center justify-center"
-				>
-					<span aria-hidden="true"
-						><CheckIcon
-							size={20}
-							weight="bold"
-							class="text-success-500"
-						/></span
-					>
-				</div>
-			{:else}
-				<div
-					in:fade={{ duration: 150 }}
-					class="absolute inset-0 flex items-center justify-center"
-				>
-					<span aria-hidden="true"><LinkIcon size={20} weight="bold" /></span>
-				</div>
-			{/if}
-		</button>
+			swapClass="absolute inset-0 flex items-center justify-center"
+		/>
 	</div>
 </div>
