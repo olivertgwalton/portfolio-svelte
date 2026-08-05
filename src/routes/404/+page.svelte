@@ -20,5 +20,7 @@ import MetaTags from "#lib/components/MetaTags.svelte";
 >
 	<h1 class="font-heading text-9xl font-black text-surface-950-50">404</h1>
 	<p class="text-xl font-bold text-surface-600-400">That page doesn't exist.</p>
-	<a href={resolve('/')} class="mt-4 btn preset-filled-primary-500">Go Home</a>
+	<a href={resolve('/(public)')} class="mt-4 btn preset-filled-primary-500"
+		>Go Home</a
+	>
 </div>

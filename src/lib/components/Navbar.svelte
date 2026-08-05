@@ -7,10 +7,11 @@ import ThemeSwitcher from "#lib/components/ThemeSwitcher.svelte";
 import { reveal } from "#lib/actions";
 
 // Kit 3 route ids include the layout group, so resolve() can't take a bare
-// pathname. Resolve once here and use the result for both href and the active
-// check, which keeps the two from drifting apart.
+// pathname — the home page is `/(public)`, not `/`. Resolve once here and use
+// the result for both href and the active check, which keeps the two from
+// drifting apart.
 const links = [
-	{ href: resolve("/"), label: "Home" },
+	{ href: resolve("/(public)"), label: "Home" },
 	{
 		href: resolve("/(public)/[collection=collection]", {
 			collection: "projects",
@@ -36,7 +37,7 @@ const links = [
 		<!-- Logo -->
 		<a
 			use:reveal={{ delay: 0, y: -10 }}
-			href={resolve('/')}
+			href={resolve('/(public)')}
 			class="font-heading text-2xl font-bold tracking-tighter text-surface-950-50"
 		>
 			Oliver<span class="text-surface-800-200">.</span>

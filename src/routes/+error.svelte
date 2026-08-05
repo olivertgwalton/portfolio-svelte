@@ -12,5 +12,7 @@ import { resolve } from "$app/paths";
 	<p class="text-xl font-bold text-surface-600-400">
 		{page.error?.message ?? 'Unknown Error'}
 	</p>
-	<a href={resolve('/')} class="mt-4 btn preset-filled-primary-500">Go Home</a>
+	<a href={resolve('/(public)')} class="mt-4 btn preset-filled-primary-500"
+		>Go Home</a
+	>
 </div>
