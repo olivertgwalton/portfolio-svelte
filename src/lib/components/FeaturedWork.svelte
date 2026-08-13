@@ -1,7 +1,7 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
-import { reveal } from "#lib/actions";
-import type { Collection, ContentMetadata } from "#lib/content";
+import { reveal } from "#lib/actions.ts";
+import type { Collection, ContentMetadata } from "#lib/content.ts";
 import ContentCard from "#lib/components/ContentCard.svelte";
 import TabGroup from "#lib/components/TabGroup.svelte";
 

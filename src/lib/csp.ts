@@ -1,8 +1,6 @@
-import type { Config } from "@sveltejs/kit";
+import type { Config } from "@sveltejs/kit/vite";
 
-export const cspDirectives: NonNullable<
-	NonNullable<Config["kit"]>["csp"]
->["directives"] = {
+export const cspDirectives: NonNullable<Config["csp"]>["directives"] = {
 	"default-src": ["self"],
 	"script-src": [
 		"self",

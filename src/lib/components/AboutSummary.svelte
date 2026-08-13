@@ -1,7 +1,7 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
 import ArrowRightIcon from "phosphor-svelte/lib/ArrowRightIcon";
-import { reveal } from "#lib/actions";
+import { reveal } from "#lib/actions.ts";
 import SectionHeader from "#lib/components/SectionHeader.svelte";
 import SocialLinks from "#lib/components/SocialLinks.svelte";
 </script>

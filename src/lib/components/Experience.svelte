@@ -1,6 +1,6 @@
 <script lang="ts">
-import { reveal } from "#lib/actions";
-import type { Collection } from "#lib/content";
+import { reveal } from "#lib/actions.ts";
+import type { Collection } from "#lib/content.ts";
 import SectionHeader from "#lib/components/SectionHeader.svelte";
 import TabGroup from "#lib/components/TabGroup.svelte";
 import BriefcaseIcon from "phosphor-svelte/lib/BriefcaseIcon";
@@ -10,7 +10,7 @@ import ArrowSquareOutIcon from "phosphor-svelte/lib/ArrowSquareOutIcon";
 import type { Component } from "svelte";
 import type { IconWeight } from "phosphor-svelte";
 import { resolve } from "$app/paths";
-import type { ContentMetadata } from "#lib/content";
+import type { ContentMetadata } from "#lib/content.ts";
 
 type Category = "experience" | "education" | "certifications";
 

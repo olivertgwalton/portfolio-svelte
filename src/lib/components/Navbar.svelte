@@ -4,7 +4,7 @@ import { resolve, asset } from "$app/paths";
 import ListIcon from "phosphor-svelte/lib/ListIcon";
 import { Menu, Portal } from "@skeletonlabs/skeleton-svelte";
 import ThemeSwitcher from "#lib/components/ThemeSwitcher.svelte";
-import { reveal } from "#lib/actions";
+import { reveal } from "#lib/actions.ts";
 
 // Kit 3 route ids include the layout group, so resolve() can't take a bare
 // pathname — the home page is `/(public)`, not `/`. Resolve once here and use

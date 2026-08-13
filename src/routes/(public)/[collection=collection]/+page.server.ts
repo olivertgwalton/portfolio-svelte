@@ -1,4 +1,4 @@
-import { getContentList, type Collection } from "#lib/content";
+import { getContentList, type Collection } from "#lib/content.ts";
 import type { PageServerLoad } from "./$types";
 
 // The `as Collection` is load-bearing: SvelteKit's load-return type widens the

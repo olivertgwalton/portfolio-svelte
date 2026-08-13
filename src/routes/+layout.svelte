@@ -5,7 +5,7 @@ import "@fontsource-variable/manrope/index.css";
 import "@fontsource-variable/jetbrains-mono/index.css";
 import Navbar from "#lib/components/Navbar.svelte";
 import BackToTop from "#lib/components/BackToTop.svelte";
-import { setThemeContext } from "#lib/theme.svelte";
+import { setThemeContext } from "#lib/theme.svelte.ts";
 import type { LayoutProps } from "./$types";
 
 let { children }: LayoutProps = $props();

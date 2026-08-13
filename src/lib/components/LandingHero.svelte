@@ -3,7 +3,7 @@ import { resolve } from "$app/paths";
 import me from "#lib/assets/me.jpg?enhanced";
 import ArrowDownIcon from "phosphor-svelte/lib/ArrowDownIcon";
 import InteractiveGrid from "#lib/components/visuals/InteractiveGrid.svelte";
-import { reveal } from "#lib/actions";
+import { reveal } from "#lib/actions.ts";
 </script>
 
 <section

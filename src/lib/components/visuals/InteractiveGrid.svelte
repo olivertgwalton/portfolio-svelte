@@ -1,7 +1,7 @@
 <script lang="ts">
 import { onMount } from "svelte";
 import type * as WasmGrid from "#lib/wasm/rust_grid.js";
-import { loadWasm } from "#lib/wasm-loader";
+import { loadWasm } from "#lib/wasm-loader.ts";
 
 // Svelte 5 Runes for element binding
 let canvas = $state<HTMLCanvasElement>();

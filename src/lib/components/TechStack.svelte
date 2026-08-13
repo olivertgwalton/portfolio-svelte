@@ -1,8 +1,8 @@
 <script lang="ts">
 import Icon from "#lib/components/icons/Icon.svelte";
 import IconPython from "#lib/components/icons/IconPython.svelte";
-import type { IconName } from "#lib/components/icons/icons";
-import { reveal } from "#lib/actions";
+import type { IconName } from "#lib/components/icons/icons.ts";
+import { reveal } from "#lib/actions.ts";
 import SectionHeader from "#lib/components/SectionHeader.svelte";
 
 interface Technology {

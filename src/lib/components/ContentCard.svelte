@@ -1,8 +1,8 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
-import { formatDate } from "#lib/utils";
-import { reveal } from "#lib/actions";
-import { getItemTags, type ContentMetadata } from "#lib/content-types";
+import { formatDate } from "#lib/utils.ts";
+import { reveal } from "#lib/actions.ts";
+import { getItemTags, type ContentMetadata } from "#lib/content-types.ts";
 import ContentImage from "#lib/components/ContentImage.svelte";
 import ArrowRightIcon from "phosphor-svelte/lib/ArrowRightIcon";
 

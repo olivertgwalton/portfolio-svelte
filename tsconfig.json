@@ -1,17 +1,9 @@
 {
 	"extends": "$app/tsconfig",
-	"include": ["src"],
+	"include": ["src", "vite.config.ts"],
 	"compilerOptions": {
-		"rewriteRelativeImportExtensions": true,
-		"allowJs": true,
-		"checkJs": true,
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"resolveJsonModule": true,
-		"skipLibCheck": true,
-		"sourceMap": true,
 		"strict": true,
-		"moduleResolution": "bundler",
+		"sourceMap": true,
 		"types": ["bun", "$app/types"]
 	},
 	// `$app/tsconfig` turns on checkJs and Kit 3 requires include: ["src"], which

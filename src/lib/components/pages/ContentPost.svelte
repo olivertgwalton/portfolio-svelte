@@ -1,7 +1,7 @@
 <script lang="ts">
 import { resolve } from "$app/paths";
-import { formatDate } from "#lib/utils";
-import { reveal } from "#lib/actions";
+import { formatDate } from "#lib/utils.ts";
+import { reveal } from "#lib/actions.ts";
 import MetaTags from "#lib/components/MetaTags.svelte";
 import TableOfContents from "#lib/components/TableOfContents.svelte";
 import ScrollProgress from "#lib/components/ScrollProgress.svelte";
@@ -17,10 +17,10 @@ import {
 	TagIcon,
 	ClockIcon,
 } from "phosphor-svelte";
-import type { Collection, ContentMetadata } from "#lib/content";
+import type { Collection, ContentMetadata } from "#lib/content.ts";
 
-import { getEnhancedImage } from "#lib/images";
-import { createTableOfContents } from "#lib/toc.svelte";
+import { getEnhancedImage } from "#lib/images.ts";
+import { createTableOfContents } from "#lib/toc.svelte.ts";
 
 const toc = createTableOfContents();
 toc.init();

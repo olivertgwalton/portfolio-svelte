@@ -3,7 +3,7 @@ import {
 	getAdjacentContent,
 	getContentItem,
 	getRelatedContent,
-} from "#lib/content";
+} from "#lib/content.ts";
 import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 

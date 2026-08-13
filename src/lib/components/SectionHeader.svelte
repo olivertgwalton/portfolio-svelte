@@ -1,5 +1,5 @@
 <script lang="ts">
-import { reveal } from "#lib/actions";
+import { reveal } from "#lib/actions.ts";
 import type { Snippet } from "svelte";
 
 let {

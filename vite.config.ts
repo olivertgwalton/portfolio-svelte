@@ -59,7 +59,7 @@ export default defineConfig({
 			// unknown keys off to vite-plugin-svelte, which silently rejects them.
 			adapter: adapter(),
 			csp: { mode: "auto", directives: cspDirectives },
-			files: { params: "src/params.ts" },
+			paths: { origin: "https://oliverwalton.uk" },
 		}),
 	],
 	preview: {

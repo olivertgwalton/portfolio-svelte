@@ -1,6 +1,6 @@
 import { error } from "@sveltejs/kit";
-import { getContentItem, getContentList } from "#lib/content";
-import { renderOgImage } from "#lib/server/og";
+import { getContentItem, getContentList } from "#lib/content.ts";
+import { renderOgImage } from "#lib/server/og.ts";
 import type { EntryGenerator, RequestHandler } from "./$types";
 
 export const prerender = true;

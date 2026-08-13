@@ -1,4 +1,4 @@
-import { type Collection, getContentList } from "#lib/content";
+import { type Collection, getContentList } from "#lib/content.ts";
 import type { RequestHandler } from "./$types";
 
 const SITE_URL = "https://oliverwalton.uk";

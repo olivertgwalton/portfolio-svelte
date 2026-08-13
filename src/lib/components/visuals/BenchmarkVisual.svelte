@@ -3,7 +3,7 @@ import { onMount } from "svelte";
 import PlayIcon from "phosphor-svelte/lib/PlayIcon";
 import PauseIcon from "phosphor-svelte/lib/PauseIcon";
 import type * as WasmGrid from "#lib/wasm/rust_grid.js";
-import { loadWasm } from "#lib/wasm-loader";
+import { loadWasm } from "#lib/wasm-loader.ts";
 import type { PhysicsWorkerResponse } from "../../workers/physics.worker.ts";
 
 // Svelte 5 Runes
