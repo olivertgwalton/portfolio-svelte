@@ -29,7 +29,11 @@ const getHighlighter = () =>
 		],
 	}));
 
-export async function mdsvexHighlighter(code: string, lang = "text", meta = "") {
+export async function mdsvexHighlighter(
+	code: string,
+	lang = "text",
+	meta = "",
+) {
 	const html = (await getHighlighter()).codeToHtml(code, {
 		lang,
 		themes: { light: "github-light", dark: "github-dark" },
