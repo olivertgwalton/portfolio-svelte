@@ -4,7 +4,6 @@ import { enhancedImages } from "@sveltejs/enhanced-img";
 import { sveltekit } from "@sveltejs/kit/vite";
 import tailwindcss from "@tailwindcss/vite";
 import { mdsvex, type MdsvexOptions } from "mdsvex";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeKatex from "rehype-katex";
 import rehypeSlug from "rehype-slug";
 import remarkMath from "remark-math";
@@ -26,17 +25,6 @@ const mdsvexOptions: MdsvexOptions = {
 	] as MdsvexOptions["remarkPlugins"],
 	rehypePlugins: [
 		rehypeSlug,
-		[
-			rehypeAutolinkHeadings,
-			{
-				behavior: "append",
-				properties: {
-					className: ["heading-anchor"],
-					ariaHidden: true,
-					tabIndex: -1,
-				},
-			},
-		],
 		rehypeKatex,
 	] as unknown as MdsvexOptions["rehypePlugins"],
 	layout: {

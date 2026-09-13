@@ -1,7 +1,6 @@
 import { type Collection, getContentList } from "#lib/content.ts";
+import { siteConfig } from "#lib/site.config.ts";
 import type { RequestHandler } from "./$types";
-
-const SITE_URL = "https://oliverwalton.uk";
 
 export const prerender = true;
 
@@ -33,7 +32,7 @@ export const GET: RequestHandler = () => {
 		.map(
 			({ path, priority, lastmod }) =>
 				`  <url>
-    <loc>${SITE_URL}${path}</loc>${lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : ""}
+    <loc>${siteConfig.url}${path}</loc>${lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : ""}
     <priority>${priority}</priority>
   </url>`,
 		)

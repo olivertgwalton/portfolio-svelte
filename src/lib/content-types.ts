@@ -7,7 +7,6 @@ export interface ContentMetadata {
 	tags?: string[];
 	tech?: string[];
 	type?: string;
-	github?: string;
 	demo?: string;
 	source?: string;
 	organization?: string;

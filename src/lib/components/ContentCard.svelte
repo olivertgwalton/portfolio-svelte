@@ -24,7 +24,7 @@ const tags = $derived(getItemTags(item));
 
 {#if variant === 'compact'}
 	<a
-		href={resolve('/(public)/[collection=collection]/[slug]', { collection, slug: item.slug })}
+		href={resolve('/[collection=collection]/[slug]', { collection, slug: item.slug })}
 		class="group rounded-xl border border-surface-200-800 p-5 transition-all hover:-translate-y-1 hover:border-primary-500/50 hover:bg-surface-100-900"
 	>
 		<h3
@@ -53,7 +53,7 @@ const tags = $derived(getItemTags(item));
 	</a>
 {:else}
 	<a
-		href={resolve('/(public)/[collection=collection]/[slug]', { collection, slug: item.slug })}
+		href={resolve('/[collection=collection]/[slug]', { collection, slug: item.slug })}
 		use:reveal={{ delay: index * 75 }}
 		class="group bg-surface-100-800 hover:bg-surface-200-700 relative flex flex-col overflow-hidden rounded-3xl border border-surface-200-800 transition-all hover:-translate-y-1 hover:border-primary-500/80"
 	>

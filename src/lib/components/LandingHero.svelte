@@ -61,7 +61,7 @@ import { reveal } from "#lib/actions.ts";
 				<!-- Buttons -->
 				<div use:reveal={{ delay: 300 }} class="mt-10 flex flex-wrap gap-5">
 					<a
-						href={resolve('/(public)/contact')}
+						href={resolve('/contact')}
 						class="btn preset-filled-primary-500 px-8 py-4 text-sm font-bold tracking-wider uppercase"
 					>
 						Contact

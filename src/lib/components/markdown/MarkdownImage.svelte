@@ -14,14 +14,13 @@ let {
 	size?: "sm" | "md" | "lg";
 }>();
 const sizeClasses: Record<string, string> = {
-	sm: "max-w-sm mx-auto",
-	md: "max-w-xl mx-auto",
-	lg: "max-w-3xl mx-auto",
+	sm: "max-w-sm",
+	md: "max-w-xl",
+	lg: "max-w-3xl",
 };
-const wrapperClass = $derived(size ? sizeClasses[size] : "");
 </script>
 
-<figure class={wrapperClass}>
+<figure class={size ? `mx-auto ${sizeClasses[size]}` : ""}>
 	<Dialog>
 		<Dialog.Trigger
 			class="image-card group block w-full cursor-zoom-in overflow-hidden rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
@@ -71,10 +70,6 @@ const wrapperClass = $derived(size ? sizeClasses[size] : "");
 </figure>
 
 <style>
-figure {
-	margin: 0;
-}
-
 figure :global(figcaption) {
 	margin: 0;
 }

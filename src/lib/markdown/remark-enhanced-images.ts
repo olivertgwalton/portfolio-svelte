@@ -1,6 +1,5 @@
 import path from "node:path";
 import type { Html, Image, PhrasingContent, Root, RootContent } from "mdast";
-import { visit } from "unist-util-visit";
 import type { VFile } from "vfile";
 
 // mdsvex attaches `filename` at runtime; not part of the base VFile type.
@@ -41,12 +40,10 @@ export function remarkEnhancedImages() {
 				const tags = currentGroup.map((img) => {
 					const { url, alt, title } = img;
 					const importName = `enhanced_image_${count++}`;
-					let importPath = url;
-					if (url.startsWith("/assets/")) {
-						importPath = url.replace("/assets/", "#lib/assets/");
-					} else if (url.startsWith("./") && file.filename) {
-						importPath = path.resolve(path.dirname(file.filename), url);
-					}
+					const importPath =
+						url.startsWith("./") && file.filename
+							? path.resolve(path.dirname(file.filename), url)
+							: url;
 					imports.push(`import ${importName} from '${importPath}?enhanced';`);
 					const sizeAttr = title ? ` size="${title}"` : "";
 					return `<MarkdownImage src={${importName}} alt="${alt ?? ""}"${sizeAttr} />`;
@@ -97,20 +94,14 @@ export function remarkEnhancedImages() {
 			`import MarkdownImage from '#lib/components/markdown/MarkdownImage.svelte';`,
 		);
 		const importContent = imports.join("\n");
-		const scriptNodeRef: { current: Html | null } = { current: null };
-
-		visit(tree, "html", (node) => {
-			if (
+		const scriptNode = tree.children.find(
+			(node): node is Html =>
+				node.type === "html" &&
 				node.value.trim().startsWith("<script") &&
-				!node.value.includes('context="module"')
-			) {
-				scriptNodeRef.current = node;
-				return false;
-			}
-		});
+				!node.value.includes('context="module"'),
+		);
 
-		if (scriptNodeRef.current) {
-			const scriptNode = scriptNodeRef.current;
+		if (scriptNode) {
 			scriptNode.value = scriptNode.value.replace(
 				/^<script.*?>/,
 				`$& \n${importContent}`,

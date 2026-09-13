@@ -4,11 +4,8 @@
 export class BenchmarkEngine {
     free(): void;
     [Symbol.dispose](): void;
-    count(): number;
     init(width: number, height: number): void;
     constructor(count: number);
-    pos_x_ptr(): number;
-    pos_y_ptr(): number;
     render(): number;
     update(time: number, width: number, height: number): void;
 }
@@ -16,7 +13,6 @@ export class BenchmarkEngine {
 export class GridEngine {
     free(): void;
     [Symbol.dispose](): void;
-    count(): number;
     init(width: number, height: number, spacing: number, dpr: number): void;
     constructor(count: number);
     pos_x_ptr(): number;
@@ -30,19 +26,15 @@ export interface InitOutput {
     readonly memory: WebAssembly.Memory;
     readonly __wbg_benchmarkengine_free: (a: number, b: number) => void;
     readonly __wbg_gridengine_free: (a: number, b: number) => void;
-    readonly benchmarkengine_count: (a: number) => number;
     readonly benchmarkengine_init: (a: number, b: number, c: number) => void;
     readonly benchmarkengine_new: (a: number) => number;
-    readonly benchmarkengine_pos_x_ptr: (a: number) => number;
-    readonly benchmarkengine_pos_y_ptr: (a: number) => number;
     readonly benchmarkengine_render: (a: number) => number;
     readonly benchmarkengine_update: (a: number, b: number, c: number, d: number) => void;
-    readonly gridengine_count: (a: number) => number;
     readonly gridengine_init: (a: number, b: number, c: number, d: number, e: number) => void;
     readonly gridengine_new: (a: number) => number;
-    readonly gridengine_update: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
     readonly gridengine_pos_x_ptr: (a: number) => number;
     readonly gridengine_pos_y_ptr: (a: number) => number;
+    readonly gridengine_update: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
     readonly __wbindgen_externrefs: WebAssembly.Table;
     readonly __wbindgen_start: () => void;
 }

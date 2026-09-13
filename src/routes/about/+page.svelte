@@ -1,6 +1,5 @@
 <script lang="ts">
 import PageHero from "#lib/components/PageHero.svelte";
-import StatCard from "#lib/components/StatCard.svelte";
 import { fly } from "svelte/transition";
 </script>
 
@@ -69,9 +68,18 @@ import { fly } from "svelte/transition";
 
 		<!-- Right Column: Stats / Highlights -->
 		<div class="space-y-16" in:fly={{ y: 20, duration: 600, delay: 400 }}>
-			<StatCard label="Location" value="Solihull, United Kingdom" />
-			<StatCard label="Focus" value="Systems & Frontend" />
-			<StatCard label="Age" value="22 Years Old" />
+			{#each [["Location", "Solihull, United Kingdom"], ["Focus", "Systems & Frontend"], ["Age", "22 Years Old"]] as [label, value] (label)}
+				<div class="border-t border-surface-200-800 pt-8">
+					<div
+						class="mb-2 font-mono text-xs font-bold tracking-widest text-surface-800-200 uppercase"
+					>
+						{label}
+					</div>
+					<div class="font-heading text-4xl font-bold text-surface-950-50">
+						{value}
+					</div>
+				</div>
+			{/each}
 		</div>
 	</div>
 </section>

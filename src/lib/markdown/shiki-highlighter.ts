@@ -39,13 +39,10 @@ export async function mdsvexHighlighter(
 		themes: { light: "github-light", dark: "github-dark" },
 		defaultColor: false,
 	});
-	const titleMatch = /title="([^"]+)"/.exec(meta);
-	const titleAttr = titleMatch
-		? ` data-title="${escapeAttr(titleMatch[1])}"`
-		: "";
-	const withLang = html.replace(
-		"<pre ",
-		`<pre data-language="${lang}"${titleAttr} `,
-	);
-	return `{@html \`${escapeSvelte(withLang)}\`}`;
+	const withLang = html.replace("<pre ", `<pre data-language="${lang}" `);
+	const title = /title="([^"]+)"/.exec(meta)?.[1];
+	const block = title
+		? `<div class="code-block-wrapper"><div class="code-block-header"><span>${escapeAttr(title)}</span><span class="code-block-lang">${lang}</span></div>${withLang}</div>`
+		: withLang;
+	return `{@html \`${escapeSvelte(block)}\`}`;
 }

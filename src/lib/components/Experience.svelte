@@ -1,89 +1,31 @@
 <script lang="ts">
 import { reveal } from "#lib/actions.ts";
-import type { Collection } from "#lib/content.ts";
 import SectionHeader from "#lib/components/SectionHeader.svelte";
 import TabGroup from "#lib/components/TabGroup.svelte";
 import BriefcaseIcon from "phosphor-svelte/lib/BriefcaseIcon";
 import GraduationCapIcon from "phosphor-svelte/lib/GraduationCapIcon";
 import CertificateIcon from "phosphor-svelte/lib/CertificateIcon";
-import ArrowSquareOutIcon from "phosphor-svelte/lib/ArrowSquareOutIcon";
-import type { Component } from "svelte";
-import type { IconWeight } from "phosphor-svelte";
-import { resolve } from "$app/paths";
 import type { ContentMetadata } from "#lib/content.ts";
 
 type Category = "experience" | "education" | "certifications";
 
-interface Props {
-	experience?: ContentMetadata[];
-	education?: ContentMetadata[];
-	certifications?: ContentMetadata[];
-}
-
-let { experience = [], education = [], certifications = [] }: Props = $props();
+let {
+	experience = [],
+	education = [],
+	certifications = [],
+}: Partial<Record<Category, ContentMetadata[]>> = $props();
 
 let activeTab = $state<Category>("experience");
 
-interface TimelineItem {
-	title: string;
-	organization: string;
-	period: string;
-	current?: boolean;
-	bullets: string[];
-	skills: string[];
-	// Kit 3 derives the param type from the matcher, so this must be the literal
-	// union rather than a plain string.
-	link?: string | { collection: Collection; slug: string };
-}
-
-interface CategoryConfig {
-	label: string;
-	icon: Component<{ size?: number; weight?: IconWeight }>;
-}
-
-const categories: Record<Category, CategoryConfig> = {
+const categories = {
 	experience: { label: "Experience", icon: BriefcaseIcon },
 	education: { label: "Education", icon: GraduationCapIcon },
 	certifications: { label: "Certifications", icon: CertificateIcon },
 };
 
-function mapContentToTimeline(items: ContentMetadata[]): TimelineItem[] {
-	return items.map((item) => {
-		let link: TimelineItem["link"];
-
-		// Handle links based on type
-		if (item.github) {
-			link = item.github;
-		} else if (item.demo) {
-			link = item.demo;
-		}
-
-		// Format period from date if not explicitly provided
-		let period = item.period;
-		if (!period && item.date) {
-			const year = new Date(item.date).getFullYear();
-			period = item.current ? `${year} - Present` : `${year}`;
-		}
-
-		return {
-			title: item.title,
-			organization: item.organization ?? item.type ?? "",
-			period: period ?? "",
-			current: item.current,
-			bullets: item.highlights ?? (item.description ? [item.description] : []),
-			skills: item.skills ?? item.tech ?? [],
-			link,
-		};
-	});
-}
-
-const data = $derived<Record<Category, TimelineItem[]>>({
-	experience: mapContentToTimeline(experience),
-	education: mapContentToTimeline(education),
-	certifications: mapContentToTimeline(certifications),
-});
-
-const activeItems = $derived(data[activeTab]);
+const activeItems = $derived(
+	{ experience, education, certifications }[activeTab],
+);
 const ActiveIcon = $derived(categories[activeTab].icon);
 </script>
 
@@ -155,7 +97,7 @@ const ActiveIcon = $derived(categories[activeTab].icon);
 							<ul
 								class="mb-4 space-y-2 text-sm leading-relaxed text-surface-600-400"
 							>
-								{#each item.bullets as bullet (bullet)}
+								{#each item.highlights ?? [] as bullet (bullet)}
 									<li class="flex items-start gap-2">
 										<span
 											class="mt-2.5 size-1 shrink-0 rounded-full bg-surface-400"
@@ -166,7 +108,7 @@ const ActiveIcon = $derived(categories[activeTab].icon);
 							</ul>
 
 							<div class="flex flex-wrap gap-2">
-								{#each item.skills as skill (skill)}
+								{#each item.skills ?? [] as skill (skill)}
 									<span
 										class="rounded-full border border-surface-200-800 px-2.5 py-1 text-[10px] font-bold tracking-wide text-surface-600-400 uppercase"
 									>
@@ -174,28 +116,6 @@ const ActiveIcon = $derived(categories[activeTab].icon);
 									</span>
 								{/each}
 							</div>
-
-							{#if item.link}
-								{@const isExternal = typeof item.link === 'string'}
-								<div class="mt-6">
-									<a
-										href={typeof item.link === 'string'
-											? item.link
-											: resolve('/(public)/[collection=collection]/[slug]', item.link)}
-										target={isExternal ? '_blank' : undefined}
-										title={isExternal
-											? 'View Project (opens in new window)'
-											: undefined}
-										rel={isExternal ? 'external noopener noreferrer' : undefined}
-										class="inline-flex items-center gap-2 text-sm font-bold text-primary-500 transition-colors hover:text-primary-600"
-									>
-										<span>View Project</span>
-										<span aria-hidden="true"
-											><ArrowSquareOutIcon size={16} weight="bold" /></span
-										>
-									</a>
-								</div>
-							{/if}
 						</div>
 					</div>
 				{/each}

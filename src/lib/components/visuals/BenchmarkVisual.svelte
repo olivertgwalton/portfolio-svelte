@@ -11,19 +11,12 @@ let canvas = $state<HTMLCanvasElement>();
 
 // This component is dedicated to the benchmark visualization
 
-// State
-let width = 0;
-let height = 0;
-let dpr = 1;
-
 // Benchmark State
 let isPaused = $state(true);
 let activeEngine = $state<"rust" | "js">("rust");
 let particleCount = $state(100000);
 
 // Buffers
-let posX: Float32Array | undefined;
-let posY: Float32Array | undefined;
 let jsParticles: Float32Array | undefined;
 let workerParticles: Float32Array | undefined;
 
@@ -49,18 +42,13 @@ let frameTimeAccum = 0;
 async function initData() {
 	if (!canvas) return;
 
-	dpr = window.devicePixelRatio || 1;
+	const dpr = window.devicePixelRatio || 1;
 	const rect = canvas.getBoundingClientRect();
-	width = rect.width;
-	height = rect.height;
-
-	const displayWidth = Math.ceil(width * dpr);
-	const displayHeight = Math.ceil(height * dpr);
+	const displayWidth = Math.ceil(rect.width * dpr);
+	const displayHeight = Math.ceil(rect.height * dpr);
 
 	canvas.width = displayWidth;
 	canvas.height = displayHeight;
-
-	if (ctx) ctx.setTransform(1, 0, 0, 1, 0, 0);
 
 	if (ctx) {
 		imageData = ctx.createImageData(displayWidth, displayHeight);
@@ -95,18 +83,6 @@ async function initComparison() {
 
 	engine = new wasm.glue.BenchmarkEngine(particleCount);
 	engine.init(canvas.width, canvas.height);
-
-	// Map Views
-	posX = new Float32Array(
-		wasm.memory.buffer,
-		engine.pos_x_ptr(),
-		particleCount,
-	);
-	posY = new Float32Array(
-		wasm.memory.buffer,
-		engine.pos_y_ptr(),
-		particleCount,
-	);
 
 	// Setup JS
 	jsParticles = new Float32Array(particleCount * 4);
@@ -149,7 +125,6 @@ function animate() {
 	animationId = requestAnimationFrame(animate);
 
 	if (!ctx || !canvas) return;
-	ctx.setTransform(1, 0, 0, 1, 0, 0);
 
 	const workStart = performance.now();
 	renderComparison();
@@ -173,8 +148,6 @@ function renderComparison() {
 	if (
 		!ctx ||
 		!engine ||
-		!posX ||
-		!posY ||
 		!jsParticles ||
 		!canvas ||
 		!pixelBuffer ||

@@ -9,7 +9,6 @@
 @import "../themes/t3-chat.css";
 @import "../themes/modern.css";
 
-@plugin "@tailwindcss/forms";
 @plugin "@tailwindcss/typography";
 
 @theme {

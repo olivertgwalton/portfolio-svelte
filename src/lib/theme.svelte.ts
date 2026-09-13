@@ -53,39 +53,35 @@ export function setThemeContext() {
 		get mode() {
 			return currentMode;
 		},
-		get isDark() {
-			return currentMode === "dark" || (currentMode === "system" && systemDark);
-		},
-		setTheme(id: string, event?: MouseEvent | KeyboardEvent) {
+		setTheme(id: string, event?: MouseEvent) {
 			void performTransition(() => {
 				currentTheme = id;
 				setCookie("theme", id);
 			}, event);
 		},
-		setMode(id: string, event?: MouseEvent | KeyboardEvent) {
+		setMode(id: string, event?: MouseEvent) {
 			void performTransition(() => {
 				currentMode = id;
 				setCookie("mode", id);
 			}, event);
 		},
-		initClient() {
-			$effect(() => {
-				const media = window.matchMedia("(prefers-color-scheme: dark)");
-				systemDark = media.matches;
-				const onChange = (e: MediaQueryListEvent) => (systemDark = e.matches);
-				media.addEventListener("change", onChange);
-
-				const isDark =
-					currentMode === "dark" || (currentMode === "system" && systemDark);
-				document.documentElement.classList.toggle("dark", isDark);
-				document.documentElement.setAttribute("data-theme", currentTheme);
-
-				return () => {
-					media.removeEventListener("change", onChange);
-				};
-			});
-		},
 	};
+
+	$effect(() => {
+		const media = window.matchMedia("(prefers-color-scheme: dark)");
+		systemDark = media.matches;
+		const onChange = (e: MediaQueryListEvent) => (systemDark = e.matches);
+		media.addEventListener("change", onChange);
+
+		const isDark =
+			currentMode === "dark" || (currentMode === "system" && systemDark);
+		document.documentElement.classList.toggle("dark", isDark);
+		document.documentElement.setAttribute("data-theme", currentTheme);
+
+		return () => {
+			media.removeEventListener("change", onChange);
+		};
+	});
 
 	setContext(THEME_KEY, ctx);
 	return ctx;
@@ -97,15 +93,8 @@ export function getThemeContext(): ThemeContext {
 	return getContext<ThemeContext>(THEME_KEY);
 }
 
-async function performTransition(
-	action: () => void,
-	event?: MouseEvent | KeyboardEvent,
-) {
-	if (
-		!("startViewTransition" in document) ||
-		!event ||
-		!(event instanceof MouseEvent)
-	) {
+async function performTransition(action: () => void, event?: MouseEvent) {
+	if (!("startViewTransition" in document) || !event) {
 		action();
 		return;
 	}

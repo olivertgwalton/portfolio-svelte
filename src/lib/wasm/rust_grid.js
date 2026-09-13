@@ -12,13 +12,6 @@ export class BenchmarkEngine {
         wasm.__wbg_benchmarkengine_free(ptr, 0);
     }
     /**
-     * @returns {number}
-     */
-    count() {
-        const ret = wasm.benchmarkengine_count(this.__wbg_ptr);
-        return ret >>> 0;
-    }
-    /**
      * @param {number} width
      * @param {number} height
      */
@@ -33,20 +26,6 @@ export class BenchmarkEngine {
         this.__wbg_ptr = ret >>> 0;
         BenchmarkEngineFinalization.register(this, this.__wbg_ptr, this);
         return this;
-    }
-    /**
-     * @returns {number}
-     */
-    pos_x_ptr() {
-        const ret = wasm.benchmarkengine_pos_x_ptr(this.__wbg_ptr);
-        return ret >>> 0;
-    }
-    /**
-     * @returns {number}
-     */
-    pos_y_ptr() {
-        const ret = wasm.benchmarkengine_pos_y_ptr(this.__wbg_ptr);
-        return ret >>> 0;
     }
     /**
      * @returns {number}
@@ -78,13 +57,6 @@ export class GridEngine {
         wasm.__wbg_gridengine_free(ptr, 0);
     }
     /**
-     * @returns {number}
-     */
-    count() {
-        const ret = wasm.gridengine_count(this.__wbg_ptr);
-        return ret >>> 0;
-    }
-    /**
      * @param {number} width
      * @param {number} height
      * @param {number} spacing
@@ -106,14 +78,14 @@ export class GridEngine {
      * @returns {number}
      */
     pos_x_ptr() {
-        const ret = wasm.benchmarkengine_pos_x_ptr(this.__wbg_ptr);
+        const ret = wasm.gridengine_pos_x_ptr(this.__wbg_ptr);
         return ret >>> 0;
     }
     /**
      * @returns {number}
      */
     pos_y_ptr() {
-        const ret = wasm.benchmarkengine_pos_y_ptr(this.__wbg_ptr);
+        const ret = wasm.gridengine_pos_y_ptr(this.__wbg_ptr);
         return ret >>> 0;
     }
     /**

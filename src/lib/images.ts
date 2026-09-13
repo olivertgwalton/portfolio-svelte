@@ -9,7 +9,6 @@ interface Picture {
 
 const images = import.meta.glob<{ default: Picture | string }>(
 	[
-		"/src/lib/assets/**/*.{jpg,jpeg,png,webp,avif}",
 		"/src/lib/blogs/**/*.{jpg,jpeg,png,webp,avif}",
 		"/src/lib/projects/**/*.{jpg,jpeg,png,webp,avif}",
 	],
@@ -19,27 +18,9 @@ const images = import.meta.glob<{ default: Picture | string }>(
 	},
 );
 
-// Cache resolved images to avoid re-scanning the glob
-const cache = new Map<string, Picture | string>();
-
-/**
- * Resolves a frontmatter image path (e.g., '/assets/blog/image.jpg')
- * to the imported enhanced image module.
- */
+/** Resolves a frontmatter image path (as produced by content.ts's resolveImage) to its enhanced image module. */
 export function getEnhancedImage(
 	path: string | undefined,
 ): Picture | string | null {
-	if (!path) return null;
-
-	const cached = cache.get(path);
-	if (cached !== undefined) return cached;
-
-	const suffix = path.replace(/^\/assets/, "");
-
-	const match = Object.entries(images).find(([key]) => key.endsWith(suffix));
-	if (!match) return null;
-
-	const result = match[1].default;
-	cache.set(path, result);
-	return result;
+	return (path && images[path]?.default) || null;
 }

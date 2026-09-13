@@ -16,13 +16,13 @@ let mouseY = -1000;
 let width = 0;
 let height = 0;
 let dpr = 1;
-let dotColor = $state("rgb(0, 0, 0)");
+let dotColor = "rgb(0, 0, 0)";
 // Buffers
 let posX: Float32Array | undefined; // Rust View X
 let posY: Float32Array | undefined; // Rust View Y
 
 // Internal
-let numPoints = $state(0);
+let numPoints = 0;
 let ctx: CanvasRenderingContext2D | null = null;
 let animationId: number;
 
@@ -30,7 +30,6 @@ let animationId: number;
 let engine: WasmGrid.GridEngine | undefined;
 
 function updateThemeColor() {
-	if (typeof window === "undefined") return;
 	const style = getComputedStyle(document.body);
 	let color = style.color || "rgb(0, 0, 0)";
 
@@ -67,9 +66,6 @@ async function initData() {
 	canvas.width = displayWidth;
 	canvas.height = displayHeight;
 
-	// Work in physical pixels
-	if (ctx) ctx.setTransform(1, 0, 0, 1, 0, 0);
-
 	await initGrid();
 }
 
@@ -101,9 +97,6 @@ function animate() {
 	animationId = requestAnimationFrame(animate);
 
 	if (!ctx || !canvas) return;
-
-	// Ensure identity transform for physical pixel drawing
-	ctx.setTransform(1, 0, 0, 1, 0, 0);
 
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	renderGrid();
@@ -179,9 +172,7 @@ onMount(() => {
 
 <svelte:window onmousemove={handleMouseMove} />
 
-<div class="contents">
-	<canvas
-		bind:this={canvas}
-		class="pointer-events-none absolute inset-0 z-0 h-full w-full"
-	></canvas>
-</div>
+<canvas
+	bind:this={canvas}
+	class="pointer-events-none absolute inset-0 z-0 h-full w-full"
+></canvas>

@@ -6,24 +6,21 @@ import { Menu, Portal } from "@skeletonlabs/skeleton-svelte";
 import ThemeSwitcher from "#lib/components/ThemeSwitcher.svelte";
 import { reveal } from "#lib/actions.ts";
 
-// Kit 3 route ids include the layout group, so resolve() can't take a bare
-// pathname — the home page is `/(public)`, not `/`. Resolve once here and use
-// the result for both href and the active check, which keeps the two from
-// drifting apart.
+// Resolved once so href and the active check can't drift apart.
 const links = [
-	{ href: resolve("/(public)"), label: "Home" },
+	{ href: resolve("/"), label: "Home" },
 	{
-		href: resolve("/(public)/[collection=collection]", {
+		href: resolve("/[collection=collection]", {
 			collection: "projects",
 		}),
 		label: "Projects",
 	},
 	{
-		href: resolve("/(public)/[collection=collection]", { collection: "blogs" }),
+		href: resolve("/[collection=collection]", { collection: "blogs" }),
 		label: "Blogs",
 	},
-	{ href: resolve("/(public)/about"), label: "About" },
-	{ href: resolve("/(public)/contact"), label: "Contact" },
+	{ href: resolve("/about"), label: "About" },
+	{ href: resolve("/contact"), label: "Contact" },
 ] as const;
 </script>
 
@@ -37,7 +34,7 @@ const links = [
 		<!-- Logo -->
 		<a
 			use:reveal={{ delay: 0, y: -10 }}
-			href={resolve('/(public)')}
+			href={resolve('/')}
 			class="font-heading text-2xl font-bold tracking-tighter text-surface-950-50"
 		>
 			Oliver<span class="text-surface-800-200">.</span>

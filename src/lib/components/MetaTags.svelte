@@ -19,13 +19,8 @@ let {
 // Use the actual current URL from SvelteKit's state for deployment
 const url = $derived(page.url.href);
 
-// Ensure the image URL is absolute (required by most social platforms)
-// Robust slash handling: remove trailing slash from base and leading from path
-const baseUrl = siteConfig.url.replace(/\/$/, "");
-const imagePath = $derived(image.startsWith("/") ? image.substring(1) : image);
-const absoluteImage = $derived(
-	image.startsWith("http") ? image : `${baseUrl}/${imagePath}`,
-);
+// Social platforms require an absolute image URL
+const absoluteImage = $derived(new URL(image, siteConfig.url).href);
 </script>
 
 <svelte:head>

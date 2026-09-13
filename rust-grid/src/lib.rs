@@ -144,7 +144,6 @@ impl GridEngine {
 
     pub fn pos_x_ptr(&self) -> *const f32 { self.pos_x.as_ptr() }
     pub fn pos_y_ptr(&self) -> *const f32 { self.pos_y.as_ptr() }
-    pub fn count(&self) -> usize { self.count }
 }
 
 // ==========================================
@@ -226,22 +225,10 @@ impl BenchmarkEngine {
             let mut wave_offset = 0.0;
             
             // Using fast_sin for better performance in time-based waves
-            wave_offset += fast_sin(*base_angle * (FREQ * 1.0) - time * (TWIST * 1.0)) * (AMP / 1.0);
-            wave_offset += fast_sin(*base_angle * (FREQ * 2.0) - time * (TWIST * 2.0)) * (AMP / 2.0);
-            wave_offset += fast_sin(*base_angle * (FREQ * 3.0) - time * (TWIST * 3.0)) * (AMP / 3.0);
-            wave_offset += fast_sin(*base_angle * (FREQ * 4.0) - time * (TWIST * 4.0)) * (AMP / 4.0);
-            wave_offset += fast_sin(*base_angle * (FREQ * 5.0) - time * (TWIST * 5.0)) * (AMP / 5.0);
-            wave_offset += fast_sin(*base_angle * (FREQ * 6.0) - time * (TWIST * 6.0)) * (AMP / 6.0);
-            wave_offset += fast_sin(*base_angle * (FREQ * 7.0) - time * (TWIST * 7.0)) * (AMP / 7.0);
-            wave_offset += fast_sin(*base_angle * (FREQ * 8.0) - time * (TWIST * 8.0)) * (AMP / 8.0);
-            wave_offset += fast_sin(*base_angle * (FREQ * 9.0) - time * (TWIST * 9.0)) * (AMP / 9.0);
-            wave_offset += fast_sin(*base_angle * (FREQ * 10.0) - time * (TWIST * 10.0)) * (AMP / 10.0);
-            wave_offset += fast_sin(*base_angle * (FREQ * 11.0) - time * (TWIST * 11.0)) * (AMP / 11.0);
-            wave_offset += fast_sin(*base_angle * (FREQ * 12.0) - time * (TWIST * 12.0)) * (AMP / 12.0);
-            wave_offset += fast_sin(*base_angle * (FREQ * 13.0) - time * (TWIST * 13.0)) * (AMP / 13.0);
-            wave_offset += fast_sin(*base_angle * (FREQ * 14.0) - time * (TWIST * 14.0)) * (AMP / 14.0);
-            wave_offset += fast_sin(*base_angle * (FREQ * 15.0) - time * (TWIST * 15.0)) * (AMP / 15.0);
-            wave_offset += fast_sin(*base_angle * (FREQ * 16.0) - time * (TWIST * 16.0)) * (AMP / 16.0);
+            for k in 1..=16 {
+                let k = k as f32;
+                wave_offset += fast_sin(*base_angle * (FREQ * k) - time * (TWIST * k)) * (AMP / k);
+            }
 
             let r = *base_radius + wave_offset;
 
@@ -272,8 +259,4 @@ impl BenchmarkEngine {
         
         self.display_buffer.as_ptr()
     }
-
-    pub fn pos_x_ptr(&self) -> *const f32 { self.pos_x.as_ptr() }
-    pub fn pos_y_ptr(&self) -> *const f32 { self.pos_y.as_ptr() }
-    pub fn count(&self) -> usize { self.count }
 }

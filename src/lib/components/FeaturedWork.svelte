@@ -40,7 +40,7 @@ const items = $derived(collection === "projects" ? projects : blogs);
 				/>
 
 				<a
-					href={resolve("/(public)/[collection=collection]", {
+					href={resolve("/[collection=collection]", {
                         collection,
                     })}
 					class="shrink-0 text-[10px] font-black tracking-widest text-surface-600-400 uppercase transition-colors hover:text-primary-500"

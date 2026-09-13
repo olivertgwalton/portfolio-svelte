@@ -10,8 +10,7 @@ import type { LayoutProps } from "./$types";
 
 let { children }: LayoutProps = $props();
 
-const theme = setThemeContext();
-theme.initClient();
+setThemeContext();
 </script>
 
 <svelte:head>

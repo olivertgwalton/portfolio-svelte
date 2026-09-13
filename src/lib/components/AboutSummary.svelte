@@ -35,7 +35,7 @@ import SocialLinks from "#lib/components/SocialLinks.svelte";
 				</div>
 				<div use:reveal={{ delay: 300 }}>
 					<a
-						href={resolve('/(public)/about')}
+						href={resolve('/about')}
 						class="inline-flex items-center gap-3 border-b-2 border-surface-950-50 pb-1 text-lg font-bold text-surface-950-50 hover:border-surface-800-200 hover:text-surface-800-200"
 					>
 						Read full bio

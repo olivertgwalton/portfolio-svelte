@@ -39,12 +39,12 @@ let {
 		prev: ContentMetadata | null;
 		next: ContentMetadata | null;
 	};
-	Content: Component | null;
+	Content: Component;
 } = $props();
 
 const isProject = $derived(type === "projects");
 const postHref = (item: ContentMetadata) =>
-	resolve("/(public)/[collection=collection]/[slug]", {
+	resolve("/[collection=collection]/[slug]", {
 		collection: type,
 		slug: item.slug,
 	});
@@ -126,7 +126,7 @@ const ogImage = $derived(`/og/${type}/${meta.slug}.png`);
 		<div class="container mx-auto max-w-7xl px-6">
 			<a
 				use:reveal={{ delay: 0, y: 10 }}
-				href={resolve("/(public)/[collection=collection]", {
+				href={resolve("/[collection=collection]", {
                     collection: type,
                 })}
 				class="mb-8 inline-flex items-center gap-2 text-sm font-bold text-surface-600-400 hover:text-primary-500"
@@ -216,15 +216,9 @@ const ogImage = $derived(`/og/${type}/${meta.slug}.png`);
 							onNavigate={toc.scrollToHeading}
 						/>
 					</div>
-					{#if Content}
-						<Content />
-					{:else}
-						<p class="animate-pulse font-bold text-surface-400">Loading...</p>
-					{/if}
+					<Content />
 				</div>
-				{#if Content}
-					<ShareWidget title={meta.title} />
-				{/if}
+				<ShareWidget title={meta.title} />
 			</div>
 			<aside class="hidden lg:block">
 				<div class="sticky top-8">

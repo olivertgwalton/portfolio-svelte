@@ -77,19 +77,15 @@ export const reveal: Action<HTMLElement, RevealParams> = (el, params = {}) => {
 	};
 };
 
-// Replace the self-links appended to headings by rehype-autolink-headings with
-// a copy-link button (same design as the share widget): a link icon that
-// becomes a green check on copy, and no jump-to-anchor scroll (it's a button).
+// Append a copy-link button to every slugged heading (same design as the share
+// widget): a link icon that becomes a green check on copy, and no jump-to-anchor
+// scroll (it's a button).
 export const enhanceHeadings: Action = (node) => {
-	const anchors = node.querySelectorAll<HTMLAnchorElement>("a.heading-anchor");
+	const headings = node.querySelectorAll(":is(h1, h2, h3, h4, h5, h6)[id]");
 	const components: ReturnType<typeof mount>[] = [];
 
-	for (const anchor of anchors) {
-		const heading = anchor.parentElement;
-		const hash = anchor.getAttribute("href") ?? "";
-		anchor.remove();
-		if (!heading) continue;
-
+	for (const heading of headings) {
+		const hash = `#${heading.id}`;
 		components.push(
 			mount(CopyButton, {
 				target: heading,
@@ -118,28 +114,6 @@ export const enhanceCodeBlocks: Action = (node) => {
 
 	for (const pre of pres) {
 		pre.classList.add("relative", "group");
-
-		const title = pre.dataset.title;
-		if (title) {
-			const lang = pre.dataset.language ?? "";
-			const wrapper = document.createElement("div");
-			wrapper.className = "code-block-wrapper";
-			pre.parentElement?.insertBefore(wrapper, pre);
-			const header = document.createElement("div");
-			header.className = "code-block-header";
-			const titleSpan = document.createElement("span");
-			titleSpan.textContent = title;
-			header.appendChild(titleSpan);
-			if (lang) {
-				const langSpan = document.createElement("span");
-				langSpan.className = "code-block-lang";
-				langSpan.textContent = lang;
-				header.appendChild(langSpan);
-			}
-			wrapper.appendChild(header);
-			wrapper.appendChild(pre);
-		}
-
 		const component = mount(CopyButton, {
 			target: pre,
 			props: {
