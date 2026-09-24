@@ -25,7 +25,8 @@ const getHighlighter = () =>
 			"json",
 			"markdown",
 			"python",
-			"rust",
+            "rust",
+			"swift",
 		],
 	}));
 
